@@ -4,9 +4,18 @@ import fetcher from './fetcher';
 export default function useApiInfinite<T>(api: string, pageSize: number) {
   const { data, error, mutate, size, setSize, isValidating } = useSWRInfinite<
     T[]
-  >((index) => api + `&limit=${pageSize}&offset=${index + 1}`, fetcher, {
-    revalidateOnFocus: false,
-  });
+  >(
+    (pageIndex, previousPageData) => {
+      // reached the end
+      if (previousPageData && previousPageData.length == 0) return null;
+      // paginate
+      return api + `&limit=${pageSize}&offset=${pageSize * pageIndex}`;
+    },
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    }
+  );
   const isLoadingInitialData = !error && !data;
   const isEmpty = data?.[0]?.length === 0;
 
