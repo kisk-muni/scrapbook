@@ -7,9 +7,10 @@ import { parseISO, format } from 'date-fns';
 import csLocale from 'date-fns/locale/cs';
 import { Markup } from 'interweave';
 import Link from 'next/link';
+import Columned from 'react-columned';
 
 function Card(props: PostItemProps) {
-  const description = props.description.split('<a class="more-link"')[0];
+  const description = props.description?.split('<a class="more-link"')[0];
   return (
     <div className="bg-white p-4 rounded-lg">
       <p className="mb-2 text-gray-500 text-sm">
@@ -48,13 +49,16 @@ export default function HomePage() {
   return (
     <div>
       <Hero />
-      <div className="columns-2 gap-4 md:columns-3 xl:columns-4">
+      <Columned
+        className="-ml-4"
+        columns={{ '320': 1, '640': 2, '768': 3, '1024': 3, '1280': 4 }}
+      >
         {data.map((item, i) => (
-          <div className="overflow-hidden mb-4" key={i}>
+          <div className="overflow-hidden mb-4 ml-4 break-inside" key={i}>
             <Card {...item} />
           </div>
         ))}
-      </div>
+      </Columned>
       <div className="items-centers flex mt-4 justify-center mb-10">
         <Button
           isDisabled={isLoadingMore || isReachingEnd}
