@@ -9,7 +9,7 @@ import { parseFeed } from 'https://deno.land/x/rss/mod.ts';
 async function sourceFeed(
   supabase: any,
   feed_url: string,
-  portfolio_id: number
+  portfolio_id: string
 ) {
   const response = await fetch(feed_url);
   const xml = await response.text();
