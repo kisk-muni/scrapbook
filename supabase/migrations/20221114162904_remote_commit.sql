@@ -3,7 +3,7 @@
 --
 
 -- Dumped from database version 14.1
--- Dumped by pg_dump version 14.5 (Debian 14.5-1.pgdg110+1)
+-- Dumped by pg_dump version 14.5 (Debian 14.5-2.pgdg110+2)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -141,11 +141,11 @@ ALTER TABLE "public"."portfolio_posts" OWNER TO "postgres";
 CREATE TABLE "public"."portfolios" (
     "created_at" timestamp with time zone DEFAULT "now"(),
     "name" character varying,
-    "user_id" "uuid",
     "url" character varying,
     "feed_url" character varying,
     "platform" character varying DEFAULT 'custom'::character varying NOT NULL,
-    "id" "uuid" DEFAULT "extensions"."uuid_generate_v4"() NOT NULL
+    "id" "uuid" DEFAULT "extensions"."uuid_generate_v4"() NOT NULL,
+    "profile_id" "uuid"
 );
 
 
@@ -158,9 +158,9 @@ ALTER TABLE "public"."portfolios" OWNER TO "postgres";
 CREATE TABLE "public"."posts" (
     "id" bigint NOT NULL,
     "created_at" timestamp with time zone DEFAULT "now"(),
-    "user_id" "uuid",
     "content" "text",
-    "media" "jsonb"
+    "media" "jsonb",
+    "profile_id" "uuid"
 );
 
 
@@ -262,19 +262,19 @@ ALTER TABLE ONLY "public"."portfolio_posts"
 
 
 --
--- Name: portfolios portfolios_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: portfolios portfolios_profile_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY "public"."portfolios"
-    ADD CONSTRAINT "portfolios_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "auth"."users"("id");
+    ADD CONSTRAINT "portfolios_profile_id_fkey" FOREIGN KEY ("profile_id") REFERENCES "public"."profiles"("id");
 
 
 --
--- Name: posts posts_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: supabase_admin
+-- Name: posts posts_profile_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: supabase_admin
 --
 
 ALTER TABLE ONLY "public"."posts"
-    ADD CONSTRAINT "posts_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "auth"."users"("id");
+    ADD CONSTRAINT "posts_profile_id_fkey" FOREIGN KEY ("profile_id") REFERENCES "public"."profiles"("id");
 
 
 --
@@ -336,14 +336,14 @@ CREATE POLICY "Public profiles are viewable by everyone." ON "public"."profiles"
 -- Name: portfolios Users can insert their own portfolio.; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY "Users can insert their own portfolio." ON "public"."portfolios" FOR INSERT WITH CHECK (("auth"."uid"() = "user_id"));
+CREATE POLICY "Users can insert their own portfolio." ON "public"."portfolios" FOR INSERT WITH CHECK (("auth"."uid"() = "profile_id"));
 
 
 --
 -- Name: posts Users can insert their own post.; Type: POLICY; Schema: public; Owner: supabase_admin
 --
 
-CREATE POLICY "Users can insert their own post." ON "public"."posts" FOR INSERT WITH CHECK (("auth"."uid"() = "user_id"));
+CREATE POLICY "Users can insert their own post." ON "public"."posts" FOR INSERT WITH CHECK (("auth"."uid"() = "profile_id"));
 
 
 --
@@ -357,14 +357,14 @@ CREATE POLICY "Users can insert their own profile." ON "public"."profiles" FOR I
 -- Name: portfolios Users can update own portfolio.; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY "Users can update own portfolio." ON "public"."portfolios" FOR UPDATE USING (("auth"."uid"() = "user_id"));
+CREATE POLICY "Users can update own portfolio." ON "public"."portfolios" FOR UPDATE USING (("auth"."uid"() = "profile_id"));
 
 
 --
 -- Name: posts Users can update own post.; Type: POLICY; Schema: public; Owner: supabase_admin
 --
 
-CREATE POLICY "Users can update own post." ON "public"."posts" FOR UPDATE USING (("auth"."uid"() = "user_id"));
+CREATE POLICY "Users can update own post." ON "public"."posts" FOR UPDATE USING (("auth"."uid"() = "profile_id"));
 
 
 --
@@ -835,50 +835,50 @@ GRANT ALL ON FUNCTION "extensions"."verify"("token" "text", "secret" "text", "al
 -- Name: FUNCTION "comment_directive"("comment_" "text"); Type: ACL; Schema: graphql; Owner: supabase_admin
 --
 
-GRANT ALL ON FUNCTION "graphql"."comment_directive"("comment_" "text") TO "postgres";
-GRANT ALL ON FUNCTION "graphql"."comment_directive"("comment_" "text") TO "anon";
-GRANT ALL ON FUNCTION "graphql"."comment_directive"("comment_" "text") TO "authenticated";
-GRANT ALL ON FUNCTION "graphql"."comment_directive"("comment_" "text") TO "service_role";
+-- GRANT ALL ON FUNCTION "graphql"."comment_directive"("comment_" "text") TO "postgres";
+-- GRANT ALL ON FUNCTION "graphql"."comment_directive"("comment_" "text") TO "anon";
+-- GRANT ALL ON FUNCTION "graphql"."comment_directive"("comment_" "text") TO "authenticated";
+-- GRANT ALL ON FUNCTION "graphql"."comment_directive"("comment_" "text") TO "service_role";
 
 
 --
 -- Name: FUNCTION "exception"("message" "text"); Type: ACL; Schema: graphql; Owner: supabase_admin
 --
 
-GRANT ALL ON FUNCTION "graphql"."exception"("message" "text") TO "postgres";
-GRANT ALL ON FUNCTION "graphql"."exception"("message" "text") TO "anon";
-GRANT ALL ON FUNCTION "graphql"."exception"("message" "text") TO "authenticated";
-GRANT ALL ON FUNCTION "graphql"."exception"("message" "text") TO "service_role";
+-- GRANT ALL ON FUNCTION "graphql"."exception"("message" "text") TO "postgres";
+-- GRANT ALL ON FUNCTION "graphql"."exception"("message" "text") TO "anon";
+-- GRANT ALL ON FUNCTION "graphql"."exception"("message" "text") TO "authenticated";
+-- GRANT ALL ON FUNCTION "graphql"."exception"("message" "text") TO "service_role";
 
 
 --
 -- Name: FUNCTION "get_schema_version"(); Type: ACL; Schema: graphql; Owner: supabase_admin
 --
 
-GRANT ALL ON FUNCTION "graphql"."get_schema_version"() TO "postgres";
-GRANT ALL ON FUNCTION "graphql"."get_schema_version"() TO "anon";
-GRANT ALL ON FUNCTION "graphql"."get_schema_version"() TO "authenticated";
-GRANT ALL ON FUNCTION "graphql"."get_schema_version"() TO "service_role";
+-- GRANT ALL ON FUNCTION "graphql"."get_schema_version"() TO "postgres";
+-- GRANT ALL ON FUNCTION "graphql"."get_schema_version"() TO "anon";
+-- GRANT ALL ON FUNCTION "graphql"."get_schema_version"() TO "authenticated";
+-- GRANT ALL ON FUNCTION "graphql"."get_schema_version"() TO "service_role";
 
 
 --
 -- Name: FUNCTION "increment_schema_version"(); Type: ACL; Schema: graphql; Owner: supabase_admin
 --
 
-GRANT ALL ON FUNCTION "graphql"."increment_schema_version"() TO "postgres";
-GRANT ALL ON FUNCTION "graphql"."increment_schema_version"() TO "anon";
-GRANT ALL ON FUNCTION "graphql"."increment_schema_version"() TO "authenticated";
-GRANT ALL ON FUNCTION "graphql"."increment_schema_version"() TO "service_role";
+-- GRANT ALL ON FUNCTION "graphql"."increment_schema_version"() TO "postgres";
+-- GRANT ALL ON FUNCTION "graphql"."increment_schema_version"() TO "anon";
+-- GRANT ALL ON FUNCTION "graphql"."increment_schema_version"() TO "authenticated";
+-- GRANT ALL ON FUNCTION "graphql"."increment_schema_version"() TO "service_role";
 
 
 --
 -- Name: FUNCTION "sequential_executor"("prepared_statement_names" "text"[]); Type: ACL; Schema: graphql; Owner: supabase_admin
 --
 
-GRANT ALL ON FUNCTION "graphql"."sequential_executor"("prepared_statement_names" "text"[]) TO "postgres";
-GRANT ALL ON FUNCTION "graphql"."sequential_executor"("prepared_statement_names" "text"[]) TO "anon";
-GRANT ALL ON FUNCTION "graphql"."sequential_executor"("prepared_statement_names" "text"[]) TO "authenticated";
-GRANT ALL ON FUNCTION "graphql"."sequential_executor"("prepared_statement_names" "text"[]) TO "service_role";
+-- GRANT ALL ON FUNCTION "graphql"."sequential_executor"("prepared_statement_names" "text"[]) TO "postgres";
+-- GRANT ALL ON FUNCTION "graphql"."sequential_executor"("prepared_statement_names" "text"[]) TO "anon";
+-- GRANT ALL ON FUNCTION "graphql"."sequential_executor"("prepared_statement_names" "text"[]) TO "authenticated";
+-- GRANT ALL ON FUNCTION "graphql"."sequential_executor"("prepared_statement_names" "text"[]) TO "service_role";
 
 
 --

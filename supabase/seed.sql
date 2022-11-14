@@ -8,7 +8,11 @@ INSERT INTO auth.identities (id,user_id,identity_data,provider,last_sign_in_at,c
 	('d9064bb5-1501-4ec9-bfee-21ab74d645b8','d9064bb5-1501-4ec9-bfee-21ab74d645b8'::uuid,'{"sub": "d9064bb5-1501-4ec9-bfee-21ab74d645b8"}','email','2022-02-12 07:40:23.615','2022-02-12 07:40:23.615','2022-02-12 07:40:23.615')
 ON CONFLICT (id, provider) DO NOTHING;
 
-insert into public.portfolios (created_at, name, user_id, url, feed_url, platform, id) values
+insert into public.profiles (username, id) values
+('testuser','d9064bb5-1501-4ec9-bfee-21ab74d645b8'),
+('testuser2',	'f76629c5-a070-4bbc-9918-64beaea48848');
+
+insert into public.portfolios (created_at, name, profile_id, url, feed_url, platform, id) values
 ('2022-11-13 20:45:24.417349+00',	null,	'd9064bb5-1501-4ec9-bfee-21ab74d645b8',	null,	'https://mvelebova.wordpress.com/feed',	'custom',	'8f37202d-438e-4996-8378-b781cf936029'),
 ('2022-11-13 20:21:44.664241+00',	null,	'f76629c5-a070-4bbc-9918-64beaea48848',	'https://veronikabatelkova.cz',	'https://veronikabatelkova.cz/feed',	'wordpress',	'327981ac-7186-409c-a4ea-7d11e8d11106');
 
