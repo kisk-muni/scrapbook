@@ -48,7 +48,7 @@ export default function HomePage() {
           <li>
             <Link
               className="text-orange-600"
-              href="https://github.com/kisk-muni/portfolios"
+              href="https://github.com/kisk-muni/scrapbook"
             >
               Zdrojový kód projektu na GitHubu
             </Link>
