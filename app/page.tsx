@@ -17,9 +17,9 @@ function Card(props: PostItemProps) {
     <div className="bg-white rounded-lg">
       <div className="flex flex-column p-3">
         <div className="w-12 h-12 bg-gray-200 rounded-full mr-2"></div>
-        <div className="">
+        <div className="mt-1">
           {(props.portfolios.title || props.portfolios.url) && (
-            <p className="mb-0 mt-0.5 text-gray-800 font-bold hover:text-gray-500">
+            <p className="mb-0 mt-0.5 text-gray-800 text-lg leading-5 font-bold hover:text-gray-500">
               <Link
                 onClick={() => plausible('Post Title Link: Click')}
                 href={props.url}
@@ -38,7 +38,7 @@ function Card(props: PostItemProps) {
         </div>
       </div>
       <div className="px-4 pb-4">
-        <p className="mb-2 text-gray-800 font-semibold hover:text-gray-500">
+        <p className="mb-2 text-gray-800 leading-6 font-semibold text-lg hover:text-gray-500">
           <Link
             onClick={() => plausible('Post Title Link: Click')}
             href={props.url}
@@ -46,7 +46,7 @@ function Card(props: PostItemProps) {
             {props.title}
           </Link>
         </p>
-        <p className="">
+        <p className="text-lg leading-6">
           <Markup content={description.substring(0, 140)} />
         </p>
       </div>
@@ -56,15 +56,33 @@ function Card(props: PostItemProps) {
 
 function Hero() {
   return (
-    <div className="mx-auto mt-6 mb-8 max-w-7xl px-4 sm:mt-8 sm:mb-16 sm:px-6 md:mt-12 md:mb-20">
+    <div className="mx-auto mt-6 mb-8 px-4 sm:mt-6 sm:mb-16 sm:px-6 md:mt-8 md:mb-20">
       <div className="text-center justify-center">
-        <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl md:text-6xl">
-          <span className="block text-amber-600 xl:inline">Portfolios</span>
+        <h1 className="text-4xl mb-0 tracking-tight text-gray-900 sm:text-5xl md:text-6xl">
+          <span className="block xl:inline">KISKový Scrapbook</span>
         </h1>
-        <p className="mt-3 text-base text-gray-500 mx-auto sm:mt-5 sm:max-w-xl sm:text-lg md:mt-5 md:text-xl">
-          See what KISK students do.
+        <p className="mt-0 text-2xl text-gray-900 mx-auto">
+          Co se právě učíme a na čem každý den pracujeme.
         </p>
       </div>
+      <style jsx>{`
+        h1 {
+          color: #ff5b00;
+          font-family: 'Shrikhand';
+          margin: 0;
+          font-size: 64px;
+          line-height: 1;
+          padding: 16px;
+          background-image: radial-gradient(
+            ellipse farthest-corner at top left,
+            #f7ff00,
+            #ff5b00
+          );
+          background-repeat: no-repeat;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+      `}</style>
     </div>
   );
 }

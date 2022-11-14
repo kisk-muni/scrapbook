@@ -18,14 +18,14 @@ export default function RootLayout({
         <header>
           <nav className="flex w-full justify-between items-center h-16">
             <Link
-              className="flex text-base text-amber-500 hover:text-amber-700 font-semibold"
+              className="flex justify-center text-base text-gray-500 hover:text-red-700 font-semibold"
               href="/"
             >
-              KISK portfolios
+              KISK
             </Link>{' '}
             <div className="flex items-center space-x-8">
               <div className="text-gray-500 hover:text-gray-700 relative md:flex justify-center text-base font space-x-8">
-                {/*<Link href="/">About</Link>*/}
+                <Link href="/about">O Scrapbooku</Link>
               </div>
             </div>
           </nav>
