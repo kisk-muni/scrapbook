@@ -33,18 +33,45 @@ export default function HomePage() {
         </p>
         <h2 className="text-3xl mt-8 mb-4 tracking-tight text-gray-900 sm:text-4xl md:text-4xl">
           <span className="block xl:inline font-extrabold">
+            Projekt je otevřený
+          </span>
+        </h2>
+        <ul className="mt-0 pl-6 text-xl list-disc text-gray-900 mx-auto mb-4">
+          <li>
+            <Link
+              className="text-orange-600"
+              href="https://plausible.io/kisk.vercel.app/"
+            >
+              Anonymní statistka návštěvnosti
+            </Link>
+          </li>
+          <li>
+            <Link
+              className="text-orange-600"
+              href="https://github.com/kisk-muni/portfolios"
+            >
+              Zdrojový kód projektu na GitHubu
+            </Link>
+          </li>
+        </ul>
+        <h2 className="text-3xl mt-8 mb-4 tracking-tight text-gray-900 sm:text-4xl md:text-4xl">
+          <span className="block xl:inline font-extrabold">
             Filosofie v.0.crap
           </span>
         </h2>
         <p className="mt-0 text-xl text-gray-900 mx-auto mb-4">
-          Scrapbook vychází ze stejnojmenného open source projektu{' '}
+          Scrapbook vychází ze stejnojmenného{' '}
           <Link
             className="text-orange-600"
             href="https://scrapbook.hackclub.com/"
           >
-            organizace Hack Club
+            open source projektu
           </Link>{' '}
-          a snaží se působit jako něco, co vzniká na koleni a neprofesionálně,
+          organizace{' '}
+          <Link className="text-orange-600" href="https://hackclub.com/">
+            Hack Club
+          </Link>
+          . Snaží se působit jako něco, co vzniká na koleni a neprofesionálně,
           jako pouhý draft, útržek či dokonce odpad. Cílem je se nebát
           experimentovat.
         </p>
