@@ -82,16 +82,16 @@ export default function HomePage() {
     <div>
       <Hero />
       <Columned
-        className="-ml-4"
+        className="-ml-6"
         columns={{ '768': 1, '1024': 2, '1280': 3, '1600': 4 }}
       >
         {data.map((item, i) => (
-          <div className="overflow-hidden mb-4 ml-4 break-inside" key={i}>
+          <div className="overflow-hidden mb-6 ml-6 break-inside" key={i}>
             <Card {...item} />
           </div>
         ))}
       </Columned>
-      <div className="items-centers flex mt-4 justify-center mb-10">
+      <div className="items-centers flex mt-6 justify-center mb-10">
         <Button
           isDisabled={isLoadingMore || isReachingEnd}
           onPress={handleLoadMore}
