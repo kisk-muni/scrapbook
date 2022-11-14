@@ -8,6 +8,7 @@ import csLocale from 'date-fns/locale/cs';
 import { Markup } from 'interweave';
 import Link from 'next/link';
 import Columned from 'react-columned';
+import { usePlausible } from 'next-plausible';
 
 function Card(props: PostItemProps) {
   const description = props.description?.split('<a class="more-link"')[0];
@@ -46,6 +47,12 @@ function Hero() {
 export default function HomePage() {
   const { data, size, setSize, isLoadingMore, isReachingEnd } =
     usePortfoliosList();
+  const plausible = usePlausible();
+  const handleLoadMore = () => {
+    setSize(size + 1);
+    plausible('Load More');
+  };
+
   return (
     <div>
       <Hero />
@@ -62,7 +69,7 @@ export default function HomePage() {
       <div className="items-centers flex mt-4 justify-center mb-10">
         <Button
           isDisabled={isLoadingMore || isReachingEnd}
-          onPress={() => setSize(size + 1)}
+          onPress={handleLoadMore}
         >
           {isLoadingMore
             ? 'Načítání...'
