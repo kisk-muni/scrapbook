@@ -22,7 +22,6 @@ async function sourceFeed(
     title: item?.title?.value,
     url: item?.links[0]?.href,
     published_at: item?.published,
-    content: item?.content?.value,
     description: item?.description?.value,
   }));
 
