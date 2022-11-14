@@ -1,4 +1,4 @@
-# kisk
+# kisk portfolios
 
 this repo contains site and database definition for https://kisk.vercel.app/
 
