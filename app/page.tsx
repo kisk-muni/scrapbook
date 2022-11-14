@@ -12,19 +12,44 @@ import { usePlausible } from 'next-plausible';
 
 function Card(props: PostItemProps) {
   const description = props.description?.split('<a class="more-link"')[0];
+  const plausible = usePlausible();
   return (
-    <div className="bg-white p-4 rounded-lg">
-      <p className="mb-2 text-gray-500 text-sm">
-        {format(parseISO(props.published_at), 'do MMMM yyyy', {
-          locale: csLocale,
-        })}
-      </p>
-      <p className="mb-2 text-gray-800 font-bold hover:text-gray-500">
-        <Link href={props.url}>{props.title}</Link>
-      </p>
-      <p className="">
-        <Markup content={description} />
-      </p>
+    <div className="bg-white rounded-lg">
+      <div className="flex flex-column p-3">
+        <div className="w-12 h-12 bg-gray-200 rounded-full mr-2"></div>
+        <div className="">
+          {(props.portfolios.title || props.portfolios.url) && (
+            <p className="mb-0 mt-0.5 text-gray-800 font-bold hover:text-gray-500">
+              <Link
+                onClick={() => plausible('Post Title Link: Click')}
+                href={props.url}
+              >
+                {props.portfolios.title
+                  ? props.portfolios.title
+                  : props.portfolios.url}
+              </Link>
+            </p>
+          )}
+          <p className="text-gray-500 text-sm">
+            {format(parseISO(props.published_at), 'do MMMM yyyy', {
+              locale: csLocale,
+            })}
+          </p>
+        </div>
+      </div>
+      <div className="px-4 pb-4">
+        <p className="mb-2 text-gray-800 font-semibold hover:text-gray-500">
+          <Link
+            onClick={() => plausible('Post Title Link: Click')}
+            href={props.url}
+          >
+            {props.title}
+          </Link>
+        </p>
+        <p className="">
+          <Markup content={description.substring(0, 140)} />
+        </p>
+      </div>
     </div>
   );
 }
@@ -58,7 +83,7 @@ export default function HomePage() {
       <Hero />
       <Columned
         className="-ml-4"
-        columns={{ '320': 1, '640': 2, '768': 3, '1024': 3, '1280': 4 }}
+        columns={{ '768': 1, '1024': 2, '1280': 3, '1600': 4 }}
       >
         {data.map((item, i) => (
           <div className="overflow-hidden mb-4 ml-4 break-inside" key={i}>

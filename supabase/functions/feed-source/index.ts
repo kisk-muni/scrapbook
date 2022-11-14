@@ -13,11 +13,20 @@ async function sourceFeed(
 ) {
   const response = await fetch(feed_url);
   const xml = await response.text();
-  const { entries } = await parseFeed(xml);
+  const feed = await parseFeed(xml);
+
+  await supabase
+    .from('portfolios')
+    .update({
+      title: feed?.title?.value,
+      description: feed?.description,
+      url: feed?.links[0],
+    })
+    .eq('id', portfolio_id);
 
   // [cernockyd] naive wordpress support
   // fields can be eventually accessed using DublinCore and MediaRss enums
-  const parsed = entries.map((item) => ({
+  const parsed = feed?.entries?.map((item) => ({
     portfolio_id,
     title: item?.title?.value,
     url: item?.links[0]?.href,
