@@ -38,7 +38,7 @@ function Card(props: PostItemProps) {
         </div>
       </div>
       <div className="px-4 pb-4">
-        <p className="mb-2 leading-6 hover:text-muted">
+        <p className="mb-2 text-lg leading-6 hover:text-muted">
           <Link
             onClick={() => plausible('Post Title Link: Click')}
             href={props.url}
