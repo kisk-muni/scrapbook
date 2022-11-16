@@ -37,7 +37,9 @@ async function sourceFeed(
     url: item?.links[0]?.href || null,
     published_at: item?.published || null,
     description: item?.description?.value || null,
-    thumbnail_url: item['media:thumbnails']?.url || null,
+    // following media type is not declared in library’s typings but exits on the object
+    // https://github.com/MikaelPorttila/rss/blob/5632aa76f1bede380da519118841e0a8dacbd3ff/src/types/media_rss.ts#L47
+    thumbnail_url: (item as any)['media:thumbnail']?.url || null,
   }));
 
   const { data, error } = await supabase
