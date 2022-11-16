@@ -18,9 +18,14 @@ async function sourceFeed(
   await supabase
     .from('portfolios')
     .update({
-      title: feed?.title?.value,
-      description: feed?.description,
-      url: feed?.links[0],
+      title: feed?.title?.value || null,
+      description: feed?.description || null,
+      url: feed?.links[0] || null,
+      image_url:
+        feed?.image?.url &&
+        feed?.image?.url != 'https://s0.wp.com/i/buttonw-com.png'
+          ? feed?.image?.url
+          : null,
     })
     .eq('id', portfolio_id);
 
@@ -28,10 +33,11 @@ async function sourceFeed(
   // fields can be eventually accessed using DublinCore and MediaRss enums
   const parsed = feed?.entries?.map((item) => ({
     portfolio_id,
-    title: item?.title?.value,
-    url: item?.links[0]?.href,
-    published_at: item?.published,
-    description: item?.description?.value,
+    title: item?.title?.value || null,
+    url: item?.links[0]?.href || null,
+    published_at: item?.published || null,
+    description: item?.description?.value || null,
+    thumbnail_url: item['media:thumbnails']?.url || null,
   }));
 
   const { data, error } = await supabase

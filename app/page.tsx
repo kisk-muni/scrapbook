@@ -9,6 +9,7 @@ import { Markup } from 'interweave';
 import Link from 'next/link';
 import Columned from 'react-columned';
 import { usePlausible } from 'next-plausible';
+import Image from 'next/image';
 
 function Card(props: PostItemProps) {
   const description = props.description?.split('<a class="more-link"')[0];
@@ -16,7 +17,20 @@ function Card(props: PostItemProps) {
   return (
     <div className="bg-white rounded-lg">
       <div className="flex flex-column p-3">
-        <div className="w-12 h-12 bg-smoke rounded-full mr-2"></div>
+        {props.portfolios.image_url ? (
+          <Image
+            className="rounded-full w-12 h-12 mr-2"
+            alt={props.portfolios.title}
+            width={48}
+            height={48}
+            src={
+              'https://res.cloudinary.com/demo/image/fetch/' +
+              props.portfolios.image_url
+            }
+          />
+        ) : (
+          <div className="w-12 h-12 bg-smoke rounded-full mr-2"></div>
+        )}
         <div className="mt-1">
           {(props.portfolios.title || props.portfolios.url) && (
             <p className="mb-0 mt-0.5 text-text text-lg leading-5 font-bold hover:text-dark">
