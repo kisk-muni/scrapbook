@@ -78,6 +78,22 @@ function Card(props: PostItemProps) {
         <p className="text-lg text-text leading-6">
           <Markup content={description} />
         </p>
+        {props.thumbnail_url && (
+          <div className="relative overflow-hidden mt-4 rounded-md w-full bg-background h-48 md:h-56 lg:h-60 xl:h-64">
+            <Image
+              alt={props.portfolios.title}
+              fill
+              sizes="(max-width: 768px) 100vw,
+              (max-width: 1200px) 50vw,
+              33vw"
+              className="object-contain"
+              src={
+                'https://res.cloudinary.com/demo/image/fetch/' +
+                props.thumbnail_url
+              }
+            />
+          </div>
+        )}
       </div>
     </div>
   );

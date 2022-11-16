@@ -2,15 +2,15 @@ import useApiInfinite from 'lib/use-api-infinite';
 
 export interface PostItemProps {
   id: string;
-  title: string;
-  published_at: string;
-  url: string;
-  description: string;
-  thumbnail_url: string;
+  title: string | null;
+  published_at: string | null;
+  url: string | null;
+  description: string | null;
+  thumbnail_url: string | null;
   portfolios: {
-    title: string;
-    url: string;
-    image_url: string;
+    title: string | null;
+    url: string | null;
+    image_url: string | null;
   };
 }
 
