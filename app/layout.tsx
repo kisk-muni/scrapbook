@@ -1,3 +1,4 @@
+'use client';
 import Link from 'next/link';
 import { Providers } from './providers';
 import '../styles/globals.css';
