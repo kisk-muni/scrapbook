@@ -11,6 +11,20 @@ import Columned from 'react-columned';
 import { usePlausible } from 'next-plausible';
 import Image from 'next/image';
 
+const formatRelativeLocale = {
+  lastWeek: "do MM yyy'",
+  yesterday: "'včera v'",
+  today: "'dnes v'",
+  tomorrow: "'zítra v'",
+  nextWeek: 'do MM yyyy',
+  other: 'do MM yyyy',
+};
+
+const locale = {
+  ...csLocale,
+  formatRelative: (token) => formatRelativeLocale[token],
+};
+
 function Card(props: PostItemProps) {
   const description = props.description?.split('<a class="more-link"')[0];
   const plausible = usePlausible();
@@ -46,7 +60,7 @@ function Card(props: PostItemProps) {
           )}
           <p className="text-muted text-sm">
             {formatRelative(parseISO(props.published_at), new Date(), {
-              locale: csLocale,
+              locale,
             })}
           </p>
         </div>
