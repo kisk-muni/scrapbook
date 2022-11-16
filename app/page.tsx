@@ -3,7 +3,7 @@ import Button from 'components/button';
 import usePortfoliosList, {
   PostItemProps,
 } from 'lib/hooks/use-portfolios-list';
-import { parseISO, format } from 'date-fns';
+import { parseISO, formatRelative } from 'date-fns';
 import csLocale from 'date-fns/locale/cs';
 import { Markup } from 'interweave';
 import Link from 'next/link';
@@ -45,7 +45,7 @@ function Card(props: PostItemProps) {
             </p>
           )}
           <p className="text-muted text-sm">
-            {format(parseISO(props.published_at), 'do MMMM yyyy', {
+            {formatRelative(parseISO(props.published_at), new Date(), {
               locale: csLocale,
             })}
           </p>
