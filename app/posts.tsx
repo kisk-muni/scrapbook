@@ -200,20 +200,18 @@ export function Posts() {
           maxColumnCount={4}
         />
       </div>
-      {data.length != 0 && (
-        <div
-          ref={ref}
-          className="items-centers flex justify-center mb-6 md:mb-8 lg:mb-10"
-        >
-          {isLoadingMore ? (
-            <LoadingIcon />
-          ) : isReachingEnd ? (
-            'Žádné další příspěvky'
-          ) : (
-            ''
-          )}
-        </div>
-      )}
+      <div
+        ref={ref}
+        className="items-centers flex justify-center mb-6 md:mb-8 lg:mb-10"
+      >
+        {isLoadingMore ? (
+          <LoadingIcon />
+        ) : isReachingEnd ? (
+          'Žádné další příspěvky'
+        ) : (
+          ''
+        )}
+      </div>
     </Fragment>
   );
 }
