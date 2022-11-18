@@ -12,6 +12,7 @@ import useOnScreen from 'lib/hooks/use-on-screen';
 import Image from 'next/image';
 
 const limit = 20;
+const limit = 30;
 
 interface PostItemProps {
   skeleton?: boolean;
@@ -200,18 +201,20 @@ export function Posts() {
           maxColumnCount={4}
         />
       </div>
-      <div
-        ref={ref}
-        className="items-centers flex justify-center mb-6 md:mb-8 lg:mb-10"
-      >
-        {isLoadingMore ? (
-          <LoadingIcon />
-        ) : isReachingEnd ? (
-          'Žádné další příspěvky'
-        ) : (
-          ''
-        )}
-      </div>
+      {data.length != 0 && (
+        <div
+          ref={ref}
+          className="items-centers flex justify-center mb-6 md:mb-8 lg:mb-10"
+        >
+          {isLoadingMore ? (
+            <LoadingIcon />
+          ) : isReachingEnd ? (
+            'Žádné další příspěvky'
+          ) : (
+            ''
+          )}
+        </div>
+      )}
     </Fragment>
   );
 }
