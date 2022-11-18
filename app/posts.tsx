@@ -11,7 +11,6 @@ import useApiInfinite from 'lib/use-api-infinite';
 import useOnScreen from 'lib/hooks/use-on-screen';
 import Image from 'next/image';
 
-const limit = 20;
 const limit = 30;
 
 interface PostItemProps {
