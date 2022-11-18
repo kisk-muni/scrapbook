@@ -1,7 +1,6 @@
 'use client';
-import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import { Posts, SkeletonPosts } from './posts';
+import { Posts } from './posts';
 
 function Hero() {
   return (
@@ -23,9 +22,7 @@ export default function HomePage() {
     <div>
       <Hero />
       <ErrorBoundary fallback={<div>Příspěvky se nepodařilo načíst.</div>}>
-        <Suspense fallback={<SkeletonPosts />}>
-          <Posts />
-        </Suspense>
+        <Posts />
       </ErrorBoundary>
     </div>
   );

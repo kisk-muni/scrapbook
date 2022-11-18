@@ -5,7 +5,7 @@ import { Markup } from 'interweave';
 import { polyfill } from 'interweave-ssr';
 import Link from 'next/link';
 import { usePlausible } from 'next-plausible';
-import Masonry from 'react-masonry-css';
+import { Masonry } from 'masonic';
 import { Fragment, useEffect, useRef } from 'react';
 import useApiInfinite from 'lib/use-api-infinite';
 import useOnScreen from 'lib/hooks/use-on-screen';
@@ -13,23 +13,15 @@ import Image from 'next/image';
 
 const limit = 20;
 
-// https://tailwindcss.com/docs/responsive-design
-const breakpointColumnsObj = {
-  1536: 4,
-  1280: 4,
-  1024: 3,
-  768: 2,
-  640: 1,
-};
-
 interface PostItemProps {
-  id: string;
-  title: string | null;
-  published_at: string | null;
-  url: string | null;
-  description: string | null;
-  thumbnail_url: string | null;
-  portfolios: {
+  skeleton?: boolean;
+  id?: string;
+  title?: string | null;
+  published_at?: string | null;
+  url?: string | null;
+  description?: string | null;
+  thumbnail_url?: string | null;
+  portfolios?: {
     title: string | null;
     url: string | null;
     image_url: string | null;
@@ -73,7 +65,7 @@ function LoadingIcon() {
 function Skeleton() {
   return (
     <div
-      className={`bg-white rounded-lg mb-4 mr-4 md:mb-6 md:mr-6 lg:mb-8 lg:mr-8`}
+      className={`bg-white animate-in fade-in rounded-lg mb-4 mr-4 md:mb-6 md:mr-6`}
     >
       <div className="animate-pulse">
         <div className="flex flex-column p-3">
@@ -95,61 +87,48 @@ function Skeleton() {
   );
 }
 
-export function SkeletonPosts() {
-  return (
-    <Masonry
-      breakpointCols={breakpointColumnsObj}
-      className="flex -mr-4 md:-mr-6 md:-mr-8"
-    >
-      <Skeleton />
-      <Skeleton />
-      <Skeleton />
-      <Skeleton />
-      <Skeleton />
-      <Skeleton />
-      <Skeleton />
-      <Skeleton />
-      <Skeleton />
-    </Masonry>
-  );
+interface CardProps {
+  index: number;
+  data: PostItemProps;
+  width: number;
 }
 
-function Card(props: PostItemProps) {
-  const description = props.description?.split('<a class="more-link"')[0];
+function Card({ data }: CardProps) {
+  const description = data.description?.split('<a class="more-link"')[0];
   const plausible = usePlausible();
-  polyfill();
+  if (data.skeleton) return <Skeleton />;
   return (
-    <div className="bg-white rounded-lg mb-4 mr-4 md:mb-6 md:mr-6 lg:mb-8 lg:mr-8">
+    <div className="bg-white rounded-lg mb-4 mr-4 md:mb-6 md:mr-6">
       <div className="flex flex-column p-3">
-        {props.portfolios.image_url ? (
+        {data.portfolios.image_url ? (
           <Image
             className="rounded-full w-12 h-12 mr-2"
-            alt={props.portfolios.title}
+            alt={data.portfolios.title}
             width={48}
             height={48}
             src={
               'https://res.cloudinary.com/demo/image/fetch/' +
-              props.portfolios.image_url
+              data.portfolios.image_url
             }
           />
         ) : (
           <div className="w-12 h-12 bg-smoke rounded-full mr-2"></div>
         )}
         <div className="mt-1">
-          {(props.portfolios.title || props.portfolios.url) && (
+          {(data.portfolios.title || data.portfolios.url) && (
             <p className="mb-0 mt-0.5 text-text text-lg leading-5 font-bold hover:text-dark">
               <Link
                 onClick={() => plausible('Post Title Link: Click')}
-                href={props.url}
+                href={data.url}
               >
-                {props.portfolios.title
-                  ? props.portfolios.title
-                  : props.portfolios.url}
+                {data.portfolios.title
+                  ? data.portfolios.title
+                  : data.portfolios.url}
               </Link>
             </p>
           )}
           <p className="text-muted text-sm">
-            {format(parseISO(props.published_at), 'do MMMM yyyy', {
+            {format(parseISO(data.published_at), 'do MMMM yyyy', {
               locale: csLocale,
             })}
           </p>
@@ -159,19 +138,19 @@ function Card(props: PostItemProps) {
         <p className="mb-2 text-lg leading-6 hover:text-muted">
           <Link
             onClick={() => plausible('Post Title Link: Click')}
-            href={props.url}
+            href={data.url}
             className="text-blue underline"
           >
-            {props.title}
+            {data.title}
           </Link>
         </p>
         <p className="text-lg text-text leading-6">
           <Markup content={description} />
         </p>
-        {props.thumbnail_url && (
+        {data.thumbnail_url && (
           <div className="relative overflow-hidden mt-4 rounded-md w-full bg-background h-48 md:h-56 lg:h-60 xl:h-64">
             <Image
-              alt={props.portfolios.title}
+              alt={data.portfolios.title}
               fill
               sizes="(max-width: 768px) 100vw,
               (max-width: 1200px) 50vw,
@@ -179,7 +158,7 @@ function Card(props: PostItemProps) {
               className="object-contain"
               src={
                 'https://res.cloudinary.com/demo/image/fetch/' +
-                props.thumbnail_url
+                data.thumbnail_url
               }
             />
           </div>
@@ -190,17 +169,6 @@ function Card(props: PostItemProps) {
 }
 
 // https://www.youtube.com/watch?v=zwQs4wXr9Bg&t=531s
-// const fetchMap = new Map<string, Promise<any>>();
-//
-// function queryClient<QueryResult>(
-//   name: string,
-//   query: () => Promise<QueryResult>
-// ): Promise<QueryResult> {
-//   if (!fetchMap.has(name)) {
-//     fetchMap.set(name, query());
-//   }
-//   return fetchMap.get(name)!;
-// }
 
 export function Posts() {
   const { data, size, setSize, isLoadingMore, isRefreshing, isReachingEnd } =
@@ -209,7 +177,7 @@ export function Posts() {
   const ref = useRef();
 
   const isVisible = useOnScreen(ref);
-
+  polyfill();
   useEffect(() => {
     if (isVisible && !isReachingEnd && !isRefreshing) {
       setSize(size + 1);
@@ -220,14 +188,18 @@ export function Posts() {
 
   return (
     <Fragment>
-      <Masonry
-        breakpointCols={breakpointColumnsObj}
-        className="flex -mr-4 md:-mr-6 md:-mr-8"
-      >
-        {data.map((item, i) => (
-          <Card key={i} {...item} />
-        ))}
-      </Masonry>
+      <div className="flex -mr-4 md:-mr-6">
+        <Masonry
+          items={
+            !data.length
+              ? Array.from(Array(8), () => ({ skeleton: true }))
+              : data
+          }
+          render={Card}
+          columnWidth={324}
+          maxColumnCount={4}
+        />
+      </div>
       <div
         ref={ref}
         className="items-centers flex justify-center mb-6 md:mb-8 lg:mb-10"

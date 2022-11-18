@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./app/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
+  plugins: [require('tailwindcss-animate')],
   theme: {
     colors: {
       transparent: 'transparent',
@@ -47,5 +48,4 @@ module.exports = {
         'radial-gradient(ellipse farthest-corner at top left, var(--tw-gradient-stops))',
     },
   },
-  plugins: [],
 };

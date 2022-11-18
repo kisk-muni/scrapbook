@@ -14,7 +14,6 @@ export default function useApiInfinite<T>(api: string, pageSize: number) {
     fetcher,
     {
       revalidateOnFocus: false,
-      suspense: true,
     }
   );
   const isLoadingInitialData = !error && !data;
