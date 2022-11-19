@@ -22,24 +22,22 @@ interface PostItemProps {
   description?: string | null;
   thumbnail_url?: string | null;
   portfolios?: {
-    id: string;
     title: string | null;
     url: string | null;
     image_url: string | null;
-    feed_url: string | null;
   };
 }
 
 function usePortfoliosList() {
   return useApiInfinite<PostItemProps>(
-    `${process.env.NEXT_PUBLIC_SUPABASE_API_URL}/rest/v1/portfolio_posts?select=title,description,url,id,published_at,thumbnail_url,portfolios(id,title,url,feed_url,image_url)&order=published_at.desc&apikey=${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
+    `${process.env.NEXT_PUBLIC_SUPABASE_API_URL}/rest/v1/portfolio_posts?select=title,description,url,id,published_at,thumbnail_url,portfolios(title,url,image_url)&order=published_at.desc&apikey=${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
     limit
   );
 }
 
 function LoadingIcon() {
   return (
-    <div className="bg-white dark:bg-smoke w-10 h-10 ring-1 ring-snow dark:ring-slate shadow-lg rounded-full flex items-center justify-center">
+    <div className="bg-white w-10 h-10 ring-1 ring-snow shadow-lg rounded-full flex items-center justify-center">
       <svg
         className="animate-spin w-6 h-6 text-orange h-5 w-5"
         xmlns="http://www.w3.org/2000/svg"
@@ -66,9 +64,7 @@ function LoadingIcon() {
 
 function Skeleton() {
   return (
-    <div
-      className={`bg-white animate-in fade-in rounded-lg mb-4 mr-4 md:mb-6 md:mr-6`}
-    >
+    <div className={`bg-white rounded-lg mb-4 mr-4 md:mb-6 md:mr-6`}>
       <div className="animate-pulse">
         <div className="flex flex-column p-3">
           <div className="w-12 h-12 bg-smoke rounded-full mr-2"></div>
@@ -120,8 +116,8 @@ function Card({ data }: CardProps) {
           {(data.portfolios.title || data.portfolios.url) && (
             <p className="mb-0 mt-0.5 text-text text-lg leading-5 font-bold hover:text-dark">
               <Link
-                onClick={() => plausible('Portfolio Link: Click')}
-                href={'/portfolio?feed=' + data.portfolios.feed_url}
+                onClick={() => plausible('Post Title Link: Click')}
+                href={data.url}
               >
                 {data.portfolios.title
                   ? data.portfolios.title
