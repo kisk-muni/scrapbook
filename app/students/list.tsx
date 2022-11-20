@@ -35,11 +35,11 @@ function Portfolio(props: PortfolioData) {
     <div className="mb-3 md:mb-6">
       <Link
         href={'/portfolio?feed=' + props.feed_url}
-        className="flex flex-col items-center"
+        className="flex sm:flex-col justify-flex-start sm:justify-center items-center"
       >
         {props.image_url ? (
           <Image
-            className="rounded-full shadow-md border border-smoke w-16 md:w-24 lg:w-28 h-16 md:h-24 lg:h-28 mb-2 sm:mb-3"
+            className="rounded-full shadow-md border border-smoke w-16 md:w-24 lg:w-28 h-16 md:h-24 lg:h-28 mb-0 mr-4 sm:mr-0 sm:mb-3"
             alt={props.title}
             width={48}
             height={48}
@@ -48,7 +48,7 @@ function Portfolio(props: PortfolioData) {
             }
           />
         ) : (
-          <div className="rounded-full w-16 md:w-24 lg:w-28 h-16 md:h-24 lg:h-28 shrink-0 bg-smoke mb-2 sm:mb-3"></div>
+          <div className="rounded-full w-16 md:w-24 lg:w-28 h-16 md:h-24 lg:h-28 shrink-0 bg-smoke mb-0 mr-4 sm:mr-0 sm:mb-3"></div>
         )}
         <h1 className="text-lg font-bold tracking-tight text-text leading-5">
           {props.title
@@ -68,7 +68,7 @@ export function PortfoliosList() {
   const { data, error } = useSWR<PortfolioData[]>(API, fetcher);
   if (error) throw new Error('No portfolio found.');
   return (
-    <div className="flex flex-row justify-center align-flex-start flex-wrap basis-auto gap-4 md:gap-8 lg:gap-12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+    <div className="sm:flex sm:flex-row sm:justify-center sm:align-flex-start sm:flex-wrap sm:basis-auto gap-4 sm:gap-6 md:gap-8 lg:gap-12 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
       {data
         ? data?.map((item, i) => <Portfolio key={i} {...item} />)
         : [...Array(30).keys()].map((_item, i) => (
