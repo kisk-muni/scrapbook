@@ -39,7 +39,7 @@ export default function RootLayout({
               >
                 Studenti
               </Link>
-              {false && pathname == '/' && (
+              {['/', '/about'].includes(pathname) && (
                 <Link
                   className="bg-slate text-background hover:bg-purple rounded-full font-semibold px-4 pt-1 pb-0.5 uppercase relative md:flex justify-center text-base font"
                   href="/add-portfolio"
