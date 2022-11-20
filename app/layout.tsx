@@ -2,12 +2,14 @@
 import Link from 'next/link';
 import { Providers } from './providers';
 import '../styles/globals.css';
+import { usePathname } from 'next/navigation';
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
   return (
     <html>
       <head>
@@ -24,10 +26,27 @@ export default function RootLayout({
             >
               KISK Scrapbook
             </Link>{' '}
-            <div className="flex items-center space-x-8">
-              <div className="text-slate hover:text-gray relative md:flex justify-center text-base font space-x-8">
-                <Link href="/about">O Scrapbooku</Link>
-              </div>
+            <div className="flex items-baseline space-x-6">
+              <Link
+                className="text-slate hover:text-gray relative md:flex justify-center text-base font space-x-6"
+                href="/about"
+              >
+                O Scrapbooku
+              </Link>
+              <Link
+                className="text-slate hover:text-gray relative md:flex justify-center text-base font space-x-6"
+                href="/students"
+              >
+                Studenti
+              </Link>
+              {false && pathname == '/' && (
+                <Link
+                  className="bg-slate text-background hover:bg-purple rounded-full font-semibold px-4 pt-1 pb-0.5 uppercase relative md:flex justify-center text-base font"
+                  href="/add-portfolio"
+                >
+                  Připojit portfolio
+                </Link>
+              )}
             </div>
           </nav>
         </header>
