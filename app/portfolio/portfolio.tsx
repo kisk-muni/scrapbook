@@ -1,3 +1,4 @@
+'use client';
 import { LinkIcon } from '@heroicons/react/20/solid';
 import { format, parseISO } from 'date-fns';
 import { Markup } from 'interweave';
@@ -5,7 +6,8 @@ import { polyfill } from 'interweave-ssr';
 import csLocale from 'date-fns/locale/cs';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Fragment } from 'react';
+import useSWR from 'swr';
+import fetcher from 'lib/fetcher';
 
 interface PostProps {
   id: string;
@@ -25,8 +27,8 @@ interface PortfolioData {
   portfolio_posts?: PostProps[];
 }
 
-const API = (url: string) =>
-  `${process.env.NEXT_PUBLIC_SUPABASE_API_URL}/rest/v1/portfolios?select=id,url,feed_url,image_url,title,portfolio_posts(title,id,url,description,thumbnail_url,published_at)&feed_url=eq.${url}&apikey=${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`;
+const API = (feedUrl: string) =>
+  `${process.env.NEXT_PUBLIC_SUPABASE_API_URL}/rest/v1/portfolios?select=id,url,feed_url,image_url,title,portfolio_posts(title,id,url,description,thumbnail_url,published_at)&feed_url=eq.${feedUrl}&apikey=${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`;
 
 interface CardProps {
   index?: number;
@@ -35,6 +37,7 @@ interface CardProps {
 }
 
 function Card(props: CardProps) {
+  polyfill();
   const data = props.data;
   return (
     <div className="bg-white p-4 sm:p-6">
@@ -93,28 +96,29 @@ export function PortfolioSkeleton() {
   );
 }
 
-async function getData(url: string) {
-  const res = await fetch(API(url));
-  if (!res.ok) {
-    throw new Error('Failed to fetch data');
-  }
-  return res.json().then((data) => data[0]) as unknown as PortfolioData;
-}
+// async function getData(feedUrl: string) {
+//   const res = await fetch(API(feedUrl));
+//   return res.json().then((data) => data[0]) as unknown as PortfolioData;
+// }
 
-export async function Portfolio({ url }: { url: string }) {
-  const data = await getData(url);
-  polyfill();
+export function Portfolio(props: { feedUrl?: string }) {
+  if (!props.feedUrl) throw new Error('Feed URL not provided.');
+  const { data, error } = useSWR<PortfolioData[]>(API(props.feedUrl), fetcher);
+  if (error || (data && !data.length)) throw new Error('No portfolio found.');
+  if (!data) return <PortfolioSkeleton />;
+  const portfolio = data[0];
   return (
-    <Fragment>
+    <div>
       <div className="flex items-center">
-        {data?.image_url ? (
+        {portfolio.image_url ? (
           <Image
             className="rounded-full border border-smoke w-32 h-32 mr-2 sm:mr-4"
-            alt={data?.title}
+            alt={portfolio.title}
             width={72}
             height={72}
             src={
-              'https://res.cloudinary.com/demo/image/fetch/' + data?.image_url
+              'https://res.cloudinary.com/demo/image/fetch/' +
+              portfolio.image_url
             }
           />
         ) : (
@@ -123,13 +127,13 @@ export async function Portfolio({ url }: { url: string }) {
         <div>
           <h1 className="text-2xl mb-2 tracking-tight text-text sm:text-3xl md:text-3xl">
             <span className="block xl:inline font-extrabold">
-              {data?.title}
+              {portfolio.title}
             </span>
           </h1>
           <div className="flex gap-2">
-            {data?.url && (
+            {portfolio.url && (
               <Link
-                href={data?.url}
+                href={portfolio.url}
                 className="flex items-center text-sm bg-blue hover:opacity-90 text-background rounded-full px-2 py-0.5"
               >
                 <LinkIcon className="w-4 h-4 mr-0.5 -ml-px -mt-px" /> Portfolio
@@ -139,10 +143,11 @@ export async function Portfolio({ url }: { url: string }) {
         </div>
       </div>
       <div className="mt-10 md:mt-12 overflow-hidden rounded-xl grid gap-1 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
-        {data?.portfolio_posts?.map((item, i) => (
-          <Card key={i} data={item} index={i + 1} />
-        ))}
+        {portfolio.portfolio_posts &&
+          portfolio.portfolio_posts?.map((item, i) => (
+            <Card key={i} data={item} index={i + 1} />
+          ))}
       </div>
-    </Fragment>
+    </div>
   );
 }
