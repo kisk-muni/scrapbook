@@ -44,34 +44,6 @@ export default function HomePage() {
         </Paragraph>
         <H2>
           <span className="block xl:inline font-extrabold">
-            Jak připojit své portfolio?
-          </span>
-        </H2>
-        <Paragraph>
-          Prozatím není možné přidat své portfolio přímo na webu. Nejjednodušší
-          způsob jak své portfolio přidat je napsat do kanálu Scrapbook na{' '}
-          <Link
-            className="text-orange hover:underline"
-            href="https://discord.gg/PGugj3BsE9"
-          >
-            KISKovém Discordu
-          </Link>
-          .
-        </Paragraph>
-        <Paragraph>Šablona zprávy:</Paragraph>
-        <div className="px-6 py-4 bg-white rounded-lg">
-          <p className="mt-0 text-lg text-text leading-6 mx-auto mb-0">
-            Ahoj, chtěl/a bych přidat své portfolio:
-            <br />
-            <br />
-            Jméno nebo přezdívka: Eliška Krásnohorská <br />
-            Portfolio: https://3liska-krasnoh0rska.wordpress.com
-            <br />
-            Platforma: wordpress
-          </p>
-        </div>
-        <H2>
-          <span className="block xl:inline font-extrabold">
             Projekt je otevřený
           </span>
         </H2>

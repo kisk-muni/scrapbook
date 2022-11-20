@@ -1,4 +1,3 @@
-'use client';
 import { useRef } from 'react';
 import {
   AriaButtonProps,
@@ -11,8 +10,7 @@ import classNames from 'classnames';
 interface ButtonProps extends AriaButtonProps<'button'> {
   className?: string;
 }
-
-export default function Button(props: ButtonProps) {
+export default function ButtonHelp(props: ButtonProps) {
   const ref = useRef();
   const { buttonProps } = useButton(props, ref);
   const { focusProps, isFocusVisible } = useFocusRing();
@@ -23,11 +21,10 @@ export default function Button(props: ButtonProps) {
       {...mergeProps(buttonProps, focusProps)}
       ref={ref}
       className={classNames(
-        'px-2',
-        'sm:px-3',
-        'py-2',
-        'sm:py-3',
-        'text-base',
+        'px-1',
+        'sm:px-2',
+        'sm:py-1',
+        'text-sm',
         'text-background',
         'cursor-pointer',
         'rounded-r-md',
@@ -47,8 +44,7 @@ export default function Button(props: ButtonProps) {
         {
           'ring-2 ring-offset-2 ring-slate bg-slate text-background':
             isFocusVisible,
-        },
-        props.className
+        }
       )}
     >
       {children}
