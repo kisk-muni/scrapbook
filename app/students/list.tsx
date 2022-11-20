@@ -16,8 +16,8 @@ const API = `${process.env.NEXT_PUBLIC_SUPABASE_API_URL}/rest/v1/portfolios?sele
 
 export function PortfolioSkeleton() {
   return (
-    <div className="mb-3 md:mb-6 flex flex-col items-center animate-pulse">
-      <div className="rounded-full w-16 md:w-24 lg:w-28 h-16 md:h-24 lg:h-28 bg-smoke mb-2 sm:mb-3"></div>
+    <div className="mb-3 md:mb-6 flex sm:flex-col justify-start sm:justify-center items-center animate-pulse">
+      <div className="rounded-full w-16 md:w-24 lg:w-28 h-16 md:h-24 lg:h-28 shrink-0 bg-smoke mb-0 mr-4 sm:mr-0 sm:mb-3"></div>
       <div>
         <div className="h-4 w-32 rounded-full bg-smoke"></div>
       </div>
@@ -35,7 +35,7 @@ function Portfolio(props: PortfolioData) {
     <div className="mb-3 md:mb-6">
       <Link
         href={'/portfolio?feed=' + props.feed_url}
-        className="flex sm:flex-col justify-flex-start sm:justify-center items-center"
+        className="flex sm:flex-col justify-start sm:justify-center items-center"
       >
         {props.image_url ? (
           <Image

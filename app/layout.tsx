@@ -41,7 +41,7 @@ export default function RootLayout({
               </Link>
               {['/', '/about'].includes(pathname) && (
                 <Link
-                  className="bg-slate text-background hover:bg-purple rounded-full font-semibold px-4 pt-1 pb-0.5 uppercase relative md:flex justify-center text-base font"
+                  className="bg-slate hidden sm:inline text-background hover:bg-purple rounded-full font-semibold px-4 pt-1 pb-0.5 uppercase relative md:flex justify-center text-base font"
                   href="/add-portfolio"
                 >
                   Připojit portfolio
