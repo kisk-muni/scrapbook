@@ -16,10 +16,10 @@ const API = `${process.env.NEXT_PUBLIC_SUPABASE_API_URL}/rest/v1/portfolios?sele
 
 export function PortfolioSkeleton() {
   return (
-    <div className="mr-4 mb-6 flex items-center animate-pulse">
-      <div className="rounded-full w-12 h-12 bg-smoke mr-2 sm:mr-3"></div>
+    <div className="mb-3 md:mb-6 flex flex-col items-center animate-pulse">
+      <div className="rounded-full w-16 md:w-24 lg:w-28 h-16 md:h-24 lg:h-28 bg-smoke mb-2 sm:mb-3"></div>
       <div>
-        <div className="h-4 w-48 rounded-full bg-smoke"></div>
+        <div className="h-4 w-32 rounded-full bg-smoke"></div>
       </div>
     </div>
   );
@@ -32,14 +32,14 @@ export function PortfolioSkeleton() {
 
 function Portfolio(props: PortfolioData) {
   return (
-    <div className="mr-4 mb-6 ">
+    <div className="mb-3 md:mb-6">
       <Link
         href={'/portfolio?feed=' + props.feed_url}
-        className="flex items-center"
+        className="flex flex-col items-center"
       >
         {props.image_url ? (
           <Image
-            className="rounded-full shadow-md border border-smoke w-12 h-12 mr-2 sm:mr-3"
+            className="rounded-full shadow-md border border-smoke w-16 md:w-24 lg:w-28 h-16 md:h-24 lg:h-28 mb-2 sm:mb-3"
             alt={props.title}
             width={48}
             height={48}
@@ -48,7 +48,7 @@ function Portfolio(props: PortfolioData) {
             }
           />
         ) : (
-          <div className="rounded-full w-12 shrink-0 h-12 bg-smoke mr-2 sm:mr-3"></div>
+          <div className="rounded-full w-16 md:w-24 lg:w-28 h-16 md:h-24 lg:h-28 shrink-0 bg-smoke mb-2 sm:mb-3"></div>
         )}
         <h1 className="text-lg font-bold tracking-tight text-text leading-5">
           {props.title
@@ -68,7 +68,7 @@ export function PortfoliosList() {
   const { data, error } = useSWR<PortfolioData[]>(API, fetcher);
   if (error) throw new Error('No portfolio found.');
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+    <div className="flex flex-row justify-center align-flex-start flex-wrap basis-auto gap-4 md:gap-8 lg:gap-12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
       {data
         ? data?.map((item, i) => <Portfolio key={i} {...item} />)
         : [...Array(30).keys()].map((_item, i) => (
