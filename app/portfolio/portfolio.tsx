@@ -85,7 +85,7 @@ function Card(props: CardProps) {
 export function PortfolioSkeleton() {
   return (
     <div className="flex items-center animate-pulse">
-      <div className="rounded-full w-32 h-32 bg-smoke mr-2 sm:mr-4"></div>
+      <div className="rounded-full w-32 h-32 bg-smoke grow-0 shrink-0 mr-2 sm:mr-4"></div>
       <div>
         <div className="h-7 mt-3 mb-3 w-56 rounded-full bg-smoke"></div>
         <div className="flex gap-2">
