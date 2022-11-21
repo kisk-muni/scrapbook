@@ -1,0 +1,14 @@
+name: Keep Supabase alive
+on:
+  schedule:
+    - cron: '0 23 * * *'
+jobs:
+  cron:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make Supabase API request
+        run: |
+          curl --request POST \
+          --url 'https://kiggmvgmzoffneyfrvuz.supabase.co/rest/v1/portfolio_posts?select=id&limit=1' \
+          --header 'apikey: ${{ secrets.SUPABASE_ANON_KEY }}' \
+          --header 'Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}' \
