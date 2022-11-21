@@ -70,18 +70,18 @@ function Skeleton() {
       className={`bg-white animate-in fade-in rounded-lg mb-4 mr-4 md:mb-6 md:mr-6`}
     >
       <div className="animate-pulse">
-        <div className="flex flex-column p-3">
+        <div className="flex flex-column pt-3 px-3 mb-2">
           <div className="w-12 h-12 bg-smoke rounded-full mr-2"></div>
           <div className="mt-1 flex-1">
-            <div className="mb-1.5 mt-0.5 w-3/4 text-text h-4 rounded-full bg-smoke"></div>
+            <div className="mb-1.5 w-8/12 text-text h-3.5 rounded-full bg-smoke"></div>
             <div className="h-3 w-1/2 rounded-full bg-smoke"></div>
           </div>
         </div>
-        <div className="px-4 pb-4">
-          <div className="h-3.5 mt-0.5 mb-2.5 w-10/12 rounded-full bg-smoke"></div>
-          <div className="h-3.5 mt-0.5 mb-2.5 w-11/12 rounded-full bg-smoke"></div>
-          <div className="h-3.5 mt-0.5 mb-2.5 w-8/12 rounded-full bg-smoke"></div>
-          <div className="h-3.5 mt-0.5 mb-2.5 w-9/12 rounded-full bg-smoke"></div>
+        <div className="px-4 mt-3 pb-4">
+          <div className="h-3.5 mb-2.5 w-10/12 rounded-full bg-smoke"></div>
+          <div className="h-3.5 mb-2.5 w-11/12 rounded-full bg-smoke"></div>
+          <div className="h-3.5 mb-2.5 w-8/12 rounded-full bg-smoke"></div>
+          <div className="h-3.5 mb-2.5 w-9/12 rounded-full bg-smoke"></div>
           <div className="relative overflow-hidden mt-4 rounded-md w-full bg-background h-48 md:h-56 lg:h-60 xl:h-64"></div>
         </div>
       </div>
@@ -101,7 +101,7 @@ function Card({ data }: CardProps) {
   if (data.skeleton) return <Skeleton />;
   return (
     <div className="bg-white rounded-lg mb-4 mr-4 md:mb-6 md:mr-6">
-      <div className="flex flex-column p-3">
+      <div className="flex flex-column pt-3 px-3 mb-2">
         {data.portfolios.image_url ? (
           <Image
             className="rounded-full w-12 h-12 mr-2"
@@ -118,7 +118,7 @@ function Card({ data }: CardProps) {
         )}
         <div className="mt-1">
           {(data.portfolios.title || data.portfolios.url) && (
-            <p className="mb-0 mt-0.5 text-text text-lg leading-5 font-bold hover:text-dark">
+            <p className="mb-0 mt-0.5 text-text text-base leading-5 font-bold hover:text-dark">
               <Link
                 onClick={() => plausible('Portfolio Link: Click')}
                 href={'/portfolio?feed=' + data.portfolios.feed_url}
@@ -129,9 +129,9 @@ function Card({ data }: CardProps) {
               </Link>
             </p>
           )}
-          <p className="text-muted text-sm">
             {format(parseISO(data.published_at), 'do MMMM yyyy', {
               locale: csLocale,
+          <p className="text-muted text-base leading-4">
             })}
           </p>
         </div>
