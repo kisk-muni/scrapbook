@@ -1,10 +1,10 @@
 # KISK Scrapbook
 
-[Scrapbook](https://kisk.vercel.app/) is the place where we share our learning journey.
+[Scrapbook (scrapbook.kisk.cz)](https://scrapbook.kisk.cz/) is the place where we share our learning journey.
 The goal of the scrapbook is to create a place where we will enjoy coming back to find
 out what others are working on and support each other.
 
-## Principles
+## Design principles
 
 - The design and development [are the same thing](https://www.youtube.com/watch?v=3hccXiXI0u8).
 - Every feature has to be mobile-first.
