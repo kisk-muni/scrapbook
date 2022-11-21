@@ -53,7 +53,7 @@ function usePortfoliosList() {
 
 function LoadingIcon() {
   return (
-    <div className="bg-white dark:bg-smoke w-10 h-10 ring-1 ring-snow dark:ring-slate shadow-lg rounded-full flex items-center justify-center">
+    <div className="bg-white w-10 h-10 ring-1 ring-snow shadow-lg rounded-full flex items-center justify-center">
       <svg
         className="animate-spin w-6 h-6 text-orange h-5 w-5"
         xmlns="http://www.w3.org/2000/svg"
