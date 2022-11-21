@@ -1,5 +1,5 @@
 'use client';
-import { parseISO, format } from 'date-fns';
+import { parseISO, formatRelative } from 'date-fns';
 import csLocale from 'date-fns/locale/cs';
 import { Markup } from 'interweave';
 import { polyfill } from 'interweave-ssr';
@@ -10,6 +10,20 @@ import { Fragment, useEffect, useRef } from 'react';
 import useApiInfinite from 'lib/use-api-infinite';
 import useOnScreen from 'lib/hooks/use-on-screen';
 import Image from 'next/image';
+
+const formatRelativeLocale = {
+  lastWeek: "''eeee",
+  yesterday: "'včera v' p",
+  today: "'' p",
+  tomorrow: "'zítra v' p",
+  nextWeek: 'do MMMM yyyy',
+  other: 'do MMMM yyyy',
+};
+
+const locale = {
+  ...csLocale,
+  formatRelative: (token) => formatRelativeLocale[token],
+};
 
 const limit = 30;
 
@@ -129,9 +143,9 @@ function Card({ data }: CardProps) {
               </Link>
             </p>
           )}
-            {format(parseISO(data.published_at), 'do MMMM yyyy', {
-              locale: csLocale,
           <p className="text-muted text-base leading-4">
+            {formatRelative(parseISO(data.published_at), new Date(), {
+              locale: locale,
             })}
           </p>
         </div>
