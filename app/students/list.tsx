@@ -41,8 +41,8 @@ function Portfolio(props: PortfolioData) {
           <Image
             className="rounded-full shadow-md border border-smoke w-16 md:w-24 lg:w-28 h-16 md:h-24 lg:h-28 mb-0 mr-4 sm:mr-0 sm:mb-3"
             alt={props.title}
-            width={48}
-            height={48}
+            width={192}
+            height={192}
             src={
               'https://res.cloudinary.com/demo/image/fetch/' + props.image_url
             }
