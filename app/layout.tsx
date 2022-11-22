@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Providers } from './providers';
 import '../styles/globals.css';
 import { usePathname } from 'next/navigation';
+import { TailwindIndicator } from 'components/tailwind-indicator';
 
 export default function RootLayout({
   children,
@@ -52,6 +53,7 @@ export default function RootLayout({
         </header>
         <main>
           <Providers>{children}</Providers>
+          <TailwindIndicator />
         </main>
       </body>
     </html>
