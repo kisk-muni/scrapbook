@@ -13,7 +13,7 @@ out what others are working on and support each other.
 
 Web app
 
-- the site is powered by [next.js 13](https://nextjs.org/) which is currently in beta
+- **Warning** the site is powered by [next.js 13](https://nextjs.org/) which is currently in beta
   and its features are not stable. this project was partly created to test the new version
   of the framework, provide feedback to its developers and form opinion on it.
 - some of the features are developed rapidly, thus we expect errors to occur and the project
@@ -32,6 +32,32 @@ Database and API
 - posts from portfolios are fetched hourly by cron job which runs on the database and invokes
   [feed-source function](./supabase/functions/feed-source/index.ts) on every portfolio from
   [student portfolios list](https://kisk.vercel.app/students)
+
+## Get started
+
+1. install dependencies
+
+```
+npm i
+```
+
+2. set environmental variables
+
+```
+cp .env.example .env.local
+```
+
+3. run local development server (the app should work, but show no data)
+
+```
+npm run dev
+```
+
+4. run local development database (assumes you have docker installed and running)
+
+```
+npx supabase start
+```
 
 ## Origin of Scrapbook
 
