@@ -10,6 +10,7 @@ import { Fragment, useEffect, useRef } from 'react';
 import useApiInfinite from 'lib/use-api-infinite';
 import useOnScreen from 'lib/hooks/use-on-screen';
 import Image from 'next/image';
+import { PostThumbnail } from 'components/post-thumbnail';
 
 const formatRelativeLocale = {
   lastWeek: "''eeee",
@@ -96,7 +97,7 @@ function Skeleton() {
           <div className="h-3.5 mb-2.5 w-11/12 rounded-full bg-smoke"></div>
           <div className="h-3.5 mb-2.5 w-8/12 rounded-full bg-smoke"></div>
           <div className="h-3.5 mb-2.5 w-9/12 rounded-full bg-smoke"></div>
-          <div className="relative overflow-hidden mt-4 rounded-md w-full bg-background h-48 md:h-56 lg:h-60 xl:h-64"></div>
+          <div className="relative overflow-hidden mt-4 rounded-md w-full bg-background aspect-w-8 aspect-h-5"></div>
         </div>
       </div>
     </div>
@@ -160,24 +161,11 @@ function Card({ data }: CardProps) {
             {data.title}
           </Link>
         </p>
-        <p className="text-lg text-text leading-6">
+        <p className="text-lg text-text leading-6 line-clamp-8">
           <Markup content={description} />
         </p>
         {data.thumbnail_url && (
-          <div className="relative overflow-hidden mt-4 rounded-md w-full bg-background h-48 md:h-56 lg:h-60 xl:h-64">
-            <Image
-              alt={data.portfolios.title}
-              fill
-              sizes="(max-width: 768px) 100vw,
-              (max-width: 1200px) 50vw,
-              33vw"
-              className="object-contain"
-              src={
-                'https://res.cloudinary.com/demo/image/fetch/' +
-                data.thumbnail_url
-              }
-            />
-          </div>
+          <PostThumbnail alt={data.portfolios.title} src={data.thumbnail_url} />
         )}
       </div>
     </div>

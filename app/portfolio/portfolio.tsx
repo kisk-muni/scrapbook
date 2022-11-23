@@ -8,6 +8,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import useSWR from 'swr';
 import fetcher from 'lib/fetcher';
+import { PostThumbnail } from 'components/post-thumbnail';
 
 interface PostProps {
   id: string;
@@ -63,20 +64,7 @@ function Card(props: CardProps) {
         </p>
       )}
       {data.thumbnail_url && (
-        <div className="relative overflow-hidden mt-4 rounded-md w-full bg-background h-48 md:h-56 lg:h-60 xl:h-64">
-          <Image
-            alt={data.title}
-            fill
-            sizes="(max-width: 768px) 100vw,
-              (max-width: 1200px) 50vw,
-              33vw"
-            className="object-contain"
-            src={
-              'https://res.cloudinary.com/demo/image/fetch/' +
-              data.thumbnail_url
-            }
-          />
-        </div>
+        <PostThumbnail alt={data.title} src={data.thumbnail_url} />
       )}
     </div>
   );
