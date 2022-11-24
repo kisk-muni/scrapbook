@@ -11,6 +11,7 @@ import useApiInfinite from 'lib/use-api-infinite';
 import useOnScreen from 'lib/hooks/use-on-screen';
 import Image from 'next/image';
 import { PostThumbnail } from 'components/post-thumbnail';
+import { cloudinaryImageFetch } from 'lib/cloudinary';
 
 const formatRelativeLocale = {
   lastWeek: "''eeee",
@@ -79,31 +80,6 @@ function LoadingIcon() {
   );
 }
 
-function Skeleton() {
-  return (
-    <div
-      className={`bg-white animate-in fade-in rounded-lg mb-4 mr-4 md:mb-6 md:mr-6`}
-    >
-      <div className="animate-pulse">
-        <div className="flex flex-column pt-3 px-3 mb-2">
-          <div className="w-12 h-12 bg-smoke rounded-full mr-2"></div>
-          <div className="mt-1 flex-1">
-            <div className="mb-1.5 w-8/12 text-text h-3.5 rounded-full bg-smoke"></div>
-            <div className="h-3 w-1/2 rounded-full bg-smoke"></div>
-          </div>
-        </div>
-        <div className="px-4 mt-3 pb-4">
-          <div className="h-3.5 mb-2.5 w-10/12 rounded-full bg-smoke"></div>
-          <div className="h-3.5 mb-2.5 w-11/12 rounded-full bg-smoke"></div>
-          <div className="h-3.5 mb-2.5 w-8/12 rounded-full bg-smoke"></div>
-          <div className="h-3.5 mb-2.5 w-9/12 rounded-full bg-smoke"></div>
-          <div className="relative overflow-hidden mt-4 rounded-md w-full bg-background aspect-w-8 aspect-h-5"></div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 interface CardProps {
   index: number;
   data: PostItemProps;
@@ -113,7 +89,7 @@ interface CardProps {
 function Card({ data }: CardProps) {
   const description = data.description?.split('<a class="more-link"')[0];
   const plausible = usePlausible();
-  if (data.skeleton) return <Skeleton />;
+  if (data.skeleton) return <Card.Skeleton />;
   return (
     <div className="bg-white rounded-lg mb-4 mr-4 md:mb-6 md:mr-6">
       <div className="flex flex-column pt-3 px-3 mb-2">
@@ -123,10 +99,7 @@ function Card({ data }: CardProps) {
             alt={data.portfolios.title}
             width={48}
             height={48}
-            src={
-              'https://res.cloudinary.com/demo/image/fetch/' +
-              data.portfolios.image_url
-            }
+            src={cloudinaryImageFetch(data.portfolios.image_url)}
           />
         ) : (
           <div className="w-12 h-12 bg-smoke rounded-full mr-2"></div>
@@ -171,6 +144,31 @@ function Card({ data }: CardProps) {
     </div>
   );
 }
+
+Card.Skeleton = function CardSkeleton() {
+  return (
+    <div
+      className={`bg-white animate-in fade-in rounded-lg mb-4 mr-4 md:mb-6 md:mr-6`}
+    >
+      <div className="animate-pulse">
+        <div className="flex flex-column pt-3 px-3 mb-2">
+          <div className="w-12 h-12 bg-smoke rounded-full mr-2"></div>
+          <div className="mt-1 flex-1">
+            <div className="mb-1.5 w-8/12 text-text h-3.5 rounded-full bg-smoke"></div>
+            <div className="h-3 w-1/2 rounded-full bg-smoke"></div>
+          </div>
+        </div>
+        <div className="px-4 mt-3 pb-4">
+          <div className="h-3.5 mb-2.5 w-10/12 rounded-full bg-smoke"></div>
+          <div className="h-3.5 mb-2.5 w-11/12 rounded-full bg-smoke"></div>
+          <div className="h-3.5 mb-2.5 w-8/12 rounded-full bg-smoke"></div>
+          <div className="h-3.5 mb-2.5 w-9/12 rounded-full bg-smoke"></div>
+          <div className="relative overflow-hidden mt-4 rounded-md w-full bg-background aspect-w-8 aspect-h-5"></div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 // https://www.youtube.com/watch?v=zwQs4wXr9Bg&t=531s
 

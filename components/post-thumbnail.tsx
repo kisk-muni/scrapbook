@@ -1,3 +1,4 @@
+import { cloudinaryImageFetch } from 'lib/cloudinary';
 import Image from 'next/image';
 
 interface PostImageProps {
@@ -11,11 +12,11 @@ export function PostThumbnail({ alt, src }: PostImageProps) {
       <Image
         alt={alt}
         fill
-        sizes="(max-width: 768px) 100vw,
-              (max-width: 1200px) 50vw,
-              33vw"
+        sizes="(max-width: 768px) 600px,
+              (max-width: 1200px) 500px,
+              500px"
         className="object-contain"
-        src={'https://res.cloudinary.com/demo/image/fetch/' + src}
+        src={cloudinaryImageFetch(src, 'c_scale,q_auto:best,w_800')}
       />
     </div>
   );

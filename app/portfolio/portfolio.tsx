@@ -9,6 +9,7 @@ import Link from 'next/link';
 import useSWR from 'swr';
 import fetcher from 'lib/fetcher';
 import { PostThumbnail } from 'components/post-thumbnail';
+import { cloudinaryImageFetch } from 'lib/cloudinary';
 
 interface PostProps {
   id: string;
@@ -104,10 +105,7 @@ export function Portfolio(props: { feedUrl?: string }) {
             alt={portfolio.title}
             width={72}
             height={72}
-            src={
-              'https://res.cloudinary.com/demo/image/fetch/' +
-              portfolio.image_url
-            }
+            src={cloudinaryImageFetch(portfolio.image_url)}
           />
         ) : (
           <div className="rounded-full w-32 h-32 bg-smoke mr-2 sm:mr-4"></div>

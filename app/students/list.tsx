@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import useSWR from 'swr';
 import fetcher from 'lib/fetcher';
+import { cloudinaryImageFetch } from 'lib/cloudinary';
 
 interface PortfolioData {
   title?: string;
@@ -43,9 +44,7 @@ function Portfolio(props: PortfolioData) {
             alt={props.title}
             width={192}
             height={192}
-            src={
-              'https://res.cloudinary.com/demo/image/fetch/' + props.image_url
-            }
+            src={cloudinaryImageFetch(props.image_url)}
           />
         ) : (
           <div className="rounded-full w-16 md:w-24 lg:w-28 h-16 md:h-24 lg:h-28 shrink-0 bg-smoke mb-0 mr-4 sm:mr-0 sm:mb-3"></div>
