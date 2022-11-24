@@ -8,7 +8,7 @@ interface PostImageProps {
 
 export function PostThumbnail({ alt, src }: PostImageProps) {
   return (
-    <div className="relative overflow-hidden mt-4 rounded-md w-full bg-background aspect-w-8 aspect-h-5">
+    <div className="relative overflow-hidden mt-4 rounded-md w-full bg-background aspect-w-4 aspect-h-3">
       <Image
         alt={alt}
         fill
@@ -16,7 +16,7 @@ export function PostThumbnail({ alt, src }: PostImageProps) {
               (max-width: 1200px) 500px,
               500px"
         className="object-contain"
-        src={cloudinaryImageFetch(src, 'c_scale,q_auto:best,w_800')}
+        src={cloudinaryImageFetch(src, 'ar_1.333,b_auto,c_pad,w_800')}
       />
     </div>
   );
