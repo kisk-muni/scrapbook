@@ -163,7 +163,7 @@ Card.Skeleton = function CardSkeleton() {
           <div className="h-3.5 mb-2.5 w-11/12 rounded-full bg-smoke"></div>
           <div className="h-3.5 mb-2.5 w-8/12 rounded-full bg-smoke"></div>
           <div className="h-3.5 mb-2.5 w-9/12 rounded-full bg-smoke"></div>
-          <div className="relative overflow-hidden mt-4 rounded-md w-full bg-background aspect-w-8 aspect-h-5"></div>
+          <div className="relative overflow-hidden mt-4 rounded-md w-full bg-background aspect-w-4 aspect-h-3"></div>
         </div>
       </div>
     </div>
