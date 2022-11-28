@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import ButtonHelp from './button-help';
 import Button from 'components/button';
+import { usePlausible } from 'next-plausible';
 
 interface AddPortfolioProps {
   platform: string;
@@ -34,8 +35,10 @@ export default function URLField({ platform }: AddPortfolioProps) {
   const [showHelp, setShowHelp] = useState(false);
   const [message, setMesage] = useState('');
   const [feedUrl, setFeedUrl] = useState('');
+  const plausible = usePlausible();
 
   const handleContinue = async () => {
+    plausible('Add Portfolio: Continue Click');
     if (url == '') {
       setMesage('Zadejte URL.');
       setIsError(true);
@@ -44,10 +47,13 @@ export default function URLField({ platform }: AddPortfolioProps) {
     setIsLoading(true);
     const postedPortfolio = await addPortfolio(url, platform);
     setMesage(postedPortfolio.message);
-    if (postedPortfolio.isError) setIsError(true);
-    else if (postedPortfolio.feedUrl) {
+    if (postedPortfolio.isError) {
+      plausible('Add Portfolio: Unsuccessful');
+      setIsError(true);
+    } else if (postedPortfolio.feedUrl) {
       setIsError(false);
       setFeedUrl(postedPortfolio.feedUrl);
+      plausible('Add Portfolio: Success');
     }
     setIsLoading(false);
   };

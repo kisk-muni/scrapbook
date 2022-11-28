@@ -22,8 +22,8 @@ export default function AddPortfolioPage() {
   const [platform, setPlatform] = useState('');
   const plausible = usePlausible();
   const handlePlatformSelect = (val) => {
+    plausible('Add Portfolio: Platform selected');
     setPlatform(val);
-    plausible('Platform selected');
   };
   return (
     <div className="mx-auto sm:max-w-2xl bg-background rounded-lg mt-6 mb-8 sm:mt-6 sm:mb-16 sm:px-8 md:mt-8 md:mb-20">
