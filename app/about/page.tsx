@@ -17,7 +17,7 @@ function H2({ children }) {
   );
 }
 
-export default function HomePage() {
+export default function AboutPage() {
   return (
     <div className="mx-auto sm:max-w-2xl mt-6 mb-8 sm:mt-6 sm:mb-16 sm:px-6 md:mt-8 md:mb-20">
       <div className="justify-center">
