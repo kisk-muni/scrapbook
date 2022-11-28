@@ -5,7 +5,7 @@ import { OverlayProvider, SSRProvider } from 'react-aria';
 export function Providers({ children }) {
   return (
     <SSRProvider>
-      <PlausibleProvider domain="kisk.vercel.app">
+      <PlausibleProvider domain={process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN}>
         <OverlayProvider>{children}</OverlayProvider>
       </PlausibleProvider>
     </SSRProvider>
