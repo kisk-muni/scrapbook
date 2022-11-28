@@ -38,7 +38,7 @@ export default function AboutPage() {
             className="text-orange hover:underline"
             href="https://discord.gg/PGugj3BsE9"
           >
-            Discord
+            KISKový Discord
           </Link>
           .
         </Paragraph>
@@ -64,7 +64,7 @@ export default function AboutPage() {
           <li>
             <Link
               className="text-orange hover:underline"
-              href="https://plausible.io/kisk.vercel.app/"
+              href="https://plausible.io/kisk.vercel.app?period=all"
             >
               Plausible Analytics
             </Link>{' '}
