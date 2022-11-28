@@ -14,9 +14,9 @@ import { PostThumbnail } from 'components/post-thumbnail';
 import { cloudinaryImageFetch } from 'lib/cloudinary';
 
 const formatRelativeLocale = {
-  lastWeek: "''eeee",
+  lastWeek: "eeee 'v' p",
   yesterday: "'včera v' p",
-  today: "'' p",
+  today: "'dnes v' p",
   tomorrow: "'zítra v' p",
   nextWeek: 'do MMMM yyyy',
   other: 'do MMMM yyyy',
