@@ -22,27 +22,27 @@ export default function RootLayout({
         <header>
           <nav className="flex w-full justify-between items-center h-16">
             <Link
-              className="flex justify-center text-base text-slate hover:text-darker font-semibold"
+              className="flex justify-center text-base text-muted hover:text-cyan font-semibold"
               href="/"
             >
               KISK Scrapbook
             </Link>{' '}
             <div className="flex items-baseline space-x-6">
               <Link
-                className="text-slate hover:text-gray relative md:flex justify-center text-base font space-x-6"
+                className="text-muted hover:text-cyan hover:text-gray relative md:flex justify-center text-base font space-x-6"
                 href="/about"
               >
                 O Scrapbooku
               </Link>
               <Link
-                className="text-slate hover:text-gray relative md:flex justify-center text-base font space-x-6"
+                className="text-muted hover:text-cyan hover:text-gray relative md:flex justify-center text-base font space-x-6"
                 href="/students"
               >
                 Studenti
               </Link>
               {['/', '/about'].includes(pathname) && (
                 <Link
-                  className="bg-slate hidden sm:inline text-background hover:bg-purple rounded-full font-semibold px-4 pt-1 pb-0.5 uppercase relative md:flex justify-center text-base font"
+                  className="bg-muted hidden sm:inline text-background hover:bg-purple rounded-full font-semibold px-4 pt-1 pb-0.5 uppercase relative md:flex justify-center text-base font"
                   href="/add-portfolio"
                 >
                   Připojit portfolio
