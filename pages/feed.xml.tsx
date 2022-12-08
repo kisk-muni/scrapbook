@@ -1,3 +1,4 @@
+import { cloudinaryImageFetch } from 'lib/cloudinary';
 import RSS from 'rss';
 import supabase from '../lib/supabase';
 
@@ -30,6 +31,7 @@ export async function getServerSideProps({ res }) {
         portfolios(
           id,
           title,
+          name,
           url,
           feed_url,
           image_url
@@ -47,10 +49,27 @@ export async function getServerSideProps({ res }) {
           url: post?.url,
           date: new Date(post?.published_at).toISOString(),
           description: post?.description,
-          author: {
-            name: post?.portfolios[0]?.title,
-            url: SITE_URL + '/portfolio?feed=' + post.portfolios[0]?.feed_url,
+          author:
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (post?.portfolios as any).title ||
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (post?.portfolios as any).name ||
+            'Uživatel Scrapbooku',
+          enclosure: {
+            url: cloudinaryImageFetch(
+              post.thumbnail_url,
+              'ar_1.333,b_auto,c_pad,w_800'
+            ),
           },
+          custom_elements: [
+            {
+              creator_url:
+                SITE_URL +
+                '/portfolio?feed=' +
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                (post?.portfolios as any).feed_url,
+            },
+          ],
         });
       } catch (error) {
         console.log(
