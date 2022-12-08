@@ -39,7 +39,7 @@ export async function getServerSideProps({ res }) {
     `
     )
     .order('published_at', { ascending: false })
-    .limit(10);
+    .limit(40);
 
   if (!error)
     data.map((post) => {
