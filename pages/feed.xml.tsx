@@ -55,12 +55,14 @@ export async function getServerSideProps({ res }) {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (post?.portfolios as any).name ||
             'Uživatel Scrapbooku',
-          enclosure: {
-            url: cloudinaryImageFetch(
-              post.thumbnail_url,
-              'ar_1.333,b_auto,c_pad,w_800'
-            ),
-          },
+          ...(post.thumbnail_url && {
+            enclosure: {
+              url: cloudinaryImageFetch(
+                post.thumbnail_url,
+                'ar_1.333,b_auto,c_pad,w_800'
+              ),
+            },
+          }),
           custom_elements: [
             {
               creator_url:
