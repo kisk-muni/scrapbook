@@ -119,6 +119,13 @@ function OtherPlatform() {
     <Fragment>
       <Step number={2}>
         <Paragraph>Zadej URL adresu portfolia</Paragraph>
+        <Paragraph>
+          <span className="text-base">
+            Pokud své portfolio provozuješ na jiné platformě, neboj se pokusit o
+            jeho připojení. Připojení se však nemusí vydařit, protože je tato
+            funkce pouze experimentální.
+          </span>
+        </Paragraph>
         <URLField platform="other" />
       </Step>
     </Fragment>
