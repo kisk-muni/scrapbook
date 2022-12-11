@@ -25,20 +25,54 @@ export default function AboutPage() {
           <span className="block xl:inline font-extrabold">O Scrapbooku</span>
         </h1>
         <Paragraph>
-          Scrapbook je místem, kde shromažďujeme střípky z našeho studia. Cílem
-          scrapbooku je vytvořit místo, kam se jako studenti budeme rádi vracet
-          abychom zjistili, na čem pracují ostatní a vzájemně se podpořili.
+          Na Scrapbooku shromažďujeme střípky z našeho studia. Cílem Scrapbooku
+          je nebát se sdílet na čem zrovna pracujeme, i když daný výstup zrovna
+          není podle našich představ. Díky vzájemnému sdílení víme, na čem
+          pracují ostatní a můžeme se vzájemně podpořit.
+        </Paragraph>
+        <H2>
+          <span className="block italic xl:inline font-extrabold">
+            Důležité je pravidelné sdílení výstupů, ne snaha o dokonalý
+            výsledek.
+          </span>
+        </H2>
+        <Paragraph>
+          Na stránce naleznete příspěvky z portfolií studentů KISKu. Studenstká
+          portfolia jsou neustále v procesu vylepšování a experimentování.
+          Většina příspěvků je a zůstane ve fázi rozpracování.
         </Paragraph>
         <Paragraph>
-          Na stránce naleznete příspěvky z portfolií studentů ze seznamu
-          zveřejněných portfolií na webu kisku. Příspěvky se pravidelně
-          automaticky aktualizují. Pokud svůj příspěvek do hodiny po publikování
-          neuvidíte, napište na{' '}
+          Příspěvky pochází z portfolií studentů, kteří souhlasili se
+          zveřejněním svého portfolia nebo své portfolio přidali na stránce{' '}
+          <Link className="text-orange hover:underline" href="/add-portfolio">
+            Připojení portfolia
+          </Link>
+          .
+        </Paragraph>
+        <Paragraph>
+          K aktualizaci příspěvků dochází každou hodinu. Pokud svůj příspěvek do
+          hodiny po publikování neuvidíte, ozvěte se na{' '}
           <Link
             className="text-orange hover:underline"
             href="https://discord.gg/PGugj3BsE9"
           >
-            KISKový Discord
+            Discordu
+          </Link>
+          .
+        </Paragraph>
+        <H2>
+          <span className="block xl:inline font-extrabold">
+            Jak mohu na příspěvky reagovat?
+          </span>
+        </H2>
+        <Paragraph>
+          Abychom mohli nad příspěvky diskutovat, všechny příspěvky se
+          automaticky sdílí do kanálu{' '}
+          <Link
+            className="text-orange hover:underline"
+            href="https://discord.gg/HDacGhAhj8"
+          >
+            #scrapbook na KISKovém Discordu
           </Link>
           .
         </Paragraph>
@@ -52,25 +86,25 @@ export default function AboutPage() {
           Navrhněte, co by mohlo být jinak nebo to rovnou udělejte sami.{' '}
         </Paragraph>
         <ul className="mt-0 pl-6 text-xl list-disc text-text mx-auto mb-4">
-          <li>
+          <li className="text-lg lg:text-xl text-text">
             <Link
               className="text-orange hover:underline"
               href="https://github.com/orgs/kisk-muni/projects/1/views/1"
             >
-              Roadmap projektu
+              Roadmap Scrapbooku
             </Link>{' '}
-            - co vás trápí, co chystáme a co je potřeba udělat?
+            - na čem pracujeme a jak se můžete zapojit?
           </li>
-          <li>
+          <li className="text-lg lg:text-xl text-text">
             <Link
               className="text-orange hover:underline"
               href="https://plausible.io/kisk.vercel.app?period=all"
             >
               Plausible Analytics
             </Link>{' '}
-            - anonymní statistka návštěvnosti projektu
+            - anonymní statistka návštěvnosti Scrapbooku
           </li>
-          <li>
+          <li className="text-lg lg:text-xl text-text">
             <Link
               className="text-orange hover:underline"
               href="https://github.com/kisk-muni/scrapbook"
@@ -80,43 +114,6 @@ export default function AboutPage() {
             - zdrojový kód a jiné materiály
           </li>
         </ul>
-        <H2>
-          <span className="block xl:inline font-extrabold">
-            Filosofie v.0.crap
-          </span>
-        </H2>
-        <Paragraph>
-          Scrapbook se snaží působit jako něco, co vzniká na koleni a
-          neprofesionálně, jako pouhý draft, útržek či dokonce odpad. Cílem je
-          se nebát experimentovat.
-        </Paragraph>
-        <Paragraph>
-          <div className="ml-3 md:ml-6">
-            <q>
-              […] We started sharing drafts with each other earlier and more
-              often, happily testing our ideas before we committed lots of time
-              to them. […] v.0.crap works because it’s attuned to the psychology
-              of the situation. It’s punching through our innate desire not to
-              “look bad”, plus years of corporate conditioning that tells us not
-              to share less-than-polished work. It’s easier for people used to
-              delivering exceptional work to feel they’ve exceeded the goal of
-              “crap”; they can sit comfortably in “good enough for the current
-              purpose.” It also establishes an agreement, even trust, between
-              the parties engaging with the work. A team member can use it to
-              tell collaborators what kind of input they’re looking for, and
-              people in positions of power can use it to clarify their
-              expectations
-            </q>{' '}
-            (
-            <Link
-              className="text-orange hover:underline"
-              href="https://blog.x.company/the-monkey-the-tiger-beetle-and-the-language-of-innovation-25d43a3c9632"
-            >
-              courtneyhohne, 2020
-            </Link>
-            )
-          </div>
-        </Paragraph>
         <H2>
           <span className="block xl:inline font-extrabold">
             Původ Scrapbooku
