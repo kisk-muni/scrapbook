@@ -1,14 +1,14 @@
 'use client';
 import { LinkIcon } from '@heroicons/react/20/solid';
 import { format, parseISO } from 'date-fns';
-import { Markup } from 'interweave';
 import { polyfill } from 'interweave-ssr';
 import csLocale from 'date-fns/locale/cs';
 import Image from 'next/image';
 import Link from 'next/link';
 import useSWR from 'swr';
 import fetcher from 'lib/fetcher';
-import { PostThumbnail } from 'components/post-thumbnail';
+import { PostImage } from 'components/post-image';
+import { PostDescription } from 'components/post-description';
 import { cloudinaryImageFetch } from 'lib/cloudinary';
 
 interface PostProps {
@@ -43,14 +43,14 @@ function Card(props: CardProps) {
   const data = props.data;
   return (
     <div className="bg-white p-4 sm:p-6">
-      {data?.published_at && (
+      {data.published_at && (
         <p className="text-text text-lg font-bold mb-2">
           {format(parseISO(data?.published_at), 'do MMMM yyyy', {
             locale: csLocale,
           })}
         </p>
       )}
-      {data?.title && data?.url && (
+      {data.title && data?.url && (
         <p className="mb-2 text-lg leading-6 hover:text-muted">
           <Link href={data?.url} className="text-blue underline">
             {data?.title}
@@ -59,13 +59,11 @@ function Card(props: CardProps) {
       )}
       {data.description && (
         <p className="text-lg text-text leading-6">
-          <Markup
-            content={data?.description?.split('<a class="more-link"')[0]}
-          />
+          <PostDescription content={data.description} />
         </p>
       )}
       {data.thumbnail_url && (
-        <PostThumbnail alt={data.title} src={data.thumbnail_url} />
+        <PostImage alt={data.title} src={data.thumbnail_url} isThumbnail />
       )}
     </div>
   );

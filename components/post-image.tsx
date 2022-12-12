@@ -1,14 +1,21 @@
 import { cloudinaryImageFetch } from 'lib/cloudinary';
 import Image from 'next/image';
+import classNames from 'classnames';
 
 interface PostImageProps {
   alt?: string;
   src: string;
+  isThumbnail?: boolean;
 }
 
-export function PostThumbnail({ alt, src }: PostImageProps) {
+export function PostImage({ alt, src, isThumbnail = false }: PostImageProps) {
   return (
-    <div className="relative overflow-hidden mt-4 rounded-md w-full bg-background aspect-w-4 aspect-h-3">
+    <div
+      className={classNames(
+        'relative overflow-hidden rounded-md w-full bg-background aspect-w-4 aspect-h-3',
+        { 'mt-4': isThumbnail, 'mb-2': !isThumbnail }
+      )}
+    >
       <Image
         alt={alt}
         fill

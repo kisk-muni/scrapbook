@@ -53,5 +53,10 @@ module.exports = {
       'gradient-header':
         'radial-gradient(ellipse farthest-corner at top left, var(--tw-gradient-stops))',
     },
+    extend: {
+      lineClamp: {
+        8: '8',
+      },
+    },
   },
 };

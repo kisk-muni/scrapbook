@@ -1,7 +1,6 @@
 'use client';
 import { parseISO, formatRelative } from 'date-fns';
 import csLocale from 'date-fns/locale/cs';
-import { Markup } from 'interweave';
 import { polyfill } from 'interweave-ssr';
 import Link from 'next/link';
 import { usePlausible } from 'next-plausible';
@@ -10,7 +9,8 @@ import { Fragment, useEffect, useRef } from 'react';
 import useApiInfinite from 'lib/use-api-infinite';
 import useOnScreen from 'lib/hooks/use-on-screen';
 import Image from 'next/image';
-import { PostThumbnail } from 'components/post-thumbnail';
+import { PostImage } from 'components/post-image';
+import { PostDescription } from 'components/post-description';
 import { cloudinaryImageFetch } from 'lib/cloudinary';
 
 const formatRelativeLocale = {
@@ -87,7 +87,6 @@ interface CardProps {
 }
 
 function Card({ data }: CardProps) {
-  const description = data.description?.split('<a class="more-link"')[0];
   const plausible = usePlausible();
   if (data.skeleton) return <Card.Skeleton />;
   return (
@@ -134,11 +133,13 @@ function Card({ data }: CardProps) {
             {data.title}
           </Link>
         </p>
-        <p className="text-lg text-text leading-6 line-clamp-8">
-          <Markup content={description} />
-        </p>
+        {data.description && <PostDescription content={data.description} />}
         {data.thumbnail_url && (
-          <PostThumbnail alt={data.portfolios.title} src={data.thumbnail_url} />
+          <PostImage
+            alt={data.portfolios.title}
+            src={data.thumbnail_url}
+            isThumbnail
+          />
         )}
       </div>
     </div>
