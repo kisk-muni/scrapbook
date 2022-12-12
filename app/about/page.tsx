@@ -30,12 +30,12 @@ export default function AboutPage() {
           není podle našich představ. Díky vzájemnému sdílení víme, na čem
           pracují ostatní a můžeme se vzájemně podpořit.
         </Paragraph>
-        <H2>
-          <span className="block italic xl:inline font-extrabold">
-            Důležité je pravidelné sdílení výstupů, ne snaha o dokonalý
+        <p className="text-xl mt-3 mb-3 md:mt-4 md:mx-3 md:mb-4 text-slate tracking-tight text-2xl md:text-3xl font-extrabold">
+          <span className="leading-9 md:leading-10 text-transparent bg-gradient-header overflow-visible block from-blue to-purple italic bg-clip-text">
+            Pravidelné sdílení výstupů je důležitější než snaha o&nbsp;dokonalý
             výsledek.
           </span>
-        </H2>
+        </p>
         <Paragraph>
           Na stránce naleznete příspěvky z portfolií studentů KISKu. Studenstká
           portfolia jsou neustále v procesu vylepšování a experimentování.
