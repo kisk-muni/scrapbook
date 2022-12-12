@@ -91,38 +91,40 @@ function Card({ data }: CardProps) {
   if (data.skeleton) return <Card.Skeleton />;
   return (
     <div className="bg-white rounded-lg mb-4 mr-4 md:mb-6 md:mr-6">
-      <div className="flex flex-column pt-3 px-3 mb-2">
-        {data.portfolios.image_url ? (
-          <Image
-            className="rounded-full w-12 h-12 mr-2"
-            alt={data.portfolios.title}
-            width={48}
-            height={48}
-            src={cloudinaryImageFetch(data.portfolios.image_url)}
-          />
-        ) : (
-          <div className="w-12 h-12 bg-smoke rounded-full mr-2"></div>
-        )}
-        <div className="mt-1">
-          {(data.portfolios.title || data.portfolios.url) && (
-            <p className="mb-0 mt-0.5 text-text text-base leading-5 font-bold hover:text-dark">
-              <Link
-                onClick={() => plausible('Portfolio Link: Click')}
-                href={'/portfolio?feed=' + data.portfolios.feed_url}
-              >
+      <Link
+        className="cursor-pointer"
+        onClick={() => plausible('Portfolio Link: Click')}
+        href={'/portfolio?feed=' + data.portfolios.feed_url}
+      >
+        <div className="flex flex-column pt-3 px-3 mb-2">
+          {data.portfolios.image_url ? (
+            <Image
+              className="rounded-full w-12 h-12 mr-2"
+              alt={data.portfolios.title}
+              width={48}
+              height={48}
+              src={cloudinaryImageFetch(data.portfolios.image_url)}
+            />
+          ) : (
+            <div className="w-12 h-12 bg-smoke rounded-full mr-2"></div>
+          )}
+
+          <div className="mt-1">
+            {(data.portfolios.title || data.portfolios.url) && (
+              <p className="mb-0 mt-0.5 text-text text-base leading-5 font-bold hover:text-dark">
                 {data.portfolios.title
                   ? data.portfolios.title
                   : data.portfolios.url}
-              </Link>
+              </p>
+            )}
+            <p className="text-muted text-base leading-4">
+              {formatRelative(parseISO(data.published_at), new Date(), {
+                locale: locale,
+              })}
             </p>
-          )}
-          <p className="text-muted text-base leading-4">
-            {formatRelative(parseISO(data.published_at), new Date(), {
-              locale: locale,
-            })}
-          </p>
+          </div>
         </div>
-      </div>
+      </Link>
       <div className="px-4 pb-4">
         <p className="mb-2 text-lg leading-6 hover:text-muted">
           <Link
