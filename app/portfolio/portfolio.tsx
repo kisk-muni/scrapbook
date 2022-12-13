@@ -30,7 +30,7 @@ interface PortfolioData {
 }
 
 const API = (feedUrl: string) =>
-  `${process.env.NEXT_PUBLIC_SUPABASE_API_URL}/rest/v1/portfolios?select=id,url,feed_url,image_url,title,portfolio_posts(title,id,url,description,thumbnail_url,published_at)&feed_url=eq.${feedUrl}&apikey=${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`;
+  `${process.env.NEXT_PUBLIC_SUPABASE_API_URL}/rest/v1/portfolios?select=id,url,feed_url,image_url,title,portfolio_posts(title,id,url,description,thumbnail_url,published_at)&feed_url=eq.${feedUrl}&portfolio_posts.order=published_at.desc&apikey=${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`;
 
 interface CardProps {
   index?: number;
