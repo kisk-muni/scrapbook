@@ -117,6 +117,7 @@ export function Portfolio(props: { feedUrl?: string }) {
           <div className="flex gap-2">
             {portfolio.url && (
               <Link
+                target="_blank"
                 href={portfolio.url}
                 className="flex items-center text-sm bg-blue hover:opacity-90 text-background rounded-full px-2 py-0.5"
               >
