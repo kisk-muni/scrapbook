@@ -11,7 +11,7 @@ function Paragraph({ children }) {
 
 function H2({ children }) {
   return (
-    <h2 className="text-xl mt-6 mb-3 md:mt-8 md:mb-6 tracking-tight text-text md:text-2xl lg:text-3xl">
+    <h2 className="text-xl mt-6 mb-2 md:mt-8 md:mb-4 tracking-tight font-extrabold text-text md:text-2xl lg:text-3xl">
       {children}
     </h2>
   );
@@ -60,11 +60,7 @@ export default function AboutPage() {
           </Link>
           .
         </Paragraph>
-        <H2>
-          <span className="block xl:inline font-extrabold">
-            Jak mohu na příspěvky reagovat?
-          </span>
-        </H2>
+        <H2>Jak mohu na příspěvky reagovat?</H2>
         <Paragraph>
           Abychom mohli nad příspěvky diskutovat, všechny příspěvky se
           automaticky sdílí do kanálu{' '}
@@ -76,11 +72,7 @@ export default function AboutPage() {
           </Link>
           .
         </Paragraph>
-        <H2>
-          <span className="block xl:inline font-extrabold">
-            Projekt je otevřený
-          </span>
-        </H2>
+        <H2>Projekt je otevřený</H2>
         <Paragraph>
           Napadá vás, jak scrapbook vylepšit? Scrapbook je zcela ve vaší moci.
           Navrhněte, co by mohlo být jinak nebo to rovnou udělejte sami.{' '}
@@ -114,11 +106,7 @@ export default function AboutPage() {
             - zdrojový kód a jiné materiály
           </li>
         </ul>
-        <H2>
-          <span className="block xl:inline font-extrabold">
-            Původ Scrapbooku
-          </span>
-        </H2>
+        <H2>Původ Scrapbooku</H2>
         <Paragraph>
           Cílem projektu je řešit potřeby studentů KISKu ve vzájemném sdílení
           studijní cesty a sebeprezentaci. Scrapbook vychází ze stejnojmenného{' '}

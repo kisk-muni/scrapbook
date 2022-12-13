@@ -38,7 +38,7 @@ module.exports = {
     },
     fontFamily: {
       sans: [
-        '"Baloo 2"',
+        '"Josefin Sans"',
         'system-ui',
         '-apple-system',
         'BlinkMacSystemFont',
@@ -47,7 +47,15 @@ module.exports = {
         'sans-serif',
       ],
       mono: `'SF Mono', 'Roboto Mono', Menlo, Consolas, monospace`,
-      header: `'Shrikhand', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`,
+      header: `'Josefin Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`,
+    },
+    fontWeight: {
+      light: 300,
+      normal: 400,
+      medium: 500,
+      semibold: 600,
+      bold: 700,
+      extrabold: 800,
     },
     backgroundImage: {
       'gradient-header':

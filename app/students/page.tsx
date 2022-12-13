@@ -8,7 +8,7 @@ export default function StudentsPage() {
   return (
     <Fragment>
       <div className="flex flex-col justify-center text-center items-center mx-auto sm:max-w-4xl mt-6 mb-6 sm:mt-6 sm:mb-14 sm:px-6 md:mt-8 md:mb-20 overflow-visible">
-        <h1 className="text-5xl mb-3 tracking-tight text-transparent bg-gradient-header from-blue to-green bg-clip-text pr-2 font-header md:text-6xl lg:text-6xl">
+        <h1 className="text-5xl mb-3 tracking-tight text-transparent bg-gradient-header from-blue to-green bg-clip-text pr-2 font-header font-extrabold md:text-6xl lg:text-6xl">
           Zapojení studenti
         </h1>
         <p className=" text-lg lg:text-xl text-text leading-8 mx-auto mb-4">
