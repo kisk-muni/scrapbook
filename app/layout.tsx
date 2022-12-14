@@ -31,7 +31,7 @@ export default function RootLayout({
               >
                 <svg
                   viewBox="0 0 242 43"
-                  className="fill-muted stroke-muted h-8 hover:fill-purple hover:stroke-purple "
+                  className="fill-muted stroke-muted h-6 sm:h-8 hover:fill-purple hover:stroke-purple "
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
