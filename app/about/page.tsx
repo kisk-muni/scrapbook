@@ -72,9 +72,21 @@ export default function AboutPage() {
             className="text-orange hover:underline"
             href="https://discord.gg/HDacGhAhj8"
           >
-            #scrapbook na KISKovém Discordu
+            #scrapbook
+          </Link>{' '}
+          v KISKové komunitě na platformě Discord. Na Discordu najdeš také
+          diskuze ohledně předmětů, jednotlivých profilací nebo trávení volného
+          času. Discord lze stáhnout jako aplikace nebo používat v jakémkoli
+          prohlížeči. Pokračuj na následující odkaz a zaregistruj se na
+          Discordu.
+        </Paragraph>
+        <Paragraph>
+          <Link
+            className="text-orange hover:underline"
+            href="https://discord.gg/HDacGhAhj8"
+          >
+            Získat pozvánku na KISKový Discord →
           </Link>
-          .
         </Paragraph>
         <H2>
           <span className="block xl:inline font-extrabold">

@@ -31,7 +31,7 @@ function Hero() {
           <span className="block xl:inline">KISKový Scrapbook</span>
         </h1>
         <p className="mt-0 text-lg md:text-xl lg:text-2xl text-text mx-auto">
-          Co se právě učíme a na čem každý den pracujeme.
+          Co se studenti KISKu na svých portfoliích právě učí a na čem pracují.
         </p>
       </div>
     </div>
