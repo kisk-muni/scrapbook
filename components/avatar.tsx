@@ -25,7 +25,7 @@ export function Avatar({ size, imageUrl, name, className }: AvatarProps) {
       ? ''
       : name
           .split(' ')
-          .map((i) => i[0].toUpperCase())
+          .map((i) => i[0]?.toUpperCase())
           .join('');
   return (
     // eslint-disable-next-line @next/next/no-img-element
