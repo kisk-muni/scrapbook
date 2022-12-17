@@ -10,6 +10,7 @@ import fetcher from 'lib/fetcher';
 import { PostImage } from 'components/post-image';
 import { PostDescription } from 'components/post-description';
 import { cloudinaryImageFetch } from 'lib/cloudinary';
+import { Avatar } from 'components/avatar';
 
 interface PostProps {
   id: string;
@@ -97,17 +98,12 @@ export function Portfolio(props: { feedUrl?: string }) {
   return (
     <div>
       <div className="flex items-center">
-        {portfolio.image_url ? (
-          <Image
-            className="rounded-full border border-smoke w-32 h-32 mr-2 sm:mr-4"
-            alt={portfolio.title}
-            width={72}
-            height={72}
-            src={cloudinaryImageFetch(portfolio.image_url)}
-          />
-        ) : (
-          <div className="rounded-full w-32 h-32 bg-smoke mr-2 sm:mr-4"></div>
-        )}
+        <Avatar
+          className="rounded-full border border-smoke w-32 h-32 mr-2 sm:mr-4"
+          imageUrl={portfolio.image_url}
+          size={72}
+          name={portfolio.title}
+        />
         <div>
           <h1 className="text-2xl mb-2 tracking-tight text-text sm:text-3xl md:text-3xl">
             <span className="block xl:inline font-extrabold">

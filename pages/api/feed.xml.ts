@@ -1,10 +1,14 @@
 import { cloudinaryImageFetch } from 'lib/cloudinary';
+import { NextApiRequest, NextApiResponse } from 'next';
 import RSS from 'rss';
-import supabase from '../lib/supabase';
+import supabase from '../../lib/supabase';
 
 const SITE_URL = 'https://scrapbook.kisk.cz';
 
-export async function getServerSideProps({ res }) {
+export default async function getServerSideProps(
+  _req: NextApiRequest,
+  res: NextApiResponse<string>
+) {
   const feed = new RSS({
     title: 'KISKový Scrapbook',
     description: 'Co se právě učíme a na čem každý den pracujeme.',
@@ -86,14 +90,5 @@ export async function getServerSideProps({ res }) {
     'Cache-Control',
     'public, s-maxage=1200, stale-while-revalidate=600'
   );
-  res.write(feed.xml({ indent: true }));
-  res.end();
-
-  return {
-    props: {},
-  };
-}
-
-export default function RSSFeed() {
-  return null;
+  res.end(feed.xml({ indent: true }));
 }

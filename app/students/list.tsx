@@ -4,6 +4,7 @@ import Link from 'next/link';
 import useSWR from 'swr';
 import fetcher from 'lib/fetcher';
 import { cloudinaryImageFetch } from 'lib/cloudinary';
+import { Avatar } from 'components/avatar';
 
 interface PortfolioData {
   title?: string;
@@ -38,18 +39,13 @@ function Portfolio(props: PortfolioData) {
         href={'/portfolio?feed=' + props.feed_url}
         className="flex sm:flex-col justify-start sm:justify-center items-center"
       >
-        {props.image_url ? (
-          <Image
-            className="rounded-full shadow-md border border-smoke w-16 md:w-24 lg:w-28 h-16 md:h-24 lg:h-28 mb-0 mr-4 sm:mr-0 sm:mb-3"
-            alt={props.title}
-            width={192}
-            height={192}
-            src={cloudinaryImageFetch(props.image_url)}
-          />
-        ) : (
-          <div className="rounded-full w-16 md:w-24 lg:w-28 h-16 md:h-24 lg:h-28 shrink-0 bg-smoke mb-0 mr-4 sm:mr-0 sm:mb-3"></div>
-        )}
-        <h1 className="text-lg font-bold tracking-tight text-text leading-5">
+        <Avatar
+          size={192}
+          className="rounded-full shadow-md border border-smoke w-16 md:w-24 lg:w-28 h-16 md:h-24 lg:h-28 mb-0 mr-4 sm:mr-0 sm:mb-3"
+          name={props.title}
+          imageUrl={props.image_url}
+        />
+        <span className="text-lg font-bold tracking-tight text-center max-w-xs text-text leading-5">
           {props.title
             ? props.title
             : props.url
@@ -57,7 +53,7 @@ function Portfolio(props: PortfolioData) {
             : props.feed_url
                 .replace('https://', '')
                 .replace(/\/feed|rss|.xml/g, '')}
-        </h1>
+        </span>
       </Link>
     </div>
   );
@@ -67,7 +63,7 @@ export function PortfoliosList() {
   const { data, error } = useSWR<PortfolioData[]>(API, fetcher);
   if (error) throw new Error('No portfolio found.');
   return (
-    <div className="sm:flex sm:flex-row sm:justify-center sm:align-flex-start sm:flex-wrap sm:basis-auto gap-4 sm:gap-6 md:gap-8 lg:gap-12 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+    <div className="sm:flex sm:flex-row sm:justify-center sm:align-flex-start sm:flex-wrap sm:basis-auto gap-4 sm:gap-6 md:gap-8 lg:gap-12 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 2xl:grid-cols-8">
       {data
         ? data?.map((item, i) => <Portfolio key={i} {...item} />)
         : [...Array(30).keys()].map((_item, i) => (

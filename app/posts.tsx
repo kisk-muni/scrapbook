@@ -12,6 +12,7 @@ import Image from 'next/image';
 import { PostImage } from 'components/post-image';
 import { PostDescription } from 'components/post-description';
 import { cloudinaryImageFetch } from 'lib/cloudinary';
+import { Avatar } from 'components/avatar';
 
 const formatRelativeLocale = {
   lastWeek: "eeee 'v' p",
@@ -97,18 +98,12 @@ function Card({ data }: CardProps) {
         href={'/portfolio?feed=' + data.portfolios.feed_url}
       >
         <div className="flex flex-column pt-3 px-3 mb-2">
-          {data.portfolios.image_url ? (
-            <Image
-              className="rounded-full w-12 h-12 mr-2"
-              alt={data.portfolios.title}
-              width={48}
-              height={48}
-              src={cloudinaryImageFetch(data.portfolios.image_url)}
-            />
-          ) : (
-            <div className="w-12 h-12 bg-smoke rounded-full mr-2"></div>
-          )}
-
+          <Avatar
+            className="rounded-full w-12 h-12 mr-2"
+            name={data.portfolios.title}
+            size={48}
+            imageUrl={data.portfolios.image_url}
+          />
           <div className="mt-1">
             {(data.portfolios.title || data.portfolios.url) && (
               <p className="mb-0 mt-0.5 text-text text-base leading-5 font-bold hover:text-dark">
