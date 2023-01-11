@@ -8,10 +8,8 @@ import { Masonry } from 'masonic';
 import { Fragment, useEffect, useRef } from 'react';
 import useApiInfinite from 'lib/use-api-infinite';
 import useOnScreen from 'lib/hooks/use-on-screen';
-import Image from 'next/image';
 import { PostImage } from 'components/post-image';
 import { PostDescription } from 'components/post-description';
-import { cloudinaryImageFetch } from 'lib/cloudinary';
 import { Avatar } from 'components/avatar';
 
 const formatRelativeLocale = {
@@ -125,7 +123,7 @@ function Card({ data }: CardProps) {
           <Link
             onClick={() => plausible('Post Title Link: Click')}
             href={data.url}
-            className="text-blue underline"
+            className="text-text text-xl leading-5 font-semibold hover:text-blue"
           >
             {data.title}
           </Link>
@@ -200,10 +198,7 @@ export function Posts() {
           maxColumnCount={4}
         />
       </div>
-      <div
-        ref={ref}
-        className="items-centers flex justify-center mb-6 md:mb-8 lg:mb-10"
-      >
+      <div ref={ref} className="items-centers flex justify-center mb-20 mt-2">
         {isLoadingMore ? (
           <LoadingIcon />
         ) : isReachingEnd ? (

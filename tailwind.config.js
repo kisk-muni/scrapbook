@@ -47,7 +47,7 @@ module.exports = {
         'sans-serif',
       ],
       mono: `'SF Mono', 'Roboto Mono', Menlo, Consolas, monospace`,
-      header: `'Shrikhand', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`,
+      header: `'Josefin Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`,
     },
     backgroundImage: {
       'gradient-header':
@@ -56,6 +56,11 @@ module.exports = {
     extend: {
       lineClamp: {
         8: '8',
+      },
+      width: {
+        560: '560px',
+        440: '440px',
+        330: '330px',
       },
     },
   },

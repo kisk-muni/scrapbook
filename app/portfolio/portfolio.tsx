@@ -3,13 +3,11 @@ import { LinkIcon } from '@heroicons/react/20/solid';
 import { format, parseISO } from 'date-fns';
 import { polyfill } from 'interweave-ssr';
 import csLocale from 'date-fns/locale/cs';
-import Image from 'next/image';
 import Link from 'next/link';
 import useSWR from 'swr';
 import fetcher from 'lib/fetcher';
 import { PostImage } from 'components/post-image';
 import { PostDescription } from 'components/post-description';
-import { cloudinaryImageFetch } from 'lib/cloudinary';
 import { Avatar } from 'components/avatar';
 
 interface PostProps {
@@ -45,15 +43,15 @@ function Card(props: CardProps) {
   return (
     <div className="bg-white p-4 sm:p-6">
       {data.published_at && (
-        <p className="text-text text-lg font-bold mb-2">
+        <p className="text-muted font-bold mb-2">
           {format(parseISO(data?.published_at), 'do MMMM yyyy', {
             locale: csLocale,
           })}
         </p>
       )}
       {data.title && data?.url && (
-        <p className="mb-2 text-lg leading-6 hover:text-muted">
-          <Link href={data?.url} className="text-blue underline">
+        <p className="mb-3 text-xl leading-5 font-semibold">
+          <Link href={data?.url} className="text-text hover:text-blue">
             {data?.title}
           </Link>
         </p>
