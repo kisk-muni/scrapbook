@@ -134,17 +134,23 @@ c-21 -2076 -37 -3776 -35 -3779 3 -2 1477 13 3275 34 1799 21 3272 36 3274 34
               </Link>
             </div>
             <div className="flex items-baseline space-x-6">
-              <Link
+              {pathname != '/' && <Link
                 className="text-muted hover:text-purple hover:text-gray relative md:flex justify-center text-base font space-x-6"
-                href="/about"
+                href="/"
               >
-                O Scrapbooku
-              </Link>
+               Příspěvky studentů 
+              </Link>}
               <Link
                 className="text-muted hover:text-purple hover:text-gray relative md:flex justify-center text-base font space-x-6"
                 href="/students"
               >
                 Studenti
+              </Link>
+              <Link
+                className="text-muted hover:text-purple hover:text-gray relative md:flex justify-center text-base font space-x-6"
+                href="/about"
+              >
+                O Scrapbooku
               </Link>
               {['/', '/about'].includes(pathname) && (
                 <Link
