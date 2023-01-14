@@ -94,8 +94,8 @@ export default function AboutPage() {
           </span>
         </H2>
         <Paragraph>
-          Napadá vás, jak scrapbook vylepšit? Scrapbook je zcela ve vaší moci.
-          Navrhněte, co by mohlo být jinak nebo to rovnou udělejte sami.{' '}
+          Napadá tě, jak scrapbook vylepšit? Scrapbook je zcela ve tvé moci.
+          Navrhni, co by mohlo být jinak nebo to rovnou realizuj.{' '}
         </Paragraph>
         <ul className="mt-0 pl-6 text-xl list-disc text-text mx-auto mb-4">
           <li className="text-lg lg:text-xl text-text">
