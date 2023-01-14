@@ -28,7 +28,7 @@ function Hero() {
     <div className="mx-auto mt-6 mb-10 px-4 sm:mt-6 sm:mb-16 sm:px-6 md:mt-8 md:mb-24">
       <div className="text-center justify-center items-center flex flex-col">
         <svg
-          className="mb-3 w-330 md:w-440 lg:w-560"
+          className="mb-3 px-4 -mr-2 sm:px-0 w-auto sm:w-330 md:w-440"
           viewBox="0 0 664 163"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
@@ -105,7 +105,7 @@ function Hero() {
           />
         </svg>
 
-        <p className="mt-0 text-lg md:text-xl lg:text-2xl text-text mx-auto">
+        <p className="mt-0 text-lg md:text-xl text-text mx-auto">
           Co se studenti KISKu na svých portfoliích právě učí a na čem pracují.
         </p>
       </div>
