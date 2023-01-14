@@ -67,7 +67,7 @@ function LoadingIcon() {
           cy="12"
           r="10"
           stroke="currentColor"
-          stroke-width="4"
+          strokeWidth="4"
         ></circle>
         <path
           className="opacity-75"
@@ -167,7 +167,6 @@ Card.Skeleton = function CardSkeleton() {
 };
 
 // https://www.youtube.com/watch?v=zwQs4wXr9Bg&t=531s
-
 export function Posts() {
   const { data, size, setSize, isLoadingMore, isRefreshing, isReachingEnd } =
     usePortfoliosList();

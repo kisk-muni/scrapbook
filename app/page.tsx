@@ -88,20 +88,20 @@ function Hero() {
           <path
             d="M530.534 115.316C530.534 116.683 531.704 119.839 531.704 117.071"
             stroke="#F37A28"
-            stroke-width="5"
-            stroke-linecap="round"
+            strokeWidth="5"
+            strokeLinecap="round"
           />
           <path
             d="M585.533 116.486C585.533 119.05 587.461 115.98 586.119 115.901C584.416 115.801 584.431 118.242 586.119 118.242"
             stroke="#F37A28"
-            stroke-width="5"
-            stroke-linecap="round"
+            strokeWidth="5"
+            strokeLinecap="round"
           />
           <path
             d="M539 149C548 159.5 569 159 578.5 149.5"
             stroke="#F37A28"
-            stroke-width="7"
-            stroke-linecap="round"
+            strokeWidth="7"
+            strokeLinecap="round"
           />
         </svg>
 
