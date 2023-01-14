@@ -24,7 +24,7 @@ export function PostDescription({ content }: PostDescriptionProps) {
   return (
     <Interweave
       className="text-lg text-text text-ellipsis overflow-hidden leading-6 line-clamp-8"
-      content={content.split('<a class="more-link"')[0]}
+      content={content.split(/<!-- \/wp:paragraph -->|<a class="more-link"/)[0]}
       transform={transform}
     />
   );
