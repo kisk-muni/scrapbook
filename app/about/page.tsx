@@ -101,11 +101,20 @@ export default function AboutPage() {
           <li className="text-lg lg:text-xl text-text">
             <Link
               className="text-orange hover:underline"
+              href="https://docs.google.com/document/d/1-qO6R2XxHrgFYbNnXtQLum2_6ZdIHSs0BaTcIn8Gals/edit?usp=sharing"
+            >
+              High-level Roadmap Scrapbooku
+            </Link>{' '}
+            - kam směřujeme
+          </li>
+          <li className="text-lg lg:text-xl text-text">
+            <Link
+              className="text-orange hover:underline"
               href="https://github.com/orgs/kisk-muni/projects/1/views/1"
             >
-              Roadmap Scrapbooku
+              Todo Roadmap
             </Link>{' '}
-            - na čem pracujeme a jak se můžete zapojit?
+            - jaké problémy aktuálně řešíme
           </li>
           <li className="text-lg lg:text-xl text-text">
             <Link
