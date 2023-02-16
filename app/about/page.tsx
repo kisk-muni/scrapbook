@@ -1,5 +1,28 @@
 'use client';
 import Link from 'next/link';
+import { Fragment } from 'react';
+
+type Contributor = {
+  name: string;
+  url?: string;
+};
+
+const contributors: Contributor[] = [
+  { name: 'Illyria Brejchová', url: 'https://illyriabrejcha.wordpress.com/' },
+  { name: 'Jasmina Aldabaghová', url: 'https://jasminaldabagh.com/' },
+  { name: 'Tomáš Marek', url: 'https://www.marektomas.cz/' },
+  { name: 'Petr Škyřík', url: 'https://twitter.com/petrskyrik' },
+  { name: 'Hana Bělochová' },
+  { name: 'Simona Kramosilová', url: 'https://www.simonakramosilova.cz/' },
+  { name: 'Martin Jůda', url: 'https://judaportfolio.wordpress.com/' },
+  { name: 'Lea Belejová', url: 'https://leabelejova.wixsite.com/portfolio' },
+  { name: 'Jan Valtr', url: 'https://jvaltr.cz/' },
+  { name: 'Dalibor Cernocky', url: 'https://cernockyd.com' },
+  { name: 'Adam Mělničák', url: 'https://twitter.com/adammelnicak' },
+  { name: 'Veronika Batelková', url: 'https://veronikabatelkova.cz/' },
+  { name: 'Jan Bendařík', url: 'https://honza-b1234.github.io/' },
+  { name: 'Michal Půta', url: 'https://twitter.com/michalpta' },
+];
 
 function Paragraph({ children }) {
   return (
@@ -95,7 +118,10 @@ export default function AboutPage() {
         </H2>
         <Paragraph>
           Napadá tě, jak scrapbook vylepšit? Scrapbook je zcela ve tvé moci.
-          Navrhni, co by mohlo být jinak nebo to rovnou realizuj.{' '}
+          Navrhni, co by mohlo být jinak nebo to rovnou realizuj.
+        </Paragraph>
+        <Paragraph>
+          Na následujících odkazech se dozvíš, jak vzniká Scrapbook:{' '}
         </Paragraph>
         <ul className="mt-0 pl-6 text-xl list-disc text-text mx-auto mb-4">
           <li className="text-lg lg:text-xl text-text">
@@ -110,6 +136,24 @@ export default function AboutPage() {
           <li className="text-lg lg:text-xl text-text">
             <Link
               className="text-orange hover:underline"
+              href="https://deepnote.com/@scrapbook/KISK-studentska-portfolia-f18e70c4-21da-47a9-ba0e-05b358b2678f"
+            >
+              Datová analýza
+            </Link>{' '}
+            - vyhodnocení stavu a obsahu Scrapbooku
+          </li>
+          <li className="text-lg lg:text-xl text-text">
+            <Link
+              className="text-orange hover:underline"
+              href="https://plausible.io/kisk.vercel.app?period=all"
+            >
+              Plausible Analytics
+            </Link>{' '}
+            - anonymní statistka návštěvnosti
+          </li>
+          <li className="text-lg lg:text-xl text-text">
+            <Link
+              className="text-orange hover:underline"
               href="https://github.com/orgs/kisk-muni/projects/1/views/1"
             >
               Todo Roadmap
@@ -119,11 +163,19 @@ export default function AboutPage() {
           <li className="text-lg lg:text-xl text-text">
             <Link
               className="text-orange hover:underline"
-              href="https://plausible.io/kisk.vercel.app?period=all"
+              href="https://www.figma.com/team_invite/redeem/KOwRVSe3NVRiwwBGmU7XYC"
             >
-              Plausible Analytics
+              Figma
             </Link>{' '}
-            - anonymní statistka návštěvnosti Scrapbooku
+            - vizuální návrhy a prototypy
+          </li>
+          <li className="text-lg lg:text-xl text-text">
+            <Link
+              className="text-orange hover:underline"
+              href="https://medium.com/design-kisk/redesign-scrapbooku-a-podpora-sd%C3%ADlen%C3%AD-portfoli%C3%AD-na-kisku-1be36100930d"
+            >
+              Článek o redesignu Scrapbooku
+            </Link>
           </li>
           <li className="text-lg lg:text-xl text-text">
             <Link
@@ -136,10 +188,38 @@ export default function AboutPage() {
           </li>
         </ul>
         <H2>
-          <span className="block xl:inline font-extrabold">
-            Původ Scrapbooku
-          </span>
+          <span className="block xl:inline font-extrabold">Přispěvatelé</span>
         </H2>
+        <Paragraph>Osoby, které pomohly s rozvojem Scrapbooku.</Paragraph>
+        <Paragraph>
+          {contributors.map((c, i) => {
+            const delimeter = i + 1 != contributors.length ? ', ' : '';
+            if (c.url)
+              return (
+                <Fragment key={i}>
+                  <Link
+                    className="text-orange whitespace-nowrap hover:underline"
+                    href={c.url}
+                  >
+                    {c.name}
+                  </Link>
+                  {delimeter}
+                </Fragment>
+              );
+            return (
+              <Fragment key={i}>
+                <span className="whitespace-nowrap">{c.name}</span>
+                {delimeter}
+              </Fragment>
+            );
+          })}
+          {'.'}
+          <H2>
+            <span className="block xl:inline font-extrabold">
+              Původ Scrapbooku
+            </span>
+          </H2>
+        </Paragraph>
         <Paragraph>
           Cílem projektu je řešit potřeby studentů KISKu ve vzájemném sdílení
           studijní cesty a sebeprezentaci. Scrapbook vychází ze stejnojmenného{' '}
