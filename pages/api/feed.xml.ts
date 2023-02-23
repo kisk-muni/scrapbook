@@ -22,31 +22,26 @@ export default async function getServerSideProps(
     },
   });
 
-  const { data, error } = await supabase
-    .from('portfolio_posts')
-    .select(
-      `
-        title,
-        description,
-        url,
-        id,
-        published_at,
-        thumbnail_url, 
-        portfolios(
-          id,
-          title,
-          name,
-          url,
-          feed_url,
-          image_url
-        )
-    `
-    )
-    .order('published_at', { ascending: false })
-    .limit(40);
+  type CuratedPost = {
+    id: string;
+    title: string | null;
+    url: string | null;
+    published_at: string | null;
+    thumbnail_url: string | null;
+    description: string | null;
+    portfolio_id: string | null;
+    portfolio_title: string | null;
+    portfolio_name: string | null;
+    portfolio_feed_url: string | null;
+    portfolio_image: string | null;
+  };
+
+  const { data, error } = await supabase.rpc('get_curated_posts');
+
+  const curatedPosts = data as unknown as CuratedPost[];
 
   if (!error)
-    data.map((post) => {
+    curatedPosts.map((post) => {
       try {
         feed.item({
           title: post?.title,
@@ -55,9 +50,9 @@ export default async function getServerSideProps(
           description: post?.description,
           author:
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            (post?.portfolios as any).title ||
+            post.portfolio_title ||
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            (post?.portfolios as any).name ||
+            post.portfolio_title ||
             'Uživatel Scrapbooku',
           ...(post.thumbnail_url && {
             enclosure: {
@@ -73,7 +68,7 @@ export default async function getServerSideProps(
                 SITE_URL +
                 '/portfolio?feed=' +
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                (post?.portfolios as any).feed_url,
+                post.portfolio_feed_url, // feed_url
             },
           ],
         });
