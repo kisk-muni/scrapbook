@@ -11,6 +11,8 @@ import useOnScreen from 'lib/hooks/use-on-screen';
 import { PostImage } from 'components/post-image';
 import { PostDescription } from 'components/post-description';
 import { Avatar } from 'components/avatar';
+import supabase from 'lib/supabase';
+import Image from 'next/image';
 
 const formatRelativeLocale = {
   lastWeek: "eeee 'v' p",
@@ -19,6 +21,27 @@ const formatRelativeLocale = {
   tomorrow: "'zítra v' p",
   nextWeek: 'do MMMM yyyy',
   other: 'do MMMM yyyy',
+};
+
+const emojis = {
+  scrappy:
+    'https://cdn.discordapp.com/emojis/1063939454848467005.webp?size=64&quality=lossless',
+  thank_you:
+    'https://cdn.discordapp.com/emojis/1052364641143111760.webp?size=64&quality=lossless',
+  mooc: 'https://cdn.discordapp.com/emojis/1046821807417720902.webp?size=64&quality=lossless',
+  double_diamond:
+    'https://cdn.discordapp.com/emojis/1046792628353650688.webp?size=64&quality=lossless',
+  plechacek:
+    'https://cdn.discordapp.com/emojis/1046783925097336922.webp?size=64&quality=lossless',
+  upvote:
+    'https://cdn.discordapp.com/emojis/1046769888078876773.webp?size=64&quality=lossless',
+  this_tbh:
+    'https://cdn.discordapp.com/emojis/1046565288478507008.webp?size=64&quality=lossless',
+  okk: 'https://cdn.discordapp.com/emojis/1044281424250945647.webp?size=64&quality=lossless',
+  zluta_bible:
+    'https://cdn.discordapp.com/emojis/898997662383239229.webp?size=64&quality=lossless',
+  KISK_logo:
+    'https://cdn.discordapp.com/emojis/898941770459648000.webp?size=64&quality=lossless',
 };
 
 const locale = {
@@ -43,11 +66,36 @@ interface PostItemProps {
     image_url: string | null;
     feed_url: string | null;
   };
+  discord_message_reactions: {
+    emoji_name: string;
+  }[];
 }
 
 function usePortfoliosList() {
-  return useApiInfinite<PostItemProps>(
-    `${process.env.NEXT_PUBLIC_SUPABASE_API_URL}/rest/v1/portfolio_posts?select=title,description,url,id,published_at,thumbnail_url,portfolios(id,title,url,feed_url,image_url)&order=published_at.desc&apikey=${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
+  return useApiInfinite(
+    supabase
+      .from('portfolio_posts')
+      .select(
+        `
+        title,
+        description,
+        url,
+        id,
+        published_at,
+        thumbnail_url,
+        portfolios(
+          id,
+          title,
+          url,
+          feed_url,
+          image_url
+        ),
+        discord_message_reactions(
+          emoji_name
+        )
+      `
+      )
+      .order('published_at', { ascending: false }),
     limit
   );
 }
@@ -88,6 +136,14 @@ interface CardProps {
 function Card({ data }: CardProps) {
   const plausible = usePlausible();
   if (data.skeleton) return <Card.Skeleton />;
+  const reactions: { [key: string]: number } =
+    data.discord_message_reactions.reduce((counts, reaction) => {
+      const { emoji_name } = reaction;
+      //if (emoji_name.length > 1) return counts;
+      counts[emoji_name] = (counts[emoji_name] || 0) + 1;
+      //counts['total'] = (counts['total'] || 0) + 1;
+      return counts;
+    }, {});
   return (
     <div className="bg-white rounded-lg mb-4 mr-4 md:mb-6 md:mr-6">
       <Link
@@ -136,6 +192,25 @@ function Card({ data }: CardProps) {
             isThumbnail
           />
         )}
+        <div className="flex mt-3 items-center">
+          {Object.keys(reactions).map((key) => {
+            return (
+              <div
+                className="pointer-events-auto flex pt-px items-center justify-center h-8 px-2 mr-2 -ml-1 rounded-full ring-1 ring-inset transition duration-200 ease-in-out bg-yellow ring-yellow"
+                key={key}
+              >
+                <span className="text-sm -mt-px mr-1.5 text-slate">
+                  {reactions[key]}
+                </span>{' '}
+                {Object.keys(emojis).includes(key) ? (
+                  <Image src={emojis[key]} width={16} height={16} alt={key} />
+                ) : (
+                  <span className="text-md -mb-px">{key}</span>
+                )}
+              </div>
+            );
+          })}{' '}
+        </div>
       </div>
     </div>
   );

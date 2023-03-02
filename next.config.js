@@ -9,6 +9,10 @@ module.exports = {
         port: '',
         pathname: `/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/**`,
       },
+      {
+        protocol: 'https',
+        hostname: 'cdn.discordapp.com',
+      },
     ],
   },
   async rewrites() {

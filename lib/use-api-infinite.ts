@@ -1,20 +1,18 @@
-import useSWRInfinite from 'swr/infinite';
-import fetcher from './fetcher';
+import { useInfiniteQuery } from '@supabase-cache-helpers/postgrest-swr';
+import { PostgrestFilterBuilder } from '@supabase/postgrest-js';
+import { GenericSchema } from '@supabase/postgrest-js/dist/module/types';
 
-export default function useApiInfinite<T>(api: string, pageSize: number) {
-  const { data, error, mutate, size, setSize, isValidating } = useSWRInfinite<
-    T[]
-  >(
-    (pageIndex, previousPageData) => {
-      // reached the end
-      if (previousPageData && previousPageData.length == 0) return null;
-      // paginate
-      return api + `&limit=${pageSize}&offset=${pageSize * pageIndex}`;
-    },
-    fetcher,
-    {
-      revalidateOnFocus: false,
-    }
+export default function useApiInfinite<
+  Schema extends GenericSchema,
+  Table extends Record<string, unknown>,
+  Result extends Record<string, unknown>
+>(
+  query: PostgrestFilterBuilder<Schema, Table, Result> | null,
+  pageSize: number
+) {
+  const { data, size, setSize, isValidating, error, mutate } = useInfiniteQuery(
+    query,
+    { pageSize: pageSize, revalidateOnFocus: false }
   );
   const isLoadingInitialData = !error && !data;
   const isEmpty = data?.[0]?.length === 0;
@@ -23,7 +21,7 @@ export default function useApiInfinite<T>(api: string, pageSize: number) {
     mutate,
     size,
     setSize,
-    data: data ? ([].concat(...data) as T[]) : ([] as T[]),
+    data: data ? [].concat(...data) : [],
     isLoadingInitialData,
     isLoadingMore:
       isLoadingInitialData ||

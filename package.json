@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.0.12",
+    "@supabase-cache-helpers/postgrest-swr": "^0.4.17",
     "@supabase/supabase-js": "^2.1.0",
     "@vercel/og": "^0.0.21",
     "classnames": "^2.3.2",
