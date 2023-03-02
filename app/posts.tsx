@@ -196,16 +196,16 @@ function Card({ data }: CardProps) {
           {Object.keys(reactions).map((key) => {
             return (
               <div
-                className="pointer-events-auto flex pt-px items-center justify-center h-8 px-2 mr-2 -ml-1 rounded-full ring-1 ring-inset transition duration-200 ease-in-out bg-yellow ring-yellow"
+                className="pointer-events-auto flex pt-px items-center justify-center h-9 px-3 mr-2 -ml-1 rounded-full ring-1 ring-inset transition duration-200 ease-in-out bg-yellow ring-yellow"
                 key={key}
               >
-                <span className="text-sm -mt-px mr-1.5 text-slate">
+                <span className="text-sm -mt-px mr-1 text-slate">
                   {reactions[key]}
                 </span>{' '}
                 {Object.keys(emojis).includes(key) ? (
-                  <Image src={emojis[key]} width={16} height={16} alt={key} />
+                  <Image src={emojis[key]} width={19} height={19} alt={key} />
                 ) : (
-                  <span className="text-md -mb-px">{key}</span>
+                  <span className="text-xl -mb-px">{key}</span>
                 )}
               </div>
             );
