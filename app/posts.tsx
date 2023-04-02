@@ -95,7 +95,6 @@ function usePortfoliosList() {
         )
       `
       )
-      .is('portfolios.is_public', true)
       .order('published_at', { ascending: false }),
     limit
   );

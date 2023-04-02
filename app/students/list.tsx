@@ -12,7 +12,7 @@ interface PortfolioData {
   id: string;
 }
 
-const API = `${process.env.NEXT_PUBLIC_SUPABASE_API_URL}/rest/v1/portfolios?select=id,url,feed_url,image_url,title&is_public=is.true&order=image_url.nullslast,title.desc.nullslast&apikey=${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`;
+const API = `${process.env.NEXT_PUBLIC_SUPABASE_API_URL}/rest/v1/portfolios?select=id,url,feed_url,image_url,title&order=image_url.nullslast,title.desc.nullslast&apikey=${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`;
 
 export function PortfolioSkeleton() {
   return (
