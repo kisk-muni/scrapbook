@@ -20,7 +20,7 @@ SELECT portfolio_posts.id, portfolio_posts.title, portfolio_posts.url, portfolio
 FROM portfolio_posts
 JOIN discord_message_reactions ON portfolio_posts.discord_message_id = discord_message_reactions.message_id
 JOIN portfolios ON portfolio_posts.portfolio_id = portfolios.id
-GROUP BY portfolio_posts.id, portfolios.id
+GROUP BY portfolio_posts.id, portfolios.id, portfolio_posts.title, portfolio_posts.url, portfolio_posts.published_at, portfolio_posts.thumbnail_url, portfolio_posts.description
 HAVING COUNT(DISTINCT discord_message_reactions.discord_user_id) >= 5 OR COUNT(discord_message_reactions.id) filter (where discord_message_reactions.emoji_name = 'upvote') >= 3
 ORDER BY portfolio_posts.published_at DESC
 LIMIT 40
