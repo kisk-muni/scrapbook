@@ -65,6 +65,10 @@ interface PostItemProps {
     url: string | null;
     image_url: string | null;
     feed_url: string | null;
+    profiles?: {
+      username: string;
+      full_name: string;
+    };
   };
   discord_message_reactions: {
     emoji_name: string;
@@ -85,10 +89,12 @@ function usePortfoliosList() {
         thumbnail_url,
         portfolios(
           id,
-          title,
           url,
-          feed_url,
-          image_url
+          image_url,
+          profiles(
+            username,
+            full_name
+          )
         ),
         discord_message_reactions(
           emoji_name
@@ -149,27 +155,32 @@ function Card({ data }: CardProps) {
       <Link
         className="cursor-pointer"
         onClick={() => plausible('Portfolio Link: Click')}
-        href={'/portfolio?feed=' + data.portfolios.feed_url}
+        href={'/' + data.portfolios?.profiles?.username}
       >
         <div className="flex flex-column pt-3 px-3 mb-2">
           <Avatar
             className="rounded-full w-12 h-12 mr-2"
-            name={data.portfolios.title}
+            name={
+              data.portfolios?.profiles?.full_name ||
+              data.portfolios?.title ||
+              'Beze jména'
+            }
             size={48}
-            imageUrl={data.portfolios.image_url}
+            imageUrl={data.portfolios?.image_url}
           />
           <div className="mt-1">
-            {(data.portfolios.title || data.portfolios.url) && (
+            {(data.portfolios?.profiles?.full_name || data.portfolios?.url) && (
               <p className="mb-0 mt-0.5 text-text text-base leading-5 font-bold hover:text-dark">
-                {data.portfolios.title
-                  ? data.portfolios.title
-                  : data.portfolios.url}
+                {data.portfolios?.profiles?.full_name
+                  ? data.portfolios?.profiles?.full_name
+                  : data.portfolios.title || 'Beze jména'}
               </p>
             )}
             <p className="text-muted text-base leading-4">
-              {formatRelative(parseISO(data.published_at), new Date(), {
-                locale: locale,
-              })}
+              {data?.published_at &&
+                formatRelative(parseISO(data?.published_at), new Date(), {
+                  locale: locale,
+                })}
             </p>
           </div>
         </div>
@@ -178,7 +189,7 @@ function Card({ data }: CardProps) {
         <p className="mb-2 text-lg leading-6 hover:text-muted">
           <Link
             onClick={() => plausible('Post Title Link: Click')}
-            href={data.url}
+            href={data.url || '/' + data.portfolios?.profiles?.username}
             className="text-text text-xl leading-5 font-semibold hover:text-blue"
           >
             {data.title}
@@ -187,7 +198,7 @@ function Card({ data }: CardProps) {
         {data.description && <PostDescription content={data.description} />}
         {data.thumbnail_url && (
           <PostImage
-            alt={data.portfolios.title}
+            alt={data?.portfolios?.profiles?.full_name || 'Beze jména'}
             src={data.thumbnail_url}
             isThumbnail
           />

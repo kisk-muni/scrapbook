@@ -18,14 +18,14 @@ async function sourceFeed(
   await supabase
     .from('portfolios')
     .update({
-      title: feed?.title?.value || null,
-      description: feed?.description || null,
-      url: feed?.links[0] || null,
+      title: feed?.title?.value || undefined,
+      description: feed?.description || undefined,
+      url: feed?.links[0] || undefined,
       image_url:
         feed?.image?.url &&
         feed?.image?.url != 'https://s0.wp.com/i/buttonw-com.png'
           ? feed?.image?.url
-          : null,
+          : undefined,
     })
     .eq('id', portfolio_id);
 
@@ -33,13 +33,13 @@ async function sourceFeed(
   // fields can be eventually accessed using DublinCore and MediaRss enums
   const parsed = feed?.entries?.map((item) => ({
     portfolio_id,
-    title: item?.title?.value || null,
-    url: item?.links[0]?.href || null,
-    published_at: item?.published || null,
-    description: item?.description?.value || null,
+    title: item?.title?.value || undefined,
+    url: item?.links[0]?.href || undefined,
+    published_at: item?.published || undefined,
+    description: item?.description?.value || undefined,
     // following media type is not declared in library’s typings but exits on the object
     // https://github.com/MikaelPorttila/rss/blob/5632aa76f1bede380da519118841e0a8dacbd3ff/src/types/media_rss.ts#L47
-    thumbnail_url: (item as any)['media:thumbnail']?.url || null,
+    thumbnail_url: (item as any)['media:thumbnail']?.url || undefined,
   }));
 
   const { data, error } = await supabase

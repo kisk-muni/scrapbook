@@ -1,4 +1,9 @@
 {
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  },
   "compilerOptions": {
     "target": "es5",
     "lib": ["dom", "dom.iterable"],
@@ -20,14 +25,16 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "strictNullChecks": true
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     "components/input/date-range-picker",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "app/(analytics)/analytics/select-cohort.jsx"
   ],
   "exclude": ["node_modules", "supabase"]
 }

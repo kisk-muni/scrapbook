@@ -3,7 +3,7 @@ import Image from 'next/image';
 import classNames from 'classnames';
 
 interface PostImageProps {
-  alt?: string;
+  alt?: string | null;
   src: string;
   isThumbnail?: boolean;
 }

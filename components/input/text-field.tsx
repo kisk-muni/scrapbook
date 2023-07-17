@@ -5,17 +5,20 @@ import {
   useFocusRing,
   useTextField,
 } from 'react-aria';
+import cn from 'classnames';
 
 interface TextFieldProps extends AriaTextFieldOptions<'input'> {
   className?: string;
   description?: string;
   errorMessage?: string;
   label?: string;
+  small?: boolean;
+  inputClassName?: string;
 }
 
 export default function TextField(props: TextFieldProps) {
-  const { label } = props;
-  const ref = useRef();
+  const { label, className, small } = props;
+  const ref = useRef() as unknown as React.MutableRefObject<HTMLInputElement>;
   const { labelProps, inputProps, descriptionProps, errorMessageProps } =
     useTextField(props, ref);
   const { focusProps, isFocusVisible } = useFocusRing();
@@ -26,14 +29,20 @@ export default function TextField(props: TextFieldProps) {
   }
 
   return (
-    <div className={`flex flex-col w-full `}>
-      <label {...labelProps} className="">
-        {label}
-      </label>
+    <div className={cn(`flex flex-col w-full`, className)}>
+      {label && (
+        <label {...labelProps} className="font-bold mb-2 text-base">
+          {label}
+        </label>
+      )}
       <input
         {...mergeProps(inputProps, focusProps)}
         ref={ref}
-        className={`rounded-md border-2 border-smoke cursor-text p-2 sm:p-3 text-base outline-0 focus:border-slate ${ring}`}
+        className={`rounded-md box-border border-2 border-smoke cursor-text ${
+          small ? 'p-1 sm:p-1' : 'p-[10px]'
+        } text-base outline-0 focus:border-slate ${ring} ${
+          props?.inputClassName
+        }`}
       />
       {props.description && (
         <div {...descriptionProps} className="text-sm">

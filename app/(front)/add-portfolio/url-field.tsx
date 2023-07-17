@@ -1,9 +1,9 @@
 import { Fragment, useState } from 'react';
-import TextField from './text-field';
+import TextField from 'components/input/text-field';
 import Image from 'next/image';
 import Link from 'next/link';
 import ButtonHelp from './button-help';
-import Button from 'components/button';
+import Button from 'components/input/button';
 import { usePlausible } from 'next-plausible';
 
 interface AddPortfolioProps {

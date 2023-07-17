@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { Fragment } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import { PortfoliosList } from './list';
+import { ProfileList } from './list';
 
 export default function StudentsPage() {
   return (
@@ -23,7 +23,7 @@ export default function StudentsPage() {
       </div>
       <div className="mx-auto sm:max-w-7xl mb-8 sm:mb-16 md:mt-8 md:mb-20">
         <ErrorBoundary fallback={<div>Portfolio se nepodařilo načíst.</div>}>
-          <PortfoliosList />
+          <ProfileList />
         </ErrorBoundary>
       </div>
     </Fragment>

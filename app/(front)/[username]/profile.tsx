@@ -10,7 +10,7 @@ import { PostImage } from 'components/post-image';
 import { PostDescription } from 'components/post-description';
 import { Avatar } from 'components/avatar';
 
-interface PostProps {
+interface PortfolioPostData {
   id: string;
   title?: string | null;
   published_at?: string | null;
@@ -19,17 +19,34 @@ interface PostProps {
   thumbnail_url?: string | null;
 }
 
-interface PortfolioData {
-  title?: string;
-  image_url?: string;
-  url?: string;
-  feed_url?: string;
+interface PortfolioPageData {
   id: string;
-  portfolio_posts?: PostProps[];
+  title?: string | null;
+  published_at?: string | null;
+  url?: string | null;
+  description?: string | null;
+  thumbnail_url?: string | null;
 }
 
-const API = (feedUrl: string) =>
-  `${process.env.NEXT_PUBLIC_SUPABASE_API_URL}/rest/v1/portfolios?select=id,url,feed_url,image_url,title,portfolio_posts(title,id,url,description,thumbnail_url,published_at)&feed_url=eq.${feedUrl}&portfolio_posts.order=published_at.desc&apikey=${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`;
+type PostProps = PortfolioPostData;
+
+interface PortfolioData {
+  id: string;
+  url: string;
+  portfolio_posts?: PostProps[];
+  portfolio_pages?: PortfolioPageData[];
+  image_url?: string;
+}
+
+interface ProfileData {
+  username: string;
+  full_name?: string;
+  id: string;
+  portfolios?: PortfolioData[];
+}
+
+const API = (userName: string) =>
+  `${process.env.NEXT_PUBLIC_SUPABASE_API_URL}/rest/v1/profiles?select=id,username,full_name,portfolios(url,id,image_url,portfolio_posts(title,id,url,description,thumbnail_url,published_at))&username=eq.${userName}&apikey=${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`;
 
 interface CardProps {
   index?: number;
@@ -82,37 +99,50 @@ export function PortfolioSkeleton() {
   );
 }
 
-// async function getData(feedUrl: string) {
-//   const res = await fetch(API(feedUrl));
-//   return res.json().then((data) => data[0]) as unknown as PortfolioData;
-// }
-
-export function Portfolio(props: { feedUrl?: string }) {
-  if (!props.feedUrl) throw new Error('Feed URL not provided.');
-  const { data, error } = useSWR<PortfolioData[]>(API(props.feedUrl), fetcher);
-  if (error || (data && !data.length)) throw new Error('No portfolio found.');
+export function Profile(props: { userName?: string }) {
+  if (!props.userName) throw new Error('Username not provided.');
+  const { data, error } = useSWR<ProfileData[]>(API(props.userName), fetcher);
+  if (error || (data && !data.length)) throw new Error('No profile found.');
   if (!data) return <PortfolioSkeleton />;
-  const portfolio = data[0];
+  const profile = data[0];
+
+  const portfolios = profile.portfolios || [];
+  // merge portfolio_posts from all portfolios in data array to a single array
+  const portfolio_posts = portfolios
+    .reduce(
+      (acc, curr) => [...acc, ...(curr.portfolio_posts || [])],
+      [] as PortfolioPostData[]
+    )
+    .sort((a, b) => {
+      if (!a.published_at) return 1;
+      if (!b.published_at) return -1;
+      return (
+        parseISO(b.published_at).getTime() - parseISO(a.published_at).getTime()
+      );
+    });
+
   return (
     <div>
       <div className="flex items-center">
         <Avatar
-          className="rounded-full border border-smoke w-32 h-32 mr-2 sm:mr-4"
-          imageUrl={portfolio.image_url}
+          imageUrl={
+            profile?.portfolios?.length ? profile.portfolios[0].image_url : ''
+          }
+          className="rounded-full border border-smoke w-32 h-32 mr-2 text-3xl sm:mr-4"
           size={72}
-          name={portfolio.title}
+          name={profile.full_name || profile.username}
         />
         <div>
           <h1 className="text-2xl mb-2 tracking-tight text-text sm:text-3xl md:text-3xl">
             <span className="block xl:inline font-extrabold">
-              {portfolio.title}
+              {profile.full_name}
             </span>
           </h1>
           <div className="flex gap-2">
-            {portfolio.url && (
+            {profile?.portfolios && profile.portfolios.length != 0 && (
               <Link
                 target="_blank"
-                href={portfolio.url}
+                href={profile?.portfolios[0].url}
                 className="flex items-center text-sm bg-blue hover:opacity-90 text-background rounded-full px-2 py-0.5"
               >
                 <LinkIcon className="w-4 h-4 mr-0.5 -ml-px -mt-px" /> Portfolio
@@ -122,8 +152,9 @@ export function Portfolio(props: { feedUrl?: string }) {
         </div>
       </div>
       <div className="mt-10 md:mt-12 overflow-hidden rounded-xl grid gap-1 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
-        {portfolio.portfolio_posts &&
-          portfolio.portfolio_posts?.map((item, i) => (
+        {profile?.portfolios?.length != 0 &&
+          portfolio_posts &&
+          portfolio_posts?.map((item, i) => (
             <Card key={i} data={item} index={i + 1} />
           ))}
       </div>

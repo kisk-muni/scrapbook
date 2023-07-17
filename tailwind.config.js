@@ -7,6 +7,7 @@ module.exports = {
   plugins: [
     require('@tailwindcss/aspect-ratio'),
     require('@tailwindcss/line-clamp'),
+    require('@headlessui/tailwindcss'),
   ],
   theme: {
     colors: {
@@ -46,6 +47,7 @@ module.exports = {
         'Roboto',
         'sans-serif',
       ],
+      longinput: ['sans-serif'],
       mono: `'SF Mono', 'Roboto Mono', Menlo, Consolas, monospace`,
       header: `'Josefin Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`,
     },

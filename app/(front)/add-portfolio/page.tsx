@@ -36,7 +36,7 @@ export default function AddPortfolioPage() {
         <Step number={1}>
           <CardGroup
             onChange={handlePlatformSelect}
-            label="Na jaké platformě běží tvé portfolio?"
+            label="Na jaké platformě běží tvé portfólio?"
             defaultValue="bg-red"
           >
             <Card value="wordpress" aria-label="Wordpress">
@@ -52,7 +52,7 @@ export default function AddPortfolioPage() {
               Vlastní
             </Card>
             <Card value="no-portfolio" aria-label="Vlastní">
-              Nemám portfolio
+              Nemám portfólio
             </Card>
           </CardGroup>
         </Step>
