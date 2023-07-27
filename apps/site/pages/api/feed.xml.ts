@@ -83,7 +83,7 @@ export default async function getServerSideProps(
   res.setHeader('Content-Type', 'text/xml');
   res.setHeader(
     'Cache-Control',
-    'public, s-maxage=1200, stale-while-revalidate=600'
+    'public, s-maxage=300, stale-while-revalidate=150'
   );
   res.end(feed.xml({ indent: true }));
 }
