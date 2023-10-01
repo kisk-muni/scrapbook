@@ -1,5 +1,4 @@
 'use client';
-import useAnalyticsData from '../../../../lib/hooks/use-analytics-data';
 import useApi from 'lib/use-api';
 import Link from 'next/link';
 import { LinkIcon } from '@heroicons/react/20/solid';
@@ -8,9 +7,12 @@ import Tooltip from 'components/tooltip';
 import { StudentsApiResult } from './api/route';
 import { Avatar } from 'components/avatar';
 import Indicator from 'components/chart/indicator';
+import useAnalyticsAuth from 'lib/hooks/use-analytics-auth';
+import useAnalyticsGlobalFilter from 'lib/hooks/use-analytics-global-filter';
 
 export default function StudentsList() {
-  const { filterData, password } = useAnalyticsData();
+  const { password } = useAnalyticsAuth();
+  const { cohorts } = useAnalyticsGlobalFilter();
   const { data } = useApi<StudentsApiResult>(
     '/analytics/students/api' +
       '?cohort=' +

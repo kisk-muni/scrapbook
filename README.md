@@ -4,6 +4,20 @@
 The goal of the scrapbook is to create a place where we will enjoy coming back to find
 out what others are working on and support each other.
 
+## todo
+
+- standardize crawler and run it on all portfolios
+- standardize chatgpt classifier and run it on all portfolios
+  - add language classifier
+  - add topic classifier
+  - add sentiment classifier
+  - add toxicity classifier
+  - add spam classifier
+  - add self-evaluation detector
+- show statistics based on the analysis
+- [ ] restrict select on profiles to only public profiles for anonymous users
+- [ ] in analytics/posts, synchronize the filters with query params
+
 ## Design principles
 
 - The design and development [are the same thing](https://www.youtube.com/watch?v=3hccXiXI0u8).

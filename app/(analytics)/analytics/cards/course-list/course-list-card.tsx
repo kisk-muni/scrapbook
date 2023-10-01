@@ -1,12 +1,12 @@
 'use client';
 import useApi from 'lib/use-api';
-import useAnalyticsData from '../../../../../lib/hooks/use-analytics-data';
+import useAnalyticsGlobalFilter from '../../../../../lib/hooks/use-analytics-global-filter';
 import Heading from '../../heading';
 import MyPieChart from '../../../../../components/chart/pie-chart';
 import { PrivateProfilesShareApiResult } from '../private-profiles-share/route';
 
 export default function CourseListCard() {
-  const { filterData, password } = useAnalyticsData();
+  const { filterData, password } = useAnalyticsGlobalFilter();
   const { data } = useApi<PrivateProfilesShareApiResult>(
     '/analytics/cards/private-profiles-share' +
       '?p=' +

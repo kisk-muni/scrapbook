@@ -1,22 +1,21 @@
 'use client';
-import { SearchQueryContext, useQuery } from 'lib/hooks/use-search-query';
 import Posts from './posts';
+import { PostsFilterProvider } from './use-posts-filter';
 
-export default function AnalyticsHomePage() {
-  const allowedParams = [
+export default function AnalyticsPostsPage() {
+  /*   const allowedParams = [
     'kind',
     'course',
     'lang',
     'sentiment',
     'category',
     'profiling',
-  ];
-  const query = useQuery([], allowedParams);
+  ]; */
   return (
-    <SearchQueryContext.Provider value={query}>
+    <PostsFilterProvider>
       <div className="w-full">
         <Posts />
       </div>
-    </SearchQueryContext.Provider>
+    </PostsFilterProvider>
   );
 }

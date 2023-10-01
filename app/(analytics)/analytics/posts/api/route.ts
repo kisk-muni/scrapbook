@@ -1,6 +1,10 @@
 import { NextResponse } from 'next/server';
 import supabase from 'lib/supabase';
 import { parseISO } from 'date-fns';
+import { filters } from '../filters';
+import { Item } from 'components/input/filter-select';
+import { cohortsFilter } from 'lib/data/cohorts';
+import { parse } from 'path';
 
 export type Counts = {
   name: string;
@@ -39,49 +43,62 @@ type Row = {
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
-    const cohort = searchParams.get('cohort');
     // const keyword = searchParams.get('keyword');
     const p = searchParams.get('p'); // password
     if (p !== process.env.ANALYTICS_PASSWORD && p !== null)
       throw new Error('Password is incorrect.');
-    // get pages from portfolios for given study cohort
-    let query = supabase
-      .from('portfolio_pages')
-      .select(
-        `
-        title:data->title,
-        url,
-        published_at:data->published-at,
-        portfolios!inner(
-          image_url,
-          profiles!inner(
-            study_start_semester_year,
-            study_start_semester_kind,
-            username,
-            full_name,
-            is_public
-          )
-        )
-      `
-      )
-      .not('data->post-content->text', 'is', null)
-      .order('data->published-at', { ascending: false });
+    const filtersWithCohorts = { ...filters, ...cohortsFilter };
 
-    if (!(p === process.env.ANALYTICS_PASSWORD))
-      query = query.eq('portfolios.profiles.is_public', true);
-
-    if (cohort && cohort != 'all' && cohort != '') {
-      const matches = (cohort as string).match(/^(\d+)([a-zA-Z]+)/);
-      if (matches) {
-        const year = parseInt(matches[1], 10);
-        console.log(year);
-        query = query.eq('portfolios.profiles.study_start_semester_year', year);
-        //const kind = matches[2];
-        //query = query.eq('portfolios.profiles.study_start_semester_kind', kind);
+    const parsedParams: {
+      [key: string]: Item[] | string | boolean | null;
+    } = {};
+    Object.keys(filtersWithCohorts).forEach((filterName) => {
+      if (filterName === 'showDebug') return;
+      const filter = filtersWithCohorts[filterName];
+      const filterValue = searchParams.get(filter.tag as unknown as string);
+      if (filterValue) {
+        const parsedValue = filter.parser.parse(filterValue);
+        parsedParams[filterName] = Array.isArray(parsedValue)
+          ? filter.parser.parse(filterValue).map((item) => item.value)
+          : parsedValue;
+      } else {
+        parsedParams[filterName] = null;
       }
-    }
+    });
+    const cohortsJson = Array.isArray(parsedParams.cohorts)
+      ? ((parsedParams.cohorts as unknown as string[])
+          .map((cohort) => {
+            const matches = cohort.match(/^(\d+)([a-zA-Z]+)/);
+            if (matches) {
+              const year = parseInt(matches[1], 10);
+              const kind = matches[2];
+              return {
+                year,
+                kind: kind === 'jaro' ? kind : null,
+              };
+            }
+          })
+          .filter((cohort) => cohort != undefined) as {
+          year: number;
+          kind: 'jaro' | null;
+        }[])
+      : [];
+    console.log(cohortsJson);
+    const rpcParams = {
+      cohorts: cohortsJson,
+      keyword: parsedParams.keyword,
+      courses: parsedParams.courses,
+      kinds: parsedParams.kinds,
+      profilations: parsedParams.profilations,
+      tones: parsedParams.tones,
+      languages: parsedParams.languages,
+      items_limit: 30,
+      items_offset: 0,
+      show_private: p === process.env.ANALYTICS_PASSWORD,
+    };
+    const { data, error } = await supabase.rpc('search_pages', rpcParams);
 
-    const { data, error } = await query;
+    //const { data, error } = await query;
     if (error) throw new Error(error.message);
     //console.log(data);
     // count the number of portfolios published per month

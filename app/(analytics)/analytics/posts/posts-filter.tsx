@@ -2,11 +2,15 @@ import { BugAntIcon, XMarkIcon } from '@heroicons/react/20/solid';
 import FilterSelect from 'components/input/filter-select';
 import TextField from 'components/input/text-field';
 import { CourseOption, courseOptions } from 'lib/data/courses';
-import { EmojiItem, languages, postKinds, profilations } from 'lib/data/rest';
-import useSearchQuery, {
-  searchQueryToString,
-} from 'lib/hooks/use-search-query';
-import { useEffect, useState } from 'react';
+import {
+  EmojiItem,
+  languages as langOptions,
+  postKinds,
+  profilations as profilationOptions,
+} from 'lib/data/rest';
+import { Tone, tones as toneOptions } from 'lib/data/sentiment';
+import { usePostsFilter } from './use-posts-filter';
+import { useState } from 'react';
 
 const renderEmojiOption = (option: EmojiItem) => (
   <div className="flex items-center">
@@ -15,24 +19,32 @@ const renderEmojiOption = (option: EmojiItem) => (
   </div>
 );
 
+// const allowedQueryTypes = ['kind', 'course'];
+
 export default function PostsFilter() {
-  const [manualQueryInput, setManualQueryInput] = useState('');
-  const [showDebug, setShowDebug] = useState(false);
-  const { query, setFromString, setParamFilter, isEmpty, set } =
-    useSearchQuery();
-
-  useEffect(() => {
-    setManualQueryInput(searchQueryToString(query));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query]);
-
-  useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
-      setFromString(manualQueryInput);
-    }, 1000);
-
-    return () => clearTimeout(delayDebounceFn);
-  }, [manualQueryInput, query]);
+  /*   const { query, setFromString, setParamFilter, set } =
+    useSearchQuery(); */
+  const [timer, setTimer] = useState<NodeJS.Timeout | undefined>();
+  const {
+    isTyping,
+    setIsTyping,
+    keywordQuery,
+    setKeywordQuery,
+    kinds,
+    setKinds,
+    courses,
+    setCourses,
+    profilations,
+    setProfilations,
+    tones,
+    setTones,
+    languages,
+    setLanguages,
+    showDebug,
+    setShowDebug,
+    isEmpty,
+    cleanup,
+  } = usePostsFilter();
 
   return (
     <div>
@@ -40,22 +52,24 @@ export default function PostsFilter() {
         <TextField
           placeholder="Hledat klíčové slovo"
           className="grow"
-          value={manualQueryInput}
+          value={keywordQuery || ''}
           onChange={(value) => {
-            setManualQueryInput(value);
+            setKeywordQuery(value);
+            setIsTyping(true);
+
+            clearTimeout(timer);
+            const newTimer = setTimeout(() => {
+              setIsTyping(false);
+            }, 500);
+
+            setTimer(newTimer);
           }}
         />
         <FilterSelect<CourseOption>
-          value={[]}
+          value={courses}
           ariaLabel="Kurz"
           placeholder="Kurz"
-          onChange={(v: { value: string }[]) => {
-            setParamFilter({
-              param: 'course',
-              value: v.map((i) => i.value),
-            });
-            setManualQueryInput(searchQueryToString(query));
-          }}
+          onChange={(v) => setCourses(v)}
           options={courseOptions}
           renderOption={(option) => (
             <div className="py-1">
@@ -74,73 +88,51 @@ export default function PostsFilter() {
             item.code.toLowerCase().includes(query.toLowerCase())
           }
         />
-        {/*  <FilterSelect
+        <FilterSelect
+          value={kinds}
           ariaLabel="Druh"
+          onChange={(v) => setKinds(v)}
           placeholder="Druh"
-          onChange={(v: { value: string }[]) => {
-            setParamFilter({
-              param: 'kind',
-              value: v.map((i) => i.value),
-            });
-            setManualQueryInput(searchQueryToString(query));
-          }}
           options={postKinds}
           filterTitle="Filtrovat podle druhu"
           filterPlaceholder="Filtrovat druhy"
         />
         <FilterSelect
+          value={profilations}
           ariaLabel="Profilace"
           placeholder="Profilace"
-          onChange={(v: { value: string }[]) => {
-            setParamFilter({
-              param: 'profiling',
-              value: v.map((i) => i.value),
-            });
-            setManualQueryInput(searchQueryToString(query));
-          }}
-          options={profilations}
+          onChange={(v) => setProfilations(v)}
+          options={profilationOptions}
           renderOption={renderEmojiOption}
           filterTitle="Filtrovat podle profilace"
           filterPlaceholder="Filtrovat profilace"
         />
         <FilterSelect<Tone>
+          value={tones}
+          onChange={(v) => setTones(v)}
           ariaLabel="Sentiment"
           placeholder="Sentiment"
-          onChange={(v: { value: string }[]) => {
-            setParamFilter({
-              param: 'sentiment',
-              value: v.map((i) => i.value),
-            });
-            setManualQueryInput(searchQueryToString(query));
-          }}
-          options={tones}
+          options={toneOptions}
           renderOption={renderEmojiOption}
           filterTitle="Filtrovat podle sentimentu"
           filterPlaceholder="Filtrovat sentiment"
         />
         <FilterSelect
+          value={languages}
           ariaLabel="Jazyk"
           placeholder="Jazyk"
-          onChange={(v: { value: string }[]) => {
-            setParamFilter({
-              param: 'lang',
-              value: v.map((i) => i.value),
-            });
-            setManualQueryInput(searchQueryToString(query));
-          }}
-          options={languages}
+          onChange={(v) => setLanguages(v)}
+          options={langOptions}
           renderOption={renderEmojiOption}
           filterTitle="Filtrovat podle jazyka"
           filterPlaceholder="Filtrovat jazyky"
-        /> */}
+        />
       </div>
       {!isEmpty && (
         <div className="mt-3 flex justify-between">
           <button
             className="group text-muted hover:text-blue flex items-center"
-            onClick={() => {
-              setManualQueryInput('');
-            }}
+            onClick={cleanup}
           >
             <XMarkIcon className="h-5 w-5 p-0.5 rounded-md text-sheet bg-muted group-hover:bg-blue mr-1.5 -mt-px" />{' '}
             Vypnout filtraci a vyhledávání{' '}
@@ -155,9 +147,9 @@ export default function PostsFilter() {
           </button>
         </div>
       )}
-      {!isEmpty && showDebug && (
+      {showDebug && (
         <div className="mt-3 text-sm text-white bg-slate rounded-lg p-4">
-          <pre>{JSON.stringify(query, null, 2)}</pre>
+          <pre>{JSON.stringify(keywordQuery, null, 2)}</pre>
         </div>
       )}
     </div>

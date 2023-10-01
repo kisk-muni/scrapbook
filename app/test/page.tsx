@@ -1,15 +1,15 @@
 'use client';
+import Button from 'components/input/button';
 import FilterSelect from 'components/input/filter-select';
 import { CourseOption, courseOptions } from 'lib/data/courses';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 export default function HomePage() {
-  const [elsewhere, setElsewhere] = useState<string>('');
   const [value, setValue] = useState<CourseOption[]>([]);
 
   // in useeffect, if elsewhere contains some element, set value so it contains elements from courseoptions with same value properties
 
-  useEffect(() => {
+  /*   useEffect(() => {
     if (elsewhere.length > 0) {
       try {
         const parsed = JSON.parse(elsewhere);
@@ -29,15 +29,15 @@ export default function HomePage() {
         return;
       }
     }
-  }, [elsewhere, value]);
+  }, [elsewhere, value]); */
 
   return (
     <div className="h-screen bg-snow flex p-40 flex-col items-center">
-      <input
+      {/*<input
         className="border-1 mb-2"
         value={elsewhere}
         onChange={(e) => setElsewhere(e.target.value)}
-      />
+      />*/}
       <FilterSelect<CourseOption>
         value={value}
         ariaLabel="Kurz"
@@ -64,6 +64,16 @@ export default function HomePage() {
       <div>
         <pre>{JSON.stringify(value)}</pre>
       </div>
+      <Button
+        onPress={() => {
+          setValue(
+            value &&
+              (value.filter((e) => e.value !== 'ARTS005') as CourseOption[])
+          );
+        }}
+      >
+        Remove ARTS005
+      </Button>
     </div>
   );
 }

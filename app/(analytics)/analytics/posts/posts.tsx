@@ -1,6 +1,6 @@
 'use client';
 import BarChart from '../../../../components/chart/bar-chart';
-import useAnalyticsData from '../../../../lib/hooks/use-analytics-data';
+import useAnalyticsGlobalFilter from '../../../../lib/hooks/use-analytics-global-filter';
 import useApi from 'lib/use-api';
 import Heading from '../heading';
 import Link from 'next/link';
@@ -10,16 +10,28 @@ import { LockClosedIcon } from '@radix-ui/react-icons';
 import Tooltip from 'components/tooltip';
 import PostsFilter from './posts-filter';
 import { Avatar } from 'components/avatar';
+import useAnalyticsAuth from 'lib/hooks/use-analytics-auth';
+import { usePostsFilter } from './use-posts-filter';
 
 export default function Posts() {
-  const { filterData, password } = useAnalyticsData();
-  const { isLoading, isError, data } = useApi<PostsApiResult>(
-    '/analytics/posts/api' +
-      '?cohort=' +
-      filterData.cohorts +
-      (password != '' ? '&p=' + password : '')
-  );
+  const { cohorts } = useAnalyticsGlobalFilter();
+  const { password } = useAnalyticsAuth();
+  const { isTyping, getUrlSearchParams } = usePostsFilter();
+  const searchParams = getUrlSearchParams();
+  const url = new URL(process.env.NEXT_PUBLIC_APP_URL + '/analytics/posts/api');
+  if (password) {
+    searchParams.set('p', password);
+  }
+  if (cohorts) {
+    searchParams.set(
+      'cohorts',
+      cohorts.map((cohort) => cohort.value).join('-')
+    );
+  }
 
+  const { isLoading, isError, data } = useApi<PostsApiResult>(
+    !isTyping ? url.toString() + '?' + searchParams.toString() : null
+  );
   return (
     <div>
       <PostsFilter />
@@ -39,8 +51,8 @@ export default function Posts() {
               {isLoading
                 ? 'Načítání'
                 : isError
-                ? 'Data grafu se nepodařilo načíst.'
-                : 'Žádná data'}
+                ? 'Příspěvky se nepodařilo načíst.'
+                : 'Žádné příspěvky'}
             </div>
           )}
         </div>

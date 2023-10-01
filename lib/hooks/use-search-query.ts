@@ -32,6 +32,7 @@ export function parseSearchQuery(
         result.push(filter);
       }
     }
+    // else add to keyword
   });
   return result;
 }

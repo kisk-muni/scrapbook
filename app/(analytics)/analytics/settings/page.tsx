@@ -1,11 +1,11 @@
 'use client';
 
 import TextField from 'components/input/text-field';
-import useAnalyticsData from '../../../../lib/hooks/use-analytics-data';
 import Heading from '../heading';
+import useAnalyticsAuth from 'lib/hooks/use-analytics-auth';
 
 export default function SettingsPage() {
-  const { password, setPassword } = useAnalyticsData();
+  const { password, setPassword } = useAnalyticsAuth();
 
   return (
     <div className="w-full mt-6">

@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import fetcher from 'lib/fetcher';
 
-export default function useApi<T>(api: string) {
+export default function useApi<T>(api: string | null) {
   const { data, error } = useSWR<T>(api, fetcher, { revalidateOnFocus: false });
 
   return {

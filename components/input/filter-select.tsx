@@ -9,19 +9,18 @@ export type Item = {
 };
 
 export type LightItem<T extends Item> = Omit<T, 'label'> & { filter: string };
-
 interface FilterSelectProps<T extends Item> {
-  onChange?: (value: T[]) => void;
+  value: T[] | null;
+  onChange?: (value: T[] | null) => void;
   options: T[];
   ariaLabel: string;
-  renderLabel?: (selected: T[], ariaLabel?) => React.ReactNode;
+  renderLabel?: (selected: T[] | null, ariaLabel?) => React.ReactNode;
   renderOption?: (option: T) => React.ReactNode;
   filterPredicate?: (value: T, query: string) => unknown;
   defaultValue?: T[];
   placeholder: string;
   filterPlaceholder?: string;
   filterTitle?: string;
-  value: T[];
   showSearch?: boolean;
 }
 
@@ -54,9 +53,11 @@ export default function FilterSelect<T extends Item>({
 
   return (
     <Combobox
-      value={value}
+      // we keep the internal value as empty array, but allow nullable value from outside
+      value={value || []}
       onChange={(v) => {
-        onChange && onChange(v);
+        // pass null value if empty array, otherwise pass new array
+        onChange && onChange(v.length > 0 ? [...v] : null);
       }}
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
@@ -69,7 +70,7 @@ export default function FilterSelect<T extends Item>({
         <div className="relative w-full cursor-default rounded-lg bg-white text-left ">
           <Combobox.Button className="inline-flex relative items-center justify-center gap-1 rounded-md cursor-pointer px-4 py-2 py-3 text-base bg-smoke hover:bg-sunken text-text">
             {renderLabel ? renderLabel(value, ariaLabel) : ariaLabel}
-            {value.length > 0 && (
+            {value && value.length > 0 && (
               <div className="absolute h-2 w-2 border border-white rounded-full bg-blue right-1 top-1"></div>
             )}
             <ChevronDownIcon className="-mt-px h4" />

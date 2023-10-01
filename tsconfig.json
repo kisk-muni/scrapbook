@@ -6,7 +6,10 @@
   },
   "compilerOptions": {
     "target": "es5",
-    "lib": ["dom", "dom.iterable"],
+    "lib": [
+      "dom",
+      "dom.iterable"
+    ],
     "allowJs": true,
     "downlevelIteration": true,
     "skipLibCheck": true,
@@ -36,5 +39,8 @@
     ".next/types/**/*.ts",
     "app/(analytics)/analytics/select-cohort.jsx"
   ],
-  "exclude": ["node_modules", "supabase"]
+  "exclude": [
+    "node_modules",
+    "supabase"
+  ]
 }
