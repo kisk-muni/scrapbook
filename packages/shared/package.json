@@ -4,7 +4,8 @@
   "main": "src/index.ts",
   "types": "src/index.ts",
   "dependencies": {
-    "@supabase/supabase-js": "^2.37.0"
+    "@supabase/supabase-js": "^2.37.0",
+    "openai": "^3.3.0"
   },
   "devDependencies": {
     "@turbo/gen": "^1.10.12",

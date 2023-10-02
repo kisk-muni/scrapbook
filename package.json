@@ -5,11 +5,12 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "dotenv -c -- turbo build",
-    "dev": "dotenv -c -- turbo dev",
+    "build-site": "dotenv -c -- turbo build --filter=site",
+    "dev-site": "dotenv -c -- turbo dev --filter=site",
     "lint": "dotenv -c -- turbo lint",
     "crawl": "dotenv -c -- turbo start:dev --filter=crawler",
-    "gen-types": "dotenv -c -- npx supabase gen types typescript --project-id '$SUPABASE_PROJECT_REF_ID' --schema public > packages/shared/src/supabase/types.ts "
+    "gen-types": "dotenv -c -- npx supabase gen types typescript --project-id '$SUPABASE_PROJECT_REF_ID' --schema public > packages/shared/src/supabase/types.ts ",
+    "dev-discord-bot": "dotenv -c -- turbo dev --filter=discord-bot"
   },
   "devDependencies": {
     "eslint": "7.32.0",
