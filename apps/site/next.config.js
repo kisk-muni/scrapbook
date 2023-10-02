@@ -1,5 +1,6 @@
 module.exports = {
   experimental: { appDir: true },
+  transpilePackages: ['shared'],
   images: {
     dangerouslyAllowSVG: true,
     remotePatterns: [

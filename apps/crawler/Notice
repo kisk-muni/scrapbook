@@ -1,0 +1,13 @@
+The following is a list of sources from which code was used/modified in this codebase.
+
+---
+
+This repository is build on Crawlee, a web scraping and browser automation library for Node.js.
+Crawlee is published under the following licenses:
+
+Copyright 2018 Apify Technologies s.r.o.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License. You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0

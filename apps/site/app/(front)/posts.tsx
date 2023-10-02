@@ -285,7 +285,9 @@ export function Posts() {
       </div>
       <div ref={ref} className="items-centers flex justify-center mb-20 mt-2">
         {isLoadingMore ? (
-          <LoadingIcon />
+          <div>
+            <LoadingIcon />
+          </div>
         ) : isReachingEnd ? (
           'Žádné další příspěvky'
         ) : (

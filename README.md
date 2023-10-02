@@ -4,48 +4,19 @@
 The goal of the scrapbook is to create a place where we will enjoy coming back to find
 out what others are working on and support each other.
 
-## todo
+## Project structure
 
-- standardize crawler and run it on all portfolios
-- standardize chatgpt classifier and run it on all portfolios
-  - add language classifier
-  - add topic classifier
-  - add sentiment classifier
-  - add toxicity classifier
-  - add spam classifier
-  - add self-evaluation detector
-- show statistics based on the analysis
-- [ ] restrict select on profiles to only public profiles for anonymous users
-- [ ] in analytics/posts, synchronize the filters with query params
+The project is a monorepo containing following workspaces:
 
-## Design principles
+apps:
 
-- The design and development [are the same thing](https://www.youtube.com/watch?v=3hccXiXI0u8).
-- Every feature has to be mobile-first.
+- [site](./apps/site) - Next.js app for the public website
+- [crawler](./apps/crawler) - App for crawling student portfolios for new content and analysis
 
-## Design decisions
+packages:
 
-Web app
-
-- **Warning** the site is powered by [next.js 13](https://nextjs.org/) which is currently in beta
-  and its features are not stable. this project was partly created to test the new version
-  of the framework, provide feedback to its developers and form opinion on it.
-- some of the features are developed rapidly, thus we expect errors to occur and the project
-  structure is is not polished. we keep it modular though so developing new features is not
-  slowed down by making sure to reuse existing code
-- to ensure accessibility support, [React Aria](https://react-spectrum.adobe.com/react-aria/)
-  is used whenever possible
-
-Database and API
-
-- the only database used is [Supabase](https://supabase.com/) free tier instance, which is
-  [kept alive by github action](https://github.com/kisk-muni/scrapbook/blob/main/.github/workflows/keep-supabase-alive.yaml)
-  (Supabase pauses free projects after one week of inactivity)
-- the database schema definitions and configs are stored in
-  [supabase folder](https://github.com/kisk-muni/scrapbook/tree/main/supabase) in the root of the project
-- posts from portfolios are fetched hourly by cron job which runs on the database and invokes
-  [feed-source function](./supabase/functions/feed-source/index.ts) on every portfolio from
-  [student portfolios list](https://kisk.vercel.app/students)
+- [shared](./packages/shared) - Shared code between apps such as database connection, types, etc.
+- [tsconfig](./packages/tsconfig) - Shared typescript configuration
 
 ## Get started
 
@@ -67,14 +38,22 @@ cp .env.example .env.local
 npm run dev
 ```
 
-4. run local development database (assumes you have docker installed and running)
+### Updating database schema
+
+1. run local development database (assumes you have docker installed and running)
 
 ```
-npx supabase start
+npx supabase login
+```
+
+2. download typings for the latest database schema
+
+```
+npm run type-gen
 ```
 
 ## Origin of Scrapbook
 
 Significant parts of the project are copied from, derived from, or
 inspired by [Hack Club’s Scrapbook](https://github.com/hackclub/scrapbook)
-which is released under MIT License.
+which is released under MIT License.#
