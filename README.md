@@ -12,6 +12,7 @@ apps:
 
 - [site](./apps/site) - Next.js app for the public website
 - [crawler](./apps/crawler) - App for crawling student portfolios for new content and analysis
+- [discord-bot](./apps/discord-bot) - Discord bot for posting new content to discord, collecting reactions etc.
 
 packages:
 
@@ -32,15 +33,15 @@ npm i
 cp .env.example .env.local
 ```
 
-3. run local development server (the app should work, but show no data)
+3. run local site development server
 
 ```
-npm run dev
+npm run dev-site
 ```
 
 ### Updating database schema
 
-1. run local development database (assumes you have docker installed and running)
+1. login to supabase
 
 ```
 npx supabase login

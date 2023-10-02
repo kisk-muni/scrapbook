@@ -25,7 +25,7 @@ export const onReactionAdd: OnReactionHandler = async (
 };
 
 export const onReactionRemove: OnReactionHandler = async (
-  client,
+  _client,
   reaction,
   user
 ) => {
