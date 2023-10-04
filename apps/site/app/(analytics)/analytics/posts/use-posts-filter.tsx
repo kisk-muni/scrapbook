@@ -1,8 +1,8 @@
 'use client';
 import { Item } from 'components/input/filter-select';
 import { useQueryState, Parser } from 'next-usequerystate';
-import { CourseOption } from 'lib/data/courses';
-import { EmojiItem } from 'lib/data/rest';
+import { CourseOption } from 'shared';
+import { EmojiItem } from 'shared';
 import {
   Dispatch,
   SetStateAction,

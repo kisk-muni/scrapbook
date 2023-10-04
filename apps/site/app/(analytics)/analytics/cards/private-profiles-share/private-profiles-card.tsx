@@ -4,16 +4,27 @@ import useAnalyticsGlobalFilter from '../../../../../lib/hooks/use-analytics-glo
 import { PrivateProfilesShareApiResult } from './route';
 import Heading from '../../heading';
 import MyPieChart from '../../../../../components/chart/pie-chart';
+import useAnalyticsAuth from 'lib/hooks/use-analytics-auth';
+import { usePostsFilter } from '../../posts/use-posts-filter';
 
 export default function PrivateProfilesCard() {
-  const { filterData, password } = useAnalyticsGlobalFilter();
-  const { data } = useApi<PrivateProfilesShareApiResult>(
-    '/analytics/cards/private-profiles-share' +
-      '?p=' +
-      password +
-      '&cohort=' +
-      filterData.cohort
+  const { cohorts } = useAnalyticsGlobalFilter();
+  const { password } = useAnalyticsAuth();
+  const { getUrlSearchParams } = usePostsFilter();
+  const searchParams = getUrlSearchParams();
+  const url = new URL(
+    process.env.NEXT_PUBLIC_APP_URL + '/analytics/cards/private-profiles-share'
   );
+  if (password) {
+    searchParams.set('p', password);
+  }
+  if (cohorts) {
+    searchParams.set(
+      'cohorts',
+      cohorts.map((cohort) => cohort.value).join('-')
+    );
+  }
+  const { data } = useApi<PrivateProfilesShareApiResult>(url.toString());
 
   return (
     <div className="grid grid-cols-3 gap-4">

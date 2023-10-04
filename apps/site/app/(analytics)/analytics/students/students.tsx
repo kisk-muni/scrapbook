@@ -13,12 +13,19 @@ import useAnalyticsGlobalFilter from 'lib/hooks/use-analytics-global-filter';
 export default function StudentsList() {
   const { password } = useAnalyticsAuth();
   const { cohorts } = useAnalyticsGlobalFilter();
-  const { data } = useApi<StudentsApiResult>(
-    '/analytics/students/api' +
-      '?cohort=' +
-      filterData.cohort +
-      (password != '' ? '&p=' + password : '')
+  const url = new URL(
+    process.env.NEXT_PUBLIC_APP_URL + '/analytics/students/api'
   );
+  if (password) {
+    url.searchParams.set('p', password);
+  }
+  if (cohorts) {
+    url.searchParams.set(
+      'cohorts',
+      cohorts.map((cohort) => cohort.value).join('-')
+    );
+  }
+  const { data } = useApi<StudentsApiResult>(url.toString());
 
   return (
     <div className="rounded-lg overflow-hidden">
@@ -41,7 +48,7 @@ export default function StudentsList() {
             <th scope="col" className="px-6 py-3 text-lg font-extrabold">
               Stránky
             </th>
-            {filterData.cohort == 'all' && (
+            {cohorts === null && (
               <th scope="col" className="px-6 py-3 text-lg font-extrabold">
                 Ročník
               </th>
@@ -154,7 +161,7 @@ export default function StudentsList() {
                       : '-'
                     : '-'}
                 </td>
-                {filterData.cohort == 'all' && (
+                {cohorts === null && (
                   <td className="px-6 py-4">
                     {(student.study_start_semester_year || '') +
                       ' ' +

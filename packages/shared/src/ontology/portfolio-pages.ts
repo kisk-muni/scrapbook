@@ -123,36 +123,10 @@ export const allowedPageTypes = [
 
 export type PageType = (typeof allowedPageTypes)[number];
 
-export const allowedProfilations = [
-  "design",
-  "analytics",
-  "edtech",
-  "librarianship",
-] as const;
-
+import { profilations } from "./rest";
+export const allowedProfilations = profilations.map((pro) => pro.value);
 export type Profilation = (typeof allowedProfilations)[number];
 
-export const allowedTones = [
-  "disheartened",
-  "accusatory",
-  "worried",
-  "curious",
-  "surprised",
-  "disapporved",
-  "unassuming",
-  "formal",
-  "assertive",
-  "confident",
-  "appreciative",
-  "concerned",
-  "sad",
-  "informal",
-  "regretful",
-  "encouraging",
-  "egocentric",
-  "joyful",
-  "optimistic",
-  "excited",
-] as const;
-
+import { tones } from "./sentiment";
+export const allowedTones = tones.map((tone) => tone.value);
 export type Tone = (typeof allowedTones)[number];

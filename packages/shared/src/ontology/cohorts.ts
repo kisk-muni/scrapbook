@@ -1,4 +1,4 @@
-import { urlSelectParser } from 'lib/filter/parsers';
+import { urlSelectParser } from "./filters/parsers";
 
 export const firstSemesterYear = 2015;
 export const cohortsOptions = Array.from(
@@ -23,7 +23,7 @@ export const cohortsOptions = Array.from(
 export const cohortsParser = urlSelectParser(cohortsOptions);
 export const cohortsFilter = {
   cohorts: {
-    tag: 'cohorts',
+    tag: "cohorts",
     parser: cohortsParser,
   },
 };

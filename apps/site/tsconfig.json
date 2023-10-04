@@ -7,8 +7,15 @@
       }
     ],
     "strictNullChecks": false,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "downlevelIteration": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "../../packages/shared/src/filter-data/parsers.ts"
+  ],
   "exclude": ["node_modules", "supabase"]
 }

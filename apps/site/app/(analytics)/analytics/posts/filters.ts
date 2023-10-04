@@ -1,15 +1,11 @@
-import {
-  urlSelectParser,
-  urlStringParser,
-  urlBooleanParser,
-} from 'lib/filter/parsers';
-import { courseOptions } from 'lib/data/courses';
+import { urlSelectParser, urlStringParser, urlBooleanParser } from 'shared';
+import { courseOptions } from 'shared';
 import {
   languages as langOptions,
   postKinds,
   profilations as profilationOptions,
-} from 'lib/data/rest';
-import { tones as toneOptions } from 'lib/data/sentiment';
+} from 'shared';
+import { tones as toneOptions } from 'shared';
 
 export const keywordParser = urlStringParser();
 export const kindsParser = urlSelectParser(postKinds);

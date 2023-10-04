@@ -2,9 +2,7 @@ import { NextResponse } from 'next/server';
 import supabase from 'lib/supabase';
 import { parseISO } from 'date-fns';
 import { filters } from '../filters';
-import { Item } from 'components/input/filter-select';
-import { cohortsFilter } from 'lib/data/cohorts';
-import { parse } from 'path';
+import { cohortsFilter } from 'shared';
 
 export type Counts = {
   name: string;
@@ -50,7 +48,7 @@ export async function GET(request: Request) {
     const filtersWithCohorts = { ...filters, ...cohortsFilter };
 
     const parsedParams: {
-      [key: string]: Item[] | string | boolean | null;
+      [key: string]: string[] | string | boolean | null;
     } = {};
     Object.keys(filtersWithCohorts).forEach((filterName) => {
       if (filterName === 'showDebug') return;
@@ -59,8 +57,10 @@ export async function GET(request: Request) {
       if (filterValue) {
         const parsedValue = filter.parser.parse(filterValue);
         parsedParams[filterName] = Array.isArray(parsedValue)
-          ? filter.parser.parse(filterValue).map((item) => item.value)
-          : parsedValue;
+          ? (filter.parser
+              .parse(filterValue)
+              .map((item) => item.value) as string[])
+          : (parsedValue as string | boolean);
       } else {
         parsedParams[filterName] = null;
       }
@@ -86,12 +86,12 @@ export async function GET(request: Request) {
     console.log(cohortsJson);
     const rpcParams = {
       cohorts: cohortsJson,
-      keyword: parsedParams.keyword,
-      courses: parsedParams.courses,
-      kinds: parsedParams.kinds,
-      profilations: parsedParams.profilations,
-      tones: parsedParams.tones,
-      languages: parsedParams.languages,
+      keywords: parsedParams.keyword as string[],
+      courses: parsedParams.courses as string[],
+      kinds: parsedParams.kinds as string[],
+      profilations: parsedParams.profilations as string[],
+      tones: parsedParams.tones as string[],
+      languages: parsedParams.languages as string[],
       items_limit: 30,
       items_offset: 0,
       show_private: p === process.env.ANALYTICS_PASSWORD,

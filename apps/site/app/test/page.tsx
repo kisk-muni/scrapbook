@@ -1,7 +1,7 @@
 'use client';
 import Button from 'components/input/button';
 import FilterSelect from 'components/input/filter-select';
-import { CourseOption, courseOptions } from 'lib/data/courses';
+import { CourseOption, courseOptions } from 'shared';
 import { useState } from 'react';
 
 export default function HomePage() {

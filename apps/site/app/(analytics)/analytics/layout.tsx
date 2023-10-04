@@ -15,7 +15,7 @@ import classNames from 'classnames';
 import { ChevronRightIcon } from '@radix-ui/react-icons';
 import FilterSelect from 'components/input/filter-select';
 import { useQueryState } from 'next-usequerystate';
-import { cohortsOptions, cohortsParser } from 'lib/data/cohorts';
+import { cohortsOptions, cohortsParser } from 'shared';
 
 const tabs = [
   {

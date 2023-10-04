@@ -1,14 +1,13 @@
 import { BugAntIcon, XMarkIcon } from '@heroicons/react/20/solid';
 import FilterSelect from 'components/input/filter-select';
 import TextField from 'components/input/text-field';
-import { CourseOption, courseOptions } from 'lib/data/courses';
+import { CourseOption, courseOptions } from 'shared';
 import {
-  EmojiItem,
   languages as langOptions,
   postKinds,
   profilations as profilationOptions,
-} from 'lib/data/rest';
-import { Tone, tones as toneOptions } from 'lib/data/sentiment';
+} from 'shared';
+import { EmojiItem, tones as toneOptions } from 'shared';
 import { usePostsFilter } from './use-posts-filter';
 import { useState } from 'react';
 
@@ -26,7 +25,6 @@ export default function PostsFilter() {
     useSearchQuery(); */
   const [timer, setTimer] = useState<NodeJS.Timeout | undefined>();
   const {
-    isTyping,
     setIsTyping,
     keywordQuery,
     setKeywordQuery,
@@ -107,7 +105,7 @@ export default function PostsFilter() {
           filterTitle="Filtrovat podle profilace"
           filterPlaceholder="Filtrovat profilace"
         />
-        <FilterSelect<Tone>
+        <FilterSelect<EmojiItem>
           value={tones}
           onChange={(v) => setTones(v)}
           ariaLabel="Sentiment"
