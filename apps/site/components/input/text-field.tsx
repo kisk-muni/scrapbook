@@ -31,18 +31,18 @@ export default function TextField(props: TextFieldProps) {
   return (
     <div className={cn(`flex flex-col w-full`, className)}>
       {label && (
-        <label {...labelProps} className="font-bold mb-2 text-base">
+        <label {...labelProps} className="font-bold mb-2 text-slate">
           {label}
         </label>
       )}
       <input
         {...mergeProps(inputProps, focusProps)}
         ref={ref}
-        className={`rounded-md box-border border-2 border-smoke cursor-text ${
+        className={`rounded-xl box-border border-2 border-smoke hover:bg-white focus:bg-white cursor-text ${
           small ? 'p-1 sm:p-1' : 'p-[10px]'
-        } text-base outline-0 focus:border-slate ${ring} ${
+        } placeholder-muted text-text outline-0 focus:border-slate ${ring} ${
           props?.inputClassName
-        }`}
+        } transition ease-in-out delay-50`}
       />
       {props.description && (
         <div {...descriptionProps} className="text-sm">

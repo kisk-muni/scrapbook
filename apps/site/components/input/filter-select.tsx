@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Combobox } from '@headlessui/react';
 import { CheckIcon, XMarkIcon } from '@heroicons/react/20/solid';
 import { ChevronDownIcon } from '@radix-ui/react-icons';
+import classNames from 'classnames';
 
 export type Item = {
   value: string;
@@ -67,8 +68,17 @@ export default function FilterSelect<T extends Item>({
       multiple
     >
       <div className="relative">
-        <div className="relative w-full cursor-default rounded-lg bg-white text-left ">
-          <Combobox.Button className="inline-flex relative items-center justify-center gap-1 rounded-md cursor-pointer px-4 py-2 py-3 text-base bg-smoke hover:bg-sunken text-text">
+        <div className="relative w-full cursor-default text-left ">
+          <Combobox.Button
+            className={classNames(
+              'inline-flex relative items-center justify-center gap-1 font-medium rounded-xl cursor-pointer px-4 py-2.5 text-base border-2 border-sunken transition ease-in-out delay-50',
+              {
+                'bg-background hover:bg-white focus:bg-white text-muted hover:text-text ui-open:bg-white ui-open:text-text':
+                  !value || value.length === 0,
+                'bg-white text-text': value && value.length > 0,
+              }
+            )}
+          >
             {renderLabel ? renderLabel(value, ariaLabel) : ariaLabel}
             {value && value.length > 0 && (
               <div className="absolute h-2 w-2 border border-white rounded-full bg-blue right-1 top-1"></div>
@@ -78,10 +88,10 @@ export default function FilterSelect<T extends Item>({
 
           <Combobox.Options
             as="div"
-            className="absolute z-50 mt-1 w-72 -right-1.5 overflow-hidden rounded-md bg-white text-base shadow-xl ring-2 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+            className="absolute z-50 mt-1 w-72 -right-1.5 overflow-hidden rounded-xl bg-white text-base shadow-xl ring-2 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
           >
             {filterTitle && (
-              <div className="py-2 px-2 flex items-center justify-between border-b-2 border-smoke/50">
+              <div className="py-2 px-3 flex items-center justify-between border-b-2 border-smoke/50">
                 <span className="text-sm font-bold text-slate">
                   {filterTitle}
                 </span>

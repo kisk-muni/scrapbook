@@ -151,7 +151,7 @@ function Card({ data }: CardProps) {
       return counts;
     }, {});
   return (
-    <div className="bg-white rounded-lg mb-4 mr-4 md:mb-6 md:mr-6">
+    <div className="bg-white rounded-xl mb-4 mr-4 md:mb-6 md:mr-6">
       <Link
         className="cursor-pointer"
         onClick={() => plausible('Portfolio Link: Click')}

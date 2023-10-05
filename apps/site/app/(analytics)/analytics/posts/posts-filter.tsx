@@ -46,10 +46,13 @@ export default function PostsFilter() {
 
   return (
     <div>
-      <div className="flex justify-start items-center space-x-4">
+      <div className="flex justify-start items-center space-x-3">
         <TextField
           placeholder="Hledat klíčové slovo"
           className="grow"
+          inputClassName={`focus:bg-white hover:bg-white ${
+            keywordQuery && keywordQuery !== '' ? 'bg-white' : 'bg-background'
+          }`}
           value={keywordQuery || ''}
           onChange={(value) => {
             setKeywordQuery(value);

@@ -35,7 +35,7 @@ export default function Posts() {
   return (
     <div>
       <PostsFilter />
-      <div className="rounded-lg bg-white px-2 py-4 mt-6">
+      <div className="rounded-xl bg-white px-2 py-4 mt-6">
         <Heading className="px-4 mb-3">
           {!isLoading && !isError && <>{data?.data?.length + ' příspěvků'}</>}
         </Heading>
@@ -57,7 +57,7 @@ export default function Posts() {
           )}
         </div>
       </div>
-      <div className="rounded-lg overflow-hidden mt-6">
+      <div className="rounded-xl overflow-hidden mt-6">
         <table className="table-auto w-full text-sm text-left text-text">
           <thead className="text-xs text-text uppercase bg-white border-b border-snow">
             <tr>
