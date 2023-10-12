@@ -24,6 +24,8 @@
         ".env"
       ]
     },
-    "start:dev": {}
+    "start": {
+      "cache": false
+    }
   }
 }

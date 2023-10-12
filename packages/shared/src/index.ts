@@ -1,7 +1,4 @@
-export * from "./supabase";
-
+export * from "./database";
 export * from "./openai";
-
-export * from "./ontology/portfolio-pages";
-export * from "./ontology/filters";
-export * from "./ontology";
+export * from "./metadata";
+export type { SearchPages, Tables, Functions } from "./database/schema";

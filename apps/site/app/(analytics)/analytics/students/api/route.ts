@@ -14,10 +14,9 @@ export type StudentsApiResult = {
       title: string;
       url: string;
       image_url: string;
-      portfolio_pages: {
-        count: number;
-      }[];
     }[];
+    portfolio_pages: number;
+    lastActivity: string;
   }[];
 };
 
@@ -30,10 +29,8 @@ export async function GET(request: Request) {
     if (p !== process.env.ANALYTICS_PASSWORD && p !== null)
       throw new Error('Password is incorrect.');
     // get pages from portfolios for given study cohort
-    let query = supabase
-      .from('profiles')
-      .select(
-        `
+    let query = supabase.from('profiles').select(
+      `
         id,
         study_start_semester_year,
         study_start_semester_kind,
@@ -46,12 +43,11 @@ export async function GET(request: Request) {
           url,
           image_url,
           portfolio_pages(
-            count 
+            scraped_data->publishedAt
           )
         )
       `
-      )
-      .order('full_name', { ascending: false });
+    );
 
     if (!(p === process.env.ANALYTICS_PASSWORD))
       query = query.eq('is_public', true);
@@ -71,10 +67,37 @@ export async function GET(request: Request) {
     if (error) throw new Error(error.message);
     //console.log(data);
     // count the number of portfolios published per month
+    const profiles = data.map((profile) => {
+      return {
+        id: profile.id,
+        study_start_semester_year: profile.study_start_semester_year,
+        study_start_semester_kind: profile.study_start_semester_kind,
+        username: profile.username,
+        full_name: profile.full_name,
+        is_public: profile.is_public,
+        portfolios: profile.portfolios.map((portfolio) => {
+          return {
+            id: portfolio.id,
+            title: portfolio.title,
+            url: portfolio.url,
+            image_url: portfolio.image_url,
+            portfolio_pages: portfolio.portfolio_pages.length,
+          };
+        }),
+        lastActivity:
+          profile.portfolios[0]?.portfolio_pages
+            .map((page) =>
+              page?.publishedAt ? new Date(page.publishedAt as string) : null
+            )
+            .sort((a, b) => (a < b ? 1 : -1))[0] || null,
+      };
+    });
 
+    console.log(profiles);
     // return
     return NextResponse.json({
-      data,
+      data: profiles // sort profiles by lastActivity param, nulls last,
+        .sort((a, b) => (a.lastActivity < b.lastActivity ? 1 : -1)),
     });
   } catch (error) {
     return new Response(JSON.stringify({ message: error.message }), {

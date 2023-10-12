@@ -1,15 +1,17 @@
 import { Parser } from "next-usequerystate";
-import { Item } from "./index";
+import { Item } from "../types";
 
 export function urlSelectParser<X extends Item>(
   possibleValues: X[],
-  separator = "-"
+  separator = ","
 ): Parser<X[]> {
   return {
     parse: (query: string) => {
       if (query === "") return null;
       return query
+        .replace("%2B", separator)
         .split(separator)
+        .map((value) => decodeURIComponent(value))
         .map((value) => {
           const item = possibleValues?.find((i) => i.value === value);
           if (item) return item;
@@ -17,7 +19,8 @@ export function urlSelectParser<X extends Item>(
         })
         .filter((v) => v !== undefined) as X[];
     },
-    serialize: (values: X[]) => values.map((v) => v.value).join(separator),
+    serialize: (values: X[]) =>
+      values.map((v) => encodeURIComponent(v.value)).join(separator),
   };
 }
 

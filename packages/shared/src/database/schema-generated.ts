@@ -9,6 +9,30 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      ai_annotation_log: {
+        Row: {
+          created_at: string
+          id: number
+          message: string | null
+          page_id: string | null
+          page_url: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          message?: string | null
+          page_id?: string | null
+          page_url?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          message?: string | null
+          page_id?: string | null
+          page_url?: string | null
+        }
+        Relationships: []
+      }
       discord_message_reactions: {
         Row: {
           created_at: string | null
@@ -45,75 +69,36 @@ export interface Database {
       }
       portfolio_pages: {
         Row: {
-          aggregation: Json | null
-          ai_courses: string[] | null
-          ai_dominant_language: string | null
-          ai_has_self_evaluation: boolean | null
-          ai_page_types: string[] | null
-          ai_post_types: string[] | null
-          ai_profilations: string[] | null
-          ai_self_evaluation_tones: string[] | null
-          ai_summary: string | null
-          ai_tags: string[] | null
-          ai_tones: string[] | null
-          category: string | null
+          ai_annotation: Json | null
+          annotated_at: string | null
           created_at: string | null
           data: Json | null
-          description: string | null
-          embedding: string | null
+          id: string
           portfolio_id: string
-          published_at: string | null
-          text: string | null
-          title: string | null
+          scraped_data: Json | null
           updated_at: string
           url: string
           title_text: string | null
         }
         Insert: {
-          aggregation?: Json | null
-          ai_courses?: string[] | null
-          ai_dominant_language?: string | null
-          ai_has_self_evaluation?: boolean | null
-          ai_page_types?: string[] | null
-          ai_post_types?: string[] | null
-          ai_profilations?: string[] | null
-          ai_self_evaluation_tones?: string[] | null
-          ai_summary?: string | null
-          ai_tags?: string[] | null
-          ai_tones?: string[] | null
-          category?: string | null
+          ai_annotation?: Json | null
+          annotated_at?: string | null
           created_at?: string | null
           data?: Json | null
-          description?: string | null
-          embedding?: string | null
+          id?: string
           portfolio_id: string
-          published_at?: string | null
-          text?: string | null
-          title?: string | null
+          scraped_data?: Json | null
           updated_at?: string
           url: string
         }
         Update: {
-          aggregation?: Json | null
-          ai_courses?: string[] | null
-          ai_dominant_language?: string | null
-          ai_has_self_evaluation?: boolean | null
-          ai_page_types?: string[] | null
-          ai_post_types?: string[] | null
-          ai_profilations?: string[] | null
-          ai_self_evaluation_tones?: string[] | null
-          ai_summary?: string | null
-          ai_tags?: string[] | null
-          ai_tones?: string[] | null
-          category?: string | null
+          ai_annotation?: Json | null
+          annotated_at?: string | null
           created_at?: string | null
           data?: Json | null
-          description?: string | null
-          embedding?: string | null
+          id?: string
           portfolio_id?: string
-          published_at?: string | null
-          text?: string | null
-          title?: string | null
+          scraped_data?: Json | null
           updated_at?: string
           url?: string
         }
@@ -419,7 +404,7 @@ export interface Database {
       search_pages: {
         Args: {
           cohorts: Json
-          keyword?: string
+          keywords?: string
           courses?: string[]
           kinds?: string[]
           profilations?: string[]
@@ -430,14 +415,15 @@ export interface Database {
           items_offset?: number
         }
         Returns: {
-          "titlz§e": string
+          id: string
+          title: string
           url: string
           published_at: string
-          ai_courses: string[]
-          ai_type: string
-          ai_profilations: string[]
-          ai_tones: string[]
-          ai_dominant_language: string
+          courses: Json
+          content_types: Json
+          profilations: Json
+          tones: Json
+          dominant_language: string
           portfolios: Json
         }[]
       }

@@ -5,20 +5,37 @@ import {
   Request,
 } from "crawlee";
 import parsePostContent from "./parse-post-content";
+
 import {
-  PostContent,
+  SimplifiedContent,
+  ScrapedPageData,
   SimplifiedElement,
-  Data,
+  WordpressPageType,
   wpPageTypes,
-  WPPageType,
-} from "./types";
+  cleanupTitle,
+} from "shared";
 import { CheerioAPI } from "cheerio";
 
 const router = createPlaywrightRouter();
 
+/* function createUrlRegExp(url: string) {
+  // Escape special characters in the URL
+  const escapedUrl = url.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+  // Create the RegExp pattern to match the URL
+  const pattern = `^${escapedUrl}$`;
+
+  // Create and return the RegExp object
+  return new RegExp(pattern);
+} */
+
 async function getEntry(request: Request) {
+  const url = request.url.startsWith("/")
+    ? new URL(request.url, request.userData.portfolioUrl).href
+    : request.url;
+
   return {
-    url: request.url,
+    url: url,
     portfolioId: request.userData.portfolioId,
   };
 }
@@ -26,11 +43,13 @@ async function getEntry(request: Request) {
 async function getMeta(
   $: CheerioAPI,
   _request: Request,
-  config?: { getOG: boolean }
+  config?: { getOG: boolean; description?: boolean }
 ) {
   return {
     title: $("title").text().trim() || null,
-    description: $("meta[name=description]").attr("content")?.trim() || null,
+    description: config?.description
+      ? $("meta[name=description]").attr("content")?.trim()
+      : undefined,
     keywords:
       $("meta[name=keywords]")
         .attr("content")
@@ -49,6 +68,9 @@ router.addDefaultHandler(
     await Dataset.pushData(getMeta($, request));
 
     await enqueueLinks({
+      strategy: "same-hostname",
+      // regexps: [createUrlRegExp(request.userData.portfolioUrl)],
+      baseUrl: request.userData.portfolioUrl,
       selector: "a",
       label: request.label,
       userData: request.userData,
@@ -59,7 +81,7 @@ router.addDefaultHandler(
 router.addHandler(
   "wordpress",
   async ({
-    // page,
+    page,
     request,
     enqueueLinks,
     // saveSnapshot,
@@ -77,12 +99,12 @@ router.addHandler(
       .attr("class")
       ?.split(" ")
       .filter((c) => (wpPageTypes as unknown as string[]).includes(c)) ||
-      []) as unknown as WPPageType[];
+      []) as unknown as WordpressPageType[];
     const isSingle = pageTypes.includes("single");
     const isPage = pageTypes.includes("page");
 
     // initialize post content obj to be filled later and stored as scraped data
-    let postContent: PostContent | undefined = {
+    let postContent: SimplifiedContent | undefined = {
       text: null,
       aggregate: {
         charactersCount: null,
@@ -92,16 +114,21 @@ router.addHandler(
         images: [],
         tagsCount: {},
       },
-      tree: null,
     };
 
     // wordpress post content may have one of two classes
     let content = $(".entry-content");
     if (!content.length) content = $(".post-content");
 
+    const toParseContent = isPage || (isSingle && content.length);
+
     // parse post html into simplified tree
-    if ((isSingle || isPage) && content.length)
-      parsePostContent(content[0] as unknown as SimplifiedElement, postContent);
+    if (toParseContent)
+      parsePostContent(
+        content[0] as unknown as SimplifiedElement,
+        postContent,
+        request.userData.portfolioUrl
+      );
 
     // get rest of aggregated data
     if (postContent.text !== null) {
@@ -113,6 +140,11 @@ router.addHandler(
     const meta = await getMeta($, request);
     const entry = await getEntry(request);
 
+    /* // cleanup title
+    if (meta.title) {
+      meta.title = cleanupTitle(meta.title);
+    } */
+
     const published = $("meta[property='article:published_time']")
       .attr("content")
       ?.trim();
@@ -121,14 +153,15 @@ router.addHandler(
       ?.trim();
 
     // merge all scraped data into one object
-    const data: Data = {
+    const data: ScrapedPageData = {
       ...meta,
-      "published-at": published
-        ? new Date(published).toISOString()
-        : null || null,
-      "updated-at": updated ? new Date(updated).toISOString() : null || null,
-      "wordpress-pagetypes": pageTypes,
-      "post-content": postContent,
+      publishedAt: published ? new Date(published).toISOString() : null || null,
+      updatedAt: updated ? new Date(updated).toISOString() : null || null,
+      platform: "wordpress",
+      wordpress: {
+        pageTypes: pageTypes,
+      },
+      simplifiedContent: toParseContent ? postContent : null,
     };
 
     // save scraped data
@@ -161,8 +194,12 @@ router.addHandler(
       // pass the same label and user data to the next crawl
       label: request.label,
       userData: request.userData,
+      // regexps: [createUrlRegExp(request.userData.portfolioUrl)],
+      strategy: "same-hostname",
+      baseUrl: request.userData.portfolioUrl,
       // filter out links that redirect to other domains, admin-only pages, etc.
       exclude: [
+        /\/wordpress\.com\//,
         /\/wp-admin\//,
         /\/wp-login\.php/,
         /\/wp-content\//,
@@ -196,10 +233,13 @@ router.addHandler(
 
     const $ = await parseWithCheerio();
     // save metadata
-    const meta = await getMeta($, request, { getOG: false });
+    const meta = await getMeta($, request, {
+      getOG: false,
+      description: false,
+    });
     const entry = await getEntry(request);
     // initialize post content obj to be filled later and stored as scraped data
-    let postContent: PostContent | undefined = {
+    let postContent: SimplifiedContent | undefined = {
       text: null,
       aggregate: {
         charactersCount: null,
@@ -236,7 +276,11 @@ router.addHandler(
 
     // parse post html into simplified tree
     if (content.length)
-      parsePostContent(content[0] as unknown as SimplifiedElement, postContent);
+      parsePostContent(
+        content[0] as unknown as SimplifiedElement,
+        postContent,
+        request.userData.portfolioUrl
+      );
 
     // get rest of aggregated data
     if (postContent.text !== null) {
@@ -245,11 +289,12 @@ router.addHandler(
       postContent.aggregate.wordsCount = words?.length || null;
     }
 
-    const data: Data = {
+    const data: ScrapedPageData = {
       ...meta,
-      "published-at": null,
-      "updated-at": null,
-      "post-content": postContent,
+      platform: "notion",
+      updatedAt: null,
+      publishedAt: null,
+      simplifiedContent: content.length ? postContent : null,
     };
 
     await Dataset.pushData({
@@ -273,7 +318,10 @@ router.addHandler(
     // await saveSnapshot({ key, saveHtml: true });
 
     await enqueueLinks({
+      // regexps: [createUrlRegExp(request.userData.portfolioUrl)],
       selector: "a",
+      strategy: "same-hostname",
+      baseUrl: request.userData.portfolioUrl,
       label: request.label,
       userData: request.userData,
       exclude: [],
@@ -313,6 +361,9 @@ router.addHandler(
     // await saveSnapshot({ key, saveHtml: true });
 
     await enqueueLinks({
+      // regexps: [createUrlRegExp(request.userData.portfolioUrl)],
+      strategy: "same-hostname",
+      baseUrl: request.userData.portfolioUrl,
       selector: "a",
       label: request.label,
       userData: request.userData,

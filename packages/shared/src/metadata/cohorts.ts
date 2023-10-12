@@ -1,4 +1,4 @@
-import { urlSelectParser } from "./filters/parsers";
+import { urlSelectParser } from "./parsers";
 
 export const firstSemesterYear = 2015;
 export const cohortsOptions = Array.from(

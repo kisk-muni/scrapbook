@@ -1,38 +1,13 @@
 import { parseOpenGraph } from "crawlee";
 
-export const wpPageTypes = [
-  "home",
-  "blog",
-  "privacy-policy",
-  "date",
-  "paged",
-  "attachment",
-  "error404",
-  "category",
-  "tag",
-  "single",
-  "page",
-  "archive",
-  "search",
-] as const;
-
-export type WPPageType = (typeof wpPageTypes)[number];
-
-/**
- * Parsed data object
- *
- * @remarks
- * The data object is stored in separate data column with jsonb type.
- * See database for live examples.
- */
-export type Data = {
+export type BasePage = {
   /**
-   * Web page title.
+   * Post title or web page title.
    *
    * @example
    * 'MOOC Reflection: convolutional neural networks in TensorFlow - Some blog'
    */
-  title: string | null;
+  title?: string | null;
 
   /**
    * Short web page description.
@@ -40,13 +15,22 @@ export type Data = {
    * @example
    * My progress in second MOOC of DeepLearning.AI’s introduction to popular Tensorflow library.
    */
-  description: string | null;
+  description?: string | null;
 
   /**
    * List of keywords provided by web author for better SEO.
    * This field is obsolete and no longer used as much, but some wordpress SEO plugins may enforce it.
+   * @deprecate
    */
-  keywords: string[];
+  keywords?: string[];
+
+  /**
+   * Open Graph meta data.
+   * ‘The Open Graph protocol enables any web page to become a rich object in a social graph. For instance, this is used on Facebook to allow any web page to have the same functionality as any other object on Facebook’.
+   * See {@link https://ogp.me/ | Open Graph protocol}.
+   * @deprecated
+   */
+  og?: ReturnType<typeof parseOpenGraph>;
 
   /**
    * ISO 8601 timestamp of article publishing.
@@ -54,7 +38,7 @@ export type Data = {
    * @example
    * '2023-01-27T14:02:16.000Z' (ISO 8601)
    */
-  "published-at": string | null;
+  publishedAt: string | null;
 
   /**
    * ISO 8601 timestamp of last article modification by its author.
@@ -62,34 +46,15 @@ export type Data = {
    * @example
    * '2023-01-27T14:02:16.000Z' (ISO 8601)
    */
-  "updated-at": string | null;
+  updatedAt: string | null;
 
-  /**
-   * List of wordpress page types. See {@link WPPageType}.
-   * This is used to detect if the page is archive, post, homepage etc.
-   *
-   * @example
-   * ['home', 'archive', 'page']
-   */
-  "wordpress-pagetypes"?: WPPageType[];
-
-  /**
-   * Post content data, aggregations and statistics.
-   */
-  "post-content": PostContent;
-
-  /**
-   * Open Graph meta data.
-   * ‘The Open Graph protocol enables any web page to become a rich object in a social graph. For instance, this is used on Facebook to allow any web page to have the same functionality as any other object on Facebook’.
-   * See {@link https://ogp.me/ | Open Graph protocol}.
-   */
-  og?: ReturnType<typeof parseOpenGraph>;
+  simplifiedContent?: SimplifiedContent | null;
 };
 
 /**
  * Post content data, aggregations, statistics and simplified html tree.
  */
-export type PostContent = {
+export type SimplifiedContent = {
   /**
    * Post content text.
    */
@@ -102,8 +67,9 @@ export type PostContent = {
 
   /**
    * Simplified html tree of post content.
+   * @deprecated
    */
-  tree: SimplifiedElement | null;
+  tree?: SimplifiedElement | null;
 };
 
 /**

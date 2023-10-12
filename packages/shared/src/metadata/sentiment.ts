@@ -1,40 +1,10 @@
-import { Item, EmojiItem } from "./filters";
+import { Item, EmojiItem } from "./types";
 
 export const tones: EmojiItem[] = [
   {
-    value: "disheartened",
-    label: "znechucený",
-    emoji: "😞",
-  },
-  {
-    value: "accusatory",
-    label: "obviňující",
+    value: "frustrated-or-unjust",
+    label: "frustrovaný",
     emoji: "😠",
-  },
-  {
-    value: "worried",
-    label: "znepokojený",
-    emoji: "😟",
-  },
-  {
-    value: "curious",
-    label: "zvědavý",
-    emoji: "🤔",
-  },
-  {
-    value: "surprised",
-    label: "překvapený",
-    emoji: "😲",
-  },
-  {
-    value: "disapporved",
-    label: "nesouhlasný",
-    emoji: "😒",
-  },
-  {
-    value: "unassuming",
-    label: "skromný",
-    emoji: "😇",
   },
   {
     value: "formal",
@@ -42,23 +12,13 @@ export const tones: EmojiItem[] = [
     emoji: "👔",
   },
   {
-    value: "assertive",
-    label: "asertivní",
-    emoji: "👊",
-  },
-  {
-    value: "confident",
-    label: "sebevědomý",
-    emoji: "😎",
-  },
-  {
-    value: "appreciative",
-    label: "oceňující",
-    emoji: "👏",
-  },
-  {
-    value: "concerned",
+    value: "scared",
     label: "obávající se",
+    emoji: "😟",
+  },
+  {
+    value: "demotivated",
+    label: "demotivovaný",
     emoji: "😟",
   },
   {
@@ -72,36 +32,16 @@ export const tones: EmojiItem[] = [
     emoji: "👕",
   },
   {
-    value: "regretful",
-    label: "lítostivý",
-    emoji: "😔",
-  },
-  {
-    value: "encouraging",
-    label: "povzbuzující",
-    emoji: "👍",
-  },
-  {
-    value: "egocentric",
-    label: "egocentrický",
-    emoji: "👑",
-  },
-  {
-    value: "joyful",
-    label: "radostný",
-    emoji: "😃",
-  },
-  {
-    value: "optimistic",
-    label: "optimistický",
-    emoji: "😃",
-  },
-  {
-    value: "excited",
-    label: "vzrušený",
+    value: "positive",
+    label: "pozitivní",
     emoji: "😃",
   },
 ];
+
+export const tonesByValue = tones.reduce((acc, curr) => {
+  acc[curr.value] = curr;
+  return acc;
+}, {} as Record<string, EmojiItem>);
 
 export const feelings: Item[] = [
   {

@@ -1,4 +1,4 @@
-import { Item } from "./filters";
+import { Item } from "./types";
 
 type Course = {
   title: string;
@@ -750,88 +750,93 @@ export const courses: Course[] = [
   },
   {
     title: "Digitální humanitní vědy",
-    code: "FF:ARTS020",
+    code: "ARTS020",
     href: "/auth/predmet/phil/ARTS020",
   },
   {
     title: "Praxe II: Výzkumný projekt",
-    code: "FF:DESB21",
+    code: "DESB21",
     href: "/auth/predmet/phil/DESB21",
   },
   {
     title: "Úvod do knihovnictví",
-    code: "FF:ISKB02",
+    code: "ISKB02",
     href: "/auth/predmet/phil/ISKB02",
   },
   {
     title: "Psaní odborných textů",
-    code: "FF:ISKB04",
+    code: "ISKB04",
     href: "/auth/predmet/phil/ISKB04",
   },
   {
     title: "Prezentační a komunikační dovednosti",
-    code: "FF:ISKB46",
+    code: "ISKB46",
     href: "/auth/predmet/phil/ISKB46",
   },
   {
     title: "Digitalizace kulturního dědictví",
-    code: "FF:ISKB48",
+    code: "ISKB48",
     href: "/auth/predmet/phil/ISKB48",
   },
   {
     title: "Rozvoj kompetencí učícího knihovníka",
-    code: "FF:ISKB51",
+    code: "ISKB51",
     href: "/auth/predmet/phil/ISKB51",
   },
   {
     title: "Základy marketingu",
-    code: "FF:ISKB71",
+    code: "ISKB71",
     href: "/auth/predmet/phil/ISKB71",
   },
   {
     title: "Literární biotop",
-    code: "FF:ISKB77",
+    code: "ISKB77",
     href: "/auth/predmet/phil/ISKB77",
   },
   {
     title: "Obecná a školní pedagogika",
-    code: "FF:ISKED03",
+    code: "ISKED03",
     href: "/auth/predmet/phil/ISKED03",
   },
   {
     title:
       "Komisionální zkouška Studia pedagogiky pro učitele oboru IS a informatiky",
-    code: "FF:ISKED06",
+    code: "ISKED06",
     href: "/auth/predmet/phil/ISKED06",
   },
   {
     title: "Laboratoř vzdělávacích technologií",
-    code: "FF:ISKM32",
+    code: "ISKM32",
     href: "/auth/predmet/phil/ISKM32",
   },
   {
     title: "Commons, P2P a digitální identita",
-    code: "FF:ISKM73",
+    code: "ISKM73",
     href: "/auth/predmet/phil/ISKM73",
   },
   {
     title: "Digital competence development course",
-    code: "FF:KPI33e",
+    code: "KPI33e",
     href: "/auth/predmet/phil/KPI33e",
   },
   {
     title: "DigCompEdu: Technologie ve vzdělávání",
-    code: "FF:KPI55",
+    code: "KPI55",
     href: "/auth/predmet/phil/KPI55",
   },
   {
     title: "Referenční služby 1",
-    code: "FF:VIKBA09",
+    code: "VIKBA09",
     href: "/auth/predmet/phil/VIKBA09",
   },
 ];
 
 export type CourseOption = Item & { code: string };
+
+export const coursesByCode = courses.reduce((acc, curr) => {
+  acc[curr.code] = curr;
+  return acc;
+}, {} as Record<string, Course>);
 
 export const courseOptions = courses
   .sort((a, b) => a.code.localeCompare(b.code))

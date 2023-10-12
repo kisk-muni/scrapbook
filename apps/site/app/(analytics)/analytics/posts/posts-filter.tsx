@@ -2,14 +2,11 @@ import { BugAntIcon, XMarkIcon } from '@heroicons/react/20/solid';
 import FilterSelect from 'components/input/filter-select';
 import TextField from 'components/input/text-field';
 import { CourseOption, courseOptions } from 'shared';
-import {
-  languages as langOptions,
-  postKinds,
-  profilations as profilationOptions,
-} from 'shared';
+import { contentTypes, profilations as profilationOptions } from 'shared';
 import { EmojiItem, tones as toneOptions } from 'shared';
 import { usePostsFilter } from './use-posts-filter';
-import { useState } from 'react';
+import { useDebounce, useDebouncedCallback } from 'use-debounce';
+import { useRef } from 'react';
 
 const renderEmojiOption = (option: EmojiItem) => (
   <div className="flex items-center">
@@ -21,11 +18,7 @@ const renderEmojiOption = (option: EmojiItem) => (
 // const allowedQueryTypes = ['kind', 'course'];
 
 export default function PostsFilter() {
-  /*   const { query, setFromString, setParamFilter, set } =
-    useSearchQuery(); */
-  const [timer, setTimer] = useState<NodeJS.Timeout | undefined>();
   const {
-    setIsTyping,
     keywordQuery,
     setKeywordQuery,
     kinds,
@@ -36,35 +29,28 @@ export default function PostsFilter() {
     setProfilations,
     tones,
     setTones,
-    languages,
-    setLanguages,
     showDebug,
     setShowDebug,
     isEmpty,
     cleanup,
   } = usePostsFilter();
+  const [defaultQuery] = useDebounce(keywordQuery, 1000);
+
+  const debouncedSetKeyword = useDebouncedCallback((value) => {
+    setKeywordQuery(value);
+  }, 200);
 
   return (
     <div>
       <div className="flex justify-start items-center space-x-3">
         <TextField
+          defaultValue={defaultQuery}
           placeholder="Hledat klíčové slovo"
           className="grow"
           inputClassName={`focus:bg-white hover:bg-white ${
             keywordQuery && keywordQuery !== '' ? 'bg-white' : 'bg-background'
           }`}
-          value={keywordQuery || ''}
-          onChange={(value) => {
-            setKeywordQuery(value);
-            setIsTyping(true);
-
-            clearTimeout(timer);
-            const newTimer = setTimeout(() => {
-              setIsTyping(false);
-            }, 500);
-
-            setTimer(newTimer);
-          }}
+          onChange={(value) => debouncedSetKeyword(value)}
         />
         <FilterSelect<CourseOption>
           value={courses}
@@ -94,7 +80,7 @@ export default function PostsFilter() {
           ariaLabel="Druh"
           onChange={(v) => setKinds(v)}
           placeholder="Druh"
-          options={postKinds}
+          options={contentTypes}
           filterTitle="Filtrovat podle druhu"
           filterPlaceholder="Filtrovat druhy"
         />
@@ -117,16 +103,6 @@ export default function PostsFilter() {
           renderOption={renderEmojiOption}
           filterTitle="Filtrovat podle sentimentu"
           filterPlaceholder="Filtrovat sentiment"
-        />
-        <FilterSelect
-          value={languages}
-          ariaLabel="Jazyk"
-          placeholder="Jazyk"
-          onChange={(v) => setLanguages(v)}
-          options={langOptions}
-          renderOption={renderEmojiOption}
-          filterTitle="Filtrovat podle jazyka"
-          filterPlaceholder="Filtrovat jazyky"
         />
       </div>
       {!isEmpty && (

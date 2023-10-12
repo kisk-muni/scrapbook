@@ -10,17 +10,15 @@ import {
   createContext,
   FC,
   PropsWithChildren,
-  useState,
 } from 'react';
 import { filters } from './filters';
+import { useDebounce } from 'use-debounce';
 
 type QueryStateFilterItem<X extends Item = Item> = X[] | null;
 type QueryStateString = string | null;
 type QueryStateBoolean = boolean | null;
 
 type PostsFilterContextType = {
-  isTyping: boolean;
-  setIsTyping: Dispatch<SetStateAction<boolean>>;
   keywordQuery: QueryStateString;
   setKeywordQuery: Dispatch<SetStateAction<QueryStateString>>;
   kinds: QueryStateFilterItem;
@@ -60,7 +58,6 @@ function useFilter<T>(filter: keyof typeof filters) {
 }
 
 export const PostsFilterProvider: FC<PropsWithChildren> = ({ children }) => {
-  const [isTyping, setIsTyping] = useState(false);
   const [keywordQuery, setKeywordQuery] = useFilter<string>('keyword');
   const [kinds, setKinds] = useFilter<Item[]>('kinds');
   const [courses, setCourses] = useFilter<CourseOption[]>('courses');
@@ -85,26 +82,29 @@ export const PostsFilterProvider: FC<PropsWithChildren> = ({ children }) => {
     setLanguages(null);
   };
 
-  // convert keywordQuery, kinds, courses, profilations, tones, languages to query string
-  const getUrlSearchParams = () => {
+  // convert keywordQuery, kinds, courses, profilations, tones, languages to a query string
+  const getUrlSearchParams = (separator = ',') => {
     const params = new URLSearchParams();
     if (keywordQuery) {
       params.set('q', keywordQuery);
     }
     if (kinds) {
-      params.set('kinds', kinds.map((v) => v.value).join('-'));
+      params.set('kinds', kinds.map((v) => v.value).join(separator));
     }
     if (courses) {
-      params.set('courses', courses.map((v) => v.value).join('-'));
+      params.set('courses', courses.map((v) => v.value).join(separator));
     }
     if (profilations) {
-      params.set('profilations', profilations.map((v) => v.value).join('-'));
+      params.set(
+        'profilations',
+        profilations.map((v) => v.value).join(separator)
+      );
     }
     if (tones) {
-      params.set('tones', tones.map((v) => v.value).join('-'));
+      params.set('tones', tones.map((v) => v.value).join(separator));
     }
     if (languages) {
-      params.set('languages', languages.map((v) => v.value).join('-'));
+      params.set('languages', languages.map((v) => v.value).join(separator));
     }
     return params;
   };
@@ -112,8 +112,6 @@ export const PostsFilterProvider: FC<PropsWithChildren> = ({ children }) => {
   return (
     <PostsFilterContext.Provider
       value={{
-        isTyping,
-        setIsTyping,
         keywordQuery,
         setKeywordQuery,
         kinds,

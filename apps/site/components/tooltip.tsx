@@ -4,11 +4,17 @@ import React from 'react';
 
 interface TooltipProps {
   children: React.ReactNode;
-  text: string;
+  text?: string;
+  content?: React.ReactNode;
   delayDuration?: number;
 }
 
-const Tooltip: React.FC<TooltipProps> = ({ children, delayDuration, text }) => {
+const Tooltip: React.FC<TooltipProps> = ({
+  children,
+  delayDuration,
+  text,
+  content,
+}) => {
   return (
     <TooltipPrimitive.Provider delayDuration={delayDuration}>
       <TooltipPrimitive.Root>
@@ -20,12 +26,21 @@ const Tooltip: React.FC<TooltipProps> = ({ children, delayDuration, text }) => {
             'radix-side-right:animate-slide-left-fade',
             'radix-side-bottom:animate-slide-up-fade',
             'radix-side-left:animate-slide-right-fade',
-            'inline-flex items-center rounded-md px-4 py-2.5',
-            'bg-slate'
+            'inline-flex items-center rounded-xl px-4 py-2.5',
+            'bg-slate',
+            'z-50'
           )}
         >
           <TooltipPrimitive.Arrow className="fill-current text-slate" />
-          <span className="block text-xs leading-none text-white">{text}</span>
+          {text ? (
+            <span className="block text-sm leading-none text-white">
+              {text}
+            </span>
+          ) : content ? (
+            content
+          ) : (
+            ''
+          )}
         </TooltipPrimitive.Content>
       </TooltipPrimitive.Root>
     </TooltipPrimitive.Provider>

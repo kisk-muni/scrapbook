@@ -18,10 +18,10 @@ import { useQueryState } from 'next-usequerystate';
 import { cohortsOptions, cohortsParser } from 'shared';
 
 const tabs = [
-  {
+  /*   {
     label: 'Přehled',
     href: '/analytics',
-  },
+  }, */
   {
     label: 'Příspěvky',
     href: '/analytics/posts',
@@ -59,7 +59,6 @@ export default function RootLayout({
     localStorage.setItem('ap', JSON.stringify(password));
   }, [password]);
 
-  const log = { cohorts };
   return (
     <AnalyticsAuthContext.Provider value={{ password, setPassword }}>
       <AnalyticsGlobalFilterContext.Provider
@@ -83,37 +82,39 @@ export default function RootLayout({
                 className="text-xl pt-px flex items-center text-muted hover:text-purple font-bold"
                 href="/analytics"
               >
-                <span className="font-header mt-0.5">Analytics</span>
+                <span className="font-header mt-0.5">Analytics (beta)</span>
               </Link>
             </div>
             <div className="flex mt-2 space-x-6">
-              <FilterSelect
-                ariaLabel="Ročník"
-                placeholder="Ročník"
-                options={cohortsOptions}
-                renderLabel={(selected) => {
-                  if (!selected || selected.length == 0)
-                    return <span>Všechny ročníky</span>;
-                  const label = selected
-                    .map((value) => value.label)
-                    .slice(0, 3)
-                    .join(', ');
-                  return (
-                    <span className="">
-                      {label}
-                      {selected.length > 3 && ' ...'}
-                    </span>
-                  );
-                }}
-                filterPlaceholder="Filtrovat ročníky"
-                filterTitle="Filtrovat podle ročníku"
-                value={cohorts}
-                onChange={(v) => setCohorts(v)}
-              />
+              {pathname != '/analytics/settings' && (
+                <FilterSelect
+                  ariaLabel="Ročník"
+                  placeholder="Ročník"
+                  options={cohortsOptions}
+                  renderLabel={(selected) => {
+                    if (!selected || selected.length == 0)
+                      return <span>Všechny ročníky</span>;
+                    const label = selected
+                      .map((value) => value.label)
+                      .slice(0, 3)
+                      .join(', ');
+                    return (
+                      <span className="">
+                        {label}
+                        {selected.length > 3 && ' ...'}
+                      </span>
+                    );
+                  }}
+                  filterPlaceholder="Filtrovat ročníky"
+                  filterTitle="Filtrovat podle ročníku"
+                  value={cohorts}
+                  onChange={(v) => setCohorts(v)}
+                />
+              )}
             </div>
           </nav>
           <nav className="border-b-2 border-smoke border-dashed">
-            <div className="flex w-full justify-start items-center relative -mb-0.5">
+            <div className="flex w-full justify-start items-center -mb-0.5">
               {tabs.map((tab) => (
                 <Link
                   href={tab.href}
@@ -146,9 +147,9 @@ export default function RootLayout({
         </header>
         <main className="mb-12">
           <div className="flex justify-end">
-            <div className="fixed bottom-1 block right-1 z-50 flex h-min w-5/6 items-center justify-start rounded-xl bg-darkless p-3 font-mono text-xs text-background">
+            {/*<div className="fixed bottom-1 block right-1 z-50 flex h-min w-5/6 items-center justify-start rounded-xl bg-darkless p-3 font-mono text-xs text-background">
               {JSON.stringify(log)}
-            </div>
+                  </div>*/}
           </div>
           {children}
         </main>

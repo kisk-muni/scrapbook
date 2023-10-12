@@ -3,7 +3,8 @@
   "display": "CLI App",
   "extends": "./base.json",
   "compilerOptions": {
-    "strictNullChecks": false,
+    "strictNullChecks": true,
+    "strict": true,
     "baseUrl": "."
   },
   "include": ["src/**/*.ts"],

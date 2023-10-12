@@ -6,7 +6,7 @@ import { LockClosedIcon } from '@radix-ui/react-icons';
 import Tooltip from 'components/tooltip';
 import { StudentsApiResult } from './api/route';
 import { Avatar } from 'components/avatar';
-import Indicator from 'components/chart/indicator';
+// import Indicator from 'components/chart/indicator';
 import useAnalyticsAuth from 'lib/hooks/use-analytics-auth';
 import useAnalyticsGlobalFilter from 'lib/hooks/use-analytics-global-filter';
 
@@ -34,8 +34,9 @@ export default function StudentsList() {
           <tr>
             <th scope="col" className="px-6 py-3 text-lg font-extrabold"></th>
             <th scope="col" className="px-6 py-3 text-lg font-extrabold">
-              ~ Pravidelnost
+              Poslední aktivita
             </th>
+            {/*
             <th scope="col" className="px-6 py-3 text-lg font-extrabold">
               ~ Profilace
             </th>
@@ -44,7 +45,7 @@ export default function StudentsList() {
             </th>
             <th scope="col" className="px-6 py-3 text-lg font-extrabold">
               ~ Sentiment
-            </th>
+  </th>*/}
             <th scope="col" className="px-6 py-3 text-lg font-extrabold">
               Stránky
             </th>
@@ -98,7 +99,12 @@ export default function StudentsList() {
                     </Tooltip>
                   )}
                 </td>
-                <td className="px-6 py-4">2x týdně</td>
+                <td className="px-6 py-4">
+                  {student.lastActivity
+                    ? new Date(student.lastActivity).toLocaleDateString()
+                    : ''}
+                </td>
+                {/*
                 <td className="px-6 py-4">Design</td>
                 <td className="px-6 py-4">
                   <Indicator
@@ -153,11 +159,11 @@ export default function StudentsList() {
                       },
                     ]}
                   />
-                </td>
+                  </td>*/}
                 <td className="px-6 py-4">
                   {student.portfolios.length > 0
-                    ? student.portfolios[0].portfolio_pages[0].count != 0
-                      ? student.portfolios[0].portfolio_pages[0].count
+                    ? student.portfolio_pages != 0
+                      ? student.portfolio_pages
                       : '-'
                     : '-'}
                 </td>

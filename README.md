@@ -12,6 +12,7 @@ apps:
 
 - [site](./apps/site) - Next.js app for the public website
 - [crawler](./apps/crawler) - App for crawling student portfolios for new content and analysis
+- [analyser](./apps/analyser) - App for generating metadata for student posts (such as tags, etc.) 
 - [discord-bot](./apps/discord-bot) - Discord bot for posting new content to discord, collecting reactions etc.
 
 packages:

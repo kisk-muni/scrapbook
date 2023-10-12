@@ -1,8 +1,9 @@
 {
   "extends": "tsconfig/base.json",
   "compilerOptions": {
-    "strictNullChecks": false,
-    "baseUrl": "."
+    "strictNullChecks": true,
+    "baseUrl": ".",
+    "strict": true
   },
   "include": ["."],
   "exclude": ["node_modules", "dist", "build"]

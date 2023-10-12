@@ -2,13 +2,13 @@ import { urlSelectParser, urlStringParser, urlBooleanParser } from 'shared';
 import { courseOptions } from 'shared';
 import {
   languages as langOptions,
-  postKinds,
+  contentTypes,
   profilations as profilationOptions,
 } from 'shared';
 import { tones as toneOptions } from 'shared';
 
 export const keywordParser = urlStringParser();
-export const kindsParser = urlSelectParser(postKinds);
+export const contentTypesParser = urlSelectParser(contentTypes);
 export const coursesParser = urlSelectParser(courseOptions);
 export const profilationsParser = urlSelectParser(profilationOptions);
 export const tonesParser = urlSelectParser(toneOptions);
@@ -22,7 +22,7 @@ export const filters = {
   },
   kinds: {
     tag: 'kinds',
-    parser: kindsParser,
+    parser: contentTypesParser,
   },
   courses: {
     tag: 'courses',

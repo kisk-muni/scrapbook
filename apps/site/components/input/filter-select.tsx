@@ -88,7 +88,7 @@ export default function FilterSelect<T extends Item>({
 
           <Combobox.Options
             as="div"
-            className="absolute z-50 mt-1 w-72 -right-1.5 overflow-hidden rounded-xl bg-white text-base shadow-xl ring-2 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+            className="absolute z-50 mt-1 w-72 -right-1.5 overflow-hidden rounded-xl bg-white text-base shadow-xl ring-2 ring-black ring-opacity-5 focus:outline-none sm:text-sm transition ease-in-out delay-50"
           >
             {filterTitle && (
               <div className="py-2 px-3 flex items-center justify-between border-b-2 border-smoke/50">
@@ -115,11 +115,11 @@ export default function FilterSelect<T extends Item>({
               </div>
             )}
             <ul className="overflow-auto max-h-80 pointer-events-auto">
-              {filteredOptions.map((item) => (
+              {filteredOptions?.map((item) => (
                 <Combobox.Option
                   key={item.value}
                   value={item}
-                  className="flex items-start px-1.5 py-1 pr-4 border-b last:border-b-0 border-smoke text-sm items-center ui-active:bg-snow ui-not-active:bg-white ui-not-active:text-black"
+                  className="flex items-start px-1.5 py-1 pr-4 border-b last:border-b-0 border-smoke text-sm items-center ui-active:bg-snow ui-not-active:bg-white ui-not-active:text-black transition ease-in-out delay-50"
                 >
                   <CheckIcon className="shrink-0 h-6 w-6 px-1 hidden ui-selected:block" />
                   <div className="w-6 px-1 h-6 shrink-0 ui-selected:hidden"></div>

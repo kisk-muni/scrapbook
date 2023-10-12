@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import supabase from 'lib/supabase';
+import { SearchPages } from 'shared';
 import { parseISO } from 'date-fns';
 import { filters } from '../filters';
 import { cohortsFilter } from 'shared';
@@ -14,29 +15,14 @@ export type Profiling = {
   value: number;
 }[];
 
+export type DatabaseResult = SearchPages['Returns'];
+
 export type PostsApiResult = {
-  data: {
-    title: string;
-    published_at: string | null;
-    url: string;
-    portfolios: {
-      image_url?: string;
-      profiles: {
-        study_start_semester_year: number;
-        study_start_semester_kind: string;
-        username: string;
-        full_name: string;
-        is_public: boolean;
-      };
-    };
-  }[];
+  data: SearchPages['Returns'][number]['filtered_portfolio_pages']['data'];
   counts: Counts;
-  profiling: Profiling;
 };
 
-type Row = {
-  published_at: string | null;
-};
+export const PAGE_SIZE = 40;
 
 export async function GET(request: Request) {
   try {
@@ -65,6 +51,7 @@ export async function GET(request: Request) {
         parsedParams[filterName] = null;
       }
     });
+    console.log(searchParams.get('kinds'));
     const cohortsJson = Array.isArray(parsedParams.cohorts)
       ? ((parsedParams.cohorts as unknown as string[])
           .map((cohort) => {
@@ -83,26 +70,36 @@ export async function GET(request: Request) {
           kind: 'jaro' | null;
         }[])
       : [];
-    console.log(cohortsJson);
+
+    const page = parseInt(searchParams.get('page') || '1', 10);
+    const limit = PAGE_SIZE;
+    const offset = (page - 1) * PAGE_SIZE;
+
     const rpcParams = {
       cohorts: cohortsJson,
-      keywords: parsedParams.keyword as string[],
+      keywords: parsedParams.keyword as string,
       courses: parsedParams.courses as string[],
       kinds: parsedParams.kinds as string[],
       profilations: parsedParams.profilations as string[],
       tones: parsedParams.tones as string[],
       languages: parsedParams.languages as string[],
-      items_limit: 30,
-      items_offset: 0,
+      items_limit: limit,
+      items_offset: offset,
       show_private: p === process.env.ANALYTICS_PASSWORD,
     };
     const { data, error } = await supabase.rpc('search_pages', rpcParams);
+
+    console.log(data);
+
+    const dbResult = data[0][
+      'filtered_portfolio_pages'
+    ] as unknown as DatabaseResult[number]['filtered_portfolio_pages'];
 
     //const { data, error } = await query;
     if (error) throw new Error(error.message);
     //console.log(data);
     // count the number of portfolios published per month
-    const countsObj = (data as unknown as Row[]).reduce((counts, obj) => {
+    /* const countsObj = (data as unknown as Row[]).reduce((counts, obj) => {
       const publishedAt = !obj['published_at']
         ? null
         : parseISO(obj['published_at']);
@@ -124,30 +121,23 @@ export async function GET(request: Request) {
     const counts = Object.keys(countsObj).map((key) => ({
       name: key,
       'Počet příspěvků': countsObj[key],
-    }));
+    })); */
 
     // return
     return NextResponse.json({
-      data,
-      counts: counts.sort((a, b) => a.name.localeCompare(b.name)),
-      profiling: [
-        {
-          name: 'design',
-          value: 50,
-        },
-        {
-          name: 'data analytics',
-          value: 43,
-        },
-        {
-          name: 'edtech',
-          value: 60,
-        },
-        {
-          name: 'librarianship',
-          value: 3,
-        },
-      ],
+      data: dbResult.data || [],
+      counts:
+        dbResult.counts?.map((count) => {
+          const period = count.filter_period_begin
+            ? parseISO(count.filter_period_begin)
+            : null;
+          return {
+            name: count.filter_period_begin
+              ? `${period.getFullYear()}-${period.getMonth()}`
+              : 'bez datumu',
+            'Počet příspěvků': parseInt(count.sum, 10),
+          };
+        }) || [],
     });
   } catch (error) {
     return new Response(JSON.stringify({ message: error.message }), {

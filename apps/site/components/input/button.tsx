@@ -23,27 +23,26 @@ export default function Button(props: ButtonProps) {
       {...mergeProps(buttonProps, focusProps)}
       ref={ref}
       className={classNames(
-        'px-2',
-        'sm:px-3',
+        'px-4',
+        'sm:px-4',
         'py-2',
         'sm:py-3',
         'text-base',
         'text-background',
         'cursor-pointer',
-        'rounded-r-md',
         'bg-slate',
-        'border-2',
-        'border-slate',
         'relative',
         'inline-flex',
         'flex-row',
         'items-center',
         'justify-center',
-        'rounded-md',
+        'rounded-xl',
         'overflow-hidden',
-        'shadow-sm',
+        'shadow-md',
+        'font-semibold',
         'outline-none',
         'hover:bg-purple hover:border-purple',
+        'transition ease-in-out delay-50',
         {
           'ring-2 ring-offset-2 ring-slate bg-slate text-background':
             isFocusVisible,

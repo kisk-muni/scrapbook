@@ -23,12 +23,16 @@ export async function getUrls(
       return {
         url: item.url,
         label: item.platform,
-        userData: { platform: item.platform, portfolioId: item.id },
+        userData: {
+          platform: item.platform,
+          portfolioId: item.id,
+          portfolioUrl: item.url,
+        },
       };
     }) as {
     url: string;
     label: string;
-    userData: { platform: string; portfolioId: string };
+    userData: { platform: string; portfolioId: string; portfolioUrl: string };
   }[];
 
   return urls;

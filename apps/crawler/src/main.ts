@@ -12,9 +12,9 @@ const config: {
   upsertDB: boolean;
   saveSnapshots?: boolean;
 } = {
-  platforms: ["notion"],
-  upsertDB: false,
-  //saveSnapshots: false,
+  platforms: ["wordpress"],
+  upsertDB: true,
+  saveSnapshots: false,
 };
 
 // tell playwright-extra to use the plugin (or plugins) we want
@@ -45,7 +45,6 @@ const crawler = new PlaywrightCrawler({
 (async () => {
   const urls = await getUrls(config.platforms);
   await crawler.addRequests(urls);
-
   const start = performance.now();
 
   // run the crawler and wait for it to finish.
@@ -67,7 +66,7 @@ const crawler = new PlaywrightCrawler({
     insert into portfolio_pages ${sql(portfolioPages)}
     on conflict (url)
       do update set
-        data = excluded.data, updated_at = now()
+        scraped_data = excluded.scraped_data, updated_at = now()
   `;
     console.log(`Database updated.`);
   }

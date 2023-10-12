@@ -1,4 +1,5 @@
 {
+  "name": "scrapbook",
   "private": true,
   "workspaces": [
     "apps/*",
@@ -8,9 +9,11 @@
     "build-site": "dotenv -c -- turbo build --filter=site",
     "dev-site": "dotenv -c -- turbo dev --filter=site",
     "lint": "dotenv -c -- turbo lint",
-    "crawl": "dotenv -c -- turbo start:dev --filter=crawler",
-    "gen-types": "dotenv -c -- npx supabase gen types typescript --project-id '$SUPABASE_PROJECT_REF_ID' --schema public > packages/shared/src/supabase/types.ts ",
-    "dev-discord-bot": "dotenv -c -- turbo dev --filter=discord-bot"
+    "crawler": "dotenv -c -- turbo dev --filter=crawler",
+    "analyser": "dotenv -c -- turbo start --filter=analyser",
+    "gen-types": "dotenv -c -- npx supabase gen types typescript --project-id '$SUPABASE_PROJECT_REF_ID' --schema public > packages/shared/src/database/schema-generated.ts ",
+    "dev-discord-bot": "dotenv -c -- turbo dev --filter=discord-bot",
+    "run-discord-bot": "dotenv -c -- turbo start --filter=discord-bot"
   },
   "devDependencies": {
     "eslint": "7.32.0",
@@ -18,7 +21,7 @@
     "supabase": "^1.99.5",
     "tsconfig": "*",
     "turbo": "^1.9.3",
-    "typescript": "latest"
+    "typescript": "^5.2.2"
   },
   "packageManager": "npm@8.19.4",
   "dependencies": {

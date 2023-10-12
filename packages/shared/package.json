@@ -6,15 +6,19 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.37.0",
     "next-usequerystate": "^1.8.1",
-    "openai": "^3.3.0"
+    "openai": "^3.3.0",
+    "type-fest": "^4.4.0",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@turbo/gen": "^1.10.12",
     "@types/node": "^20.5.2",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
+    "crawlee": "^3.5.7",
+    "i18n-iso-countries": "^7.7.0",
     "react": "^18.2.0",
     "tsconfig": "*",
-    "typescript": "^4.5.2"
+    "typescript": "5.2.2"
   }
 }
