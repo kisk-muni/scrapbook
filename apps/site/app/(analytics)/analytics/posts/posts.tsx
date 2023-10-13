@@ -37,7 +37,7 @@ function useUrlWithParams() {
   const { password } = useAnalyticsAuth();
   const { getUrlSearchParams } = usePostsFilter();
   const searchParams = getUrlSearchParams();
-  const url = new URL('/api');
+  const url = new URL(process.env.NEXT_PUBLIC_APP_URL + '/analytics/posts/api');
   if (password) {
     searchParams.set('p', password);
   }
