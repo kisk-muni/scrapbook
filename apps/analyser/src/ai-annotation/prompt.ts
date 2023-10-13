@@ -1,6 +1,6 @@
 import { contentTypes, profilations, tones } from "shared";
 
-const schema = [
+const schema: SchemaItem[] = [
   {
     parameter: "contentTypes",
     options: contentTypes.map((kind) => kind.value),
@@ -70,15 +70,18 @@ podcast: a short text linking to a podcast episode or sound recording;
 study-abroad: a post about a study abroad experience (erasmus, freemover, etc.);
 internship: a post about an internship experience (working in a company, library, design firm, agency, or NGOs);`;
 
-function printTypeDefinition(
-  keys: {
-    parameter: string;
-    options?: string[];
-    comment?: string;
-    valueString?: string;
-  }[]
-) {
+type SchemaItem =
+  | {
+      parameter: string;
+      options?: string[];
+      comment?: string;
+      valueString?: string;
+    }
+  | undefined;
+
+function printTypeDefinition(keys: SchemaItem[]) {
   const typeDefinition = keys.map((key) => {
+    if (!key) return "";
     const { parameter } = key;
     const optionsString = `(${key.options
       ?.map((option) => `${option}`)

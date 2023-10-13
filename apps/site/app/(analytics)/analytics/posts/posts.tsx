@@ -31,6 +31,7 @@ import Button from 'components/input/button';
 import fetcher from 'lib/fetcher';
 import { useDebounce } from 'use-debounce';
 import { tonesByValue } from 'shared';
+import { Label } from 'components/label';
 
 function useUrlWithParams() {
   const { cohorts } = useAnalyticsGlobalFilter();
@@ -67,7 +68,7 @@ type Item =
 
 const TableColName = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="flex border-b border-snow grow pt-4 pb-4 px-6 text-lg font-extrabold">
+    <div className="flex border-b items-center border-snow grow pt-4 pb-4 px-6 text-lg font-extrabold">
       {children}
     </div>
   );
@@ -152,12 +153,9 @@ export default function Posts() {
             {post.tones?.map((value) => {
               const tone = tonesByValue[value];
               return (
-                <div
-                  key={value}
-                  className="inline-block rounded-full bg-[#e7e7e7] border border-white text-base px-2 mr-0.5 mb-0.5 whitespace-nowrap break-keep"
-                >
+                <Label key={value}>
                   {tone.emoji} {tone.label}
-                </div>
+                </Label>
               );
             })}
           </div>
@@ -168,12 +166,9 @@ export default function Posts() {
             {post.categories?.map((value) => {
               const profilation = profilationsByValue[value];
               return (
-                <div
-                  key={value}
-                  className="inline-block rounded-full bg-[#e7e7e7] border border-white text-base px-2 mr-1 mb-1 whitespace-nowrap break-keep"
-                >
+                <Label key={value}>
                   {profilation.emoji} {profilation.label}
-                </div>
+                </Label>
               );
             })}
           </div>
@@ -181,28 +176,20 @@ export default function Posts() {
       case 'courses':
         return (
           <div className="max-w-48">
-            {post.courses.slice(0, 5).map((code) => {
+            {post.courses.slice(0, 4).map((code) => {
               const course = coursesByCode[code];
-              // const count = post.courses.length;
-              // const renderFull = count <= 2;
               if (!course) return null;
               return (
-                <Tooltip key={code} text={course.title} delayDuration={20}>
-                  <div
-                    key={code}
-                    className="inline-block cursor-help rounded-full bg-[#e7e7e7] border border-white text-base px-2 mr-1 mb-1 whitespace-nowrap break-keep"
-                  >
-                    {course?.code}
-                    {/*renderFull && ` ${truncateString(course?.title, 20)}`*/}
-                  </div>
+                <Tooltip key={code} text={course?.title} delayDuration={20}>
+                  <Label className="cursor-help">{course?.code}</Label>
                 </Tooltip>
               );
             })}
-            {post.courses.length > 5 && (
+            {post.courses.length > 4 && (
               <Tooltip
                 content={
                   <div className="block text-sm leading-none text-white grid grid-cols-1 gap-2">
-                    {post.courses.slice(5).map((code) => (
+                    {post.courses.slice(4).map((code) => (
                       <div key={code}>
                         {code} {coursesByCode[code]?.title}
                       </div>
@@ -211,12 +198,9 @@ export default function Posts() {
                 }
                 delayDuration={20}
               >
-                <div
-                  key={'more'}
-                  className="inline-block cursor-help rounded-full bg-[#e7e7e7] border border-white text-base px-2 mr-1 mb-1 whitespace-nowrap break-keep"
-                >
-                  + {post.courses.length - 5}
-                </div>
+                <Label key={'more'} className="cursor-help">
+                  + {post.courses.length - 4}
+                </Label>
               </Tooltip>
             )}
           </div>
@@ -226,7 +210,7 @@ export default function Posts() {
           <div>
             {post.content_types?.map((value) => {
               const type = contentTypesByValue[value];
-              return <div key={value}>{type.label}</div>;
+              return <Label key={value}>{type.label}</Label>;
             })}
           </div>
         );
@@ -241,7 +225,10 @@ export default function Posts() {
             }
           >
             {!post.portfolios?.profiles?.is_public ? (
-              <Tooltip text="K profilu máte přístup, student si však nepřeje aby byla URL adresa portfolia prozrazena.">
+              <Tooltip
+                delayDuration={20}
+                text="K profilu máte přístup, student si však nepřeje aby byla URL adresa portfolia prozrazena."
+              >
                 <LockClosedIcon className="w-4 h-4 mr-1 -ml-px -mt-px" />
               </Tooltip>
             ) : (
@@ -325,9 +312,9 @@ export default function Posts() {
               isLoading ? 'animate-pulse' : ''
             }`,
             thead:
-              'text-xs z-20 text-text uppercase border-b border-snow last:[&>tr]:hidden',
+              'text-xs text-text uppercase border-b border-snow last:[&>tr]:hidden',
             table: 'table-auto w-full text-base text-left text-text',
-            th: 'first:rounded-tl-xl last:rounded-tr-xl bg-white z-20 sticky px-0 py-0 top-0',
+            th: 'first:rounded-tl-xl last:rounded-tr-xl bg-white z-10 sticky px-0 py-0 top-0',
             tbody:
               '[&>tr]:border-b last:[&>tr]:overflow-hidden [&>tr]:border-snow [&>tr]:bg-white hover:[&>tr]:bg-snow/70',
             td: 'px-6 py-4',
@@ -370,16 +357,50 @@ export default function Posts() {
               <TableColName>Příspěvek</TableColName>
             </TableColumn>
             <TableColumn key="content_types">
-              <TableColName>Druh</TableColName>
+              <TableColName>
+                Druh
+                <Tooltip sideOffset={20} text="AI odhad typu obsahu.">
+                  <span className="h-4 w-4 inline-block text-center text-sm font-normal mb-px ml-1 cursor-help bg-muted text-white normal-case leading-tight rounded-full">
+                    i
+                  </span>
+                </Tooltip>
+              </TableColName>
             </TableColumn>
             <TableColumn key="categories">
-              <TableColName>Profilace</TableColName>
+              <TableColName>
+                Profilace
+                <Tooltip
+                  sideOffset={20}
+                  text="AI odhad profilace na základě blízkých témat."
+                >
+                  <span className="h-4 w-4 inline-block text-center text-sm font-normal mb-px ml-1 cursor-help bg-muted text-white normal-case leading-tight rounded-full">
+                    i
+                  </span>
+                </Tooltip>
+              </TableColName>
             </TableColumn>
             <TableColumn key="tones">
-              <TableColName>Sentiment</TableColName>
+              <TableColName>
+                Sentiment{' '}
+                <Tooltip
+                  sideOffset={20}
+                  text="AI odhad celkového tónu příspěvku."
+                >
+                  <span className="h-4 w-4 inline-block text-center text-sm font-normal mb-px ml-1 cursor-help bg-muted text-white normal-case leading-tight rounded-full">
+                    i
+                  </span>
+                </Tooltip>
+              </TableColName>
             </TableColumn>
             <TableColumn key="courses">
-              <TableColName>Kurz</TableColName>
+              <TableColName>
+                Kurz
+                <Tooltip sideOffset={20} text="Výskyt názvu nebo kódu kurzu.">
+                  <span className="h-4 w-4 inline-block text-center text-sm font-normal mb-px ml-1 cursor-help bg-muted text-white normal-case leading-tight rounded-full">
+                    i
+                  </span>
+                </Tooltip>
+              </TableColName>
             </TableColumn>
             <TableColumn key="published_at">
               <TableColName>Datum</TableColName>

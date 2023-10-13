@@ -4,7 +4,7 @@ export const tones: EmojiItem[] = [
   {
     value: "frustrated-or-unjust",
     label: "frustrovaný",
-    emoji: "😠",
+    emoji: "😣",
   },
   {
     value: "formal",
@@ -34,7 +34,7 @@ export const tones: EmojiItem[] = [
   {
     value: "positive",
     label: "pozitivní",
-    emoji: "😃",
+    emoji: "🙂",
   },
 ];
 

@@ -88,8 +88,6 @@ export async function GET(request: Request) {
     };
     const { data, error } = await supabase.rpc('search_pages', rpcParams);
 
-    console.log(data);
-
     const dbResult = data[0][
       'filtered_portfolio_pages'
     ] as unknown as DatabaseResult[number]['filtered_portfolio_pages'];

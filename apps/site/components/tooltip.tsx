@@ -7,11 +7,13 @@ interface TooltipProps {
   text?: string;
   content?: React.ReactNode;
   delayDuration?: number;
+  sideOffset?: number;
 }
 
 const Tooltip: React.FC<TooltipProps> = ({
   children,
   delayDuration,
+  sideOffset = 4,
   text,
   content,
 }) => {
@@ -20,7 +22,7 @@ const Tooltip: React.FC<TooltipProps> = ({
       <TooltipPrimitive.Root>
         <TooltipPrimitive.Trigger asChild>{children}</TooltipPrimitive.Trigger>
         <TooltipPrimitive.Content
-          sideOffset={4}
+          sideOffset={sideOffset}
           className={clsx(
             'radix-side-top:animate-slide-down-fade',
             'radix-side-right:animate-slide-left-fade',
@@ -28,12 +30,12 @@ const Tooltip: React.FC<TooltipProps> = ({
             'radix-side-left:animate-slide-right-fade',
             'inline-flex items-center rounded-xl px-4 py-2.5',
             'bg-slate',
-            'z-50'
+            'z-90'
           )}
         >
           <TooltipPrimitive.Arrow className="fill-current text-slate" />
           {text ? (
-            <span className="block text-sm leading-none text-white">
+            <span className="block text-sm leading-none normal-case font-normal text-white">
               {text}
             </span>
           ) : content ? (
