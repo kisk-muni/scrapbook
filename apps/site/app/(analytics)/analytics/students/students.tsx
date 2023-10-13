@@ -13,9 +13,7 @@ import useAnalyticsGlobalFilter from 'lib/hooks/use-analytics-global-filter';
 export default function StudentsList() {
   const { password } = useAnalyticsAuth();
   const { cohorts } = useAnalyticsGlobalFilter();
-  const url = new URL(
-    process.env.NEXT_PUBLIC_APP_URL + '/analytics/students/api'
-  );
+  const url = new URL('/api');
   if (password) {
     url.searchParams.set('p', password);
   }

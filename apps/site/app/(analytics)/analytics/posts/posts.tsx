@@ -37,7 +37,7 @@ function useUrlWithParams() {
   const { password } = useAnalyticsAuth();
   const { getUrlSearchParams } = usePostsFilter();
   const searchParams = getUrlSearchParams();
-  const url = new URL(process.env.NEXT_PUBLIC_APP_URL + '/analytics/posts/api');
+  const url = new URL('/api');
   if (password) {
     searchParams.set('p', password);
   }
@@ -79,7 +79,7 @@ export default function Posts() {
 
   const { data, error, size, setSize, isLoading, isValidating } =
     useSWRInfinite<PostsApiResult>(
-      (index) => debouncedUrl + '&page=' + index + 1,
+      (index) => debouncedUrl + '&page=' + (index + 1),
       fetcher,
       {
         keepPreviousData: true,

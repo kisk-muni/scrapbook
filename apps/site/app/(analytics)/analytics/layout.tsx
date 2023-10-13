@@ -80,7 +80,7 @@ export default function RootLayout({
               <ChevronRightIcon className="w-6 h-6 text-muted mx-1" />
               <Link
                 className="text-xl pt-px flex items-center text-muted hover:text-purple font-bold"
-                href="/analytics"
+                href="/analytics/posts"
               >
                 <span className="font-header mt-0.5">Analytics (beta)</span>
               </Link>

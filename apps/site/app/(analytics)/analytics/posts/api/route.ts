@@ -51,7 +51,6 @@ export async function GET(request: Request) {
         parsedParams[filterName] = null;
       }
     });
-    console.log(searchParams.get('kinds'));
     const cohortsJson = Array.isArray(parsedParams.cohorts)
       ? ((parsedParams.cohorts as unknown as string[])
           .map((cohort) => {

@@ -44,7 +44,7 @@ export default function RootLayout({
             </Link>
             <Link
               className="text-muted hover:text-purple hover:text-gray relative md:flex justify-center text-base font space-x-6"
-              href="/analytics"
+              href="/analytics/posts"
             >
               Analytika
             </Link>
