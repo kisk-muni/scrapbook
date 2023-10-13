@@ -22,7 +22,7 @@ export type PostsApiResult = {
   counts: Counts;
 };
 
-export const PAGE_SIZE = 40;
+const PAGE_SIZE = 40;
 
 export async function GET(request: Request) {
   try {

@@ -4,7 +4,7 @@ import useAnalyticsGlobalFilter from '../../../../lib/hooks/use-analytics-global
 import useSWRInfinite from 'swr/infinite';
 import Heading from '../heading';
 import Link from 'next/link';
-import { PostsApiResult, PAGE_SIZE } from './api/route';
+import { PostsApiResult } from './api/route';
 import { LockClosedIcon } from '@radix-ui/react-icons';
 import Tooltip from 'components/tooltip';
 import PostsFilter from './posts-filter';
@@ -19,7 +19,7 @@ import {
   TableBody,
 } from '@nextui-org/table';
 import { TableHeader } from 'react-stately';
-import { Key, use, useCallback, useEffect, useState } from 'react';
+import { Key, useCallback } from 'react';
 import {
   SearchPages,
   contentTypesByValue,
@@ -27,7 +27,6 @@ import {
   profilationsByValue,
 } from 'shared';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/20/solid';
-import LoadingIcon from 'components/loading-icon';
 import Button from 'components/input/button';
 import fetcher from 'lib/fetcher';
 import { useDebounce } from 'use-debounce';
@@ -53,13 +52,15 @@ function useUrlWithParams() {
   };
 }
 
-function truncateString(str, maxLength) {
+const PAGE_SIZE = 40;
+
+/* function truncateString(str, maxLength) {
   if (str.length > maxLength) {
     return str.slice(0, maxLength) + '...';
   } else {
     return str;
   }
-}
+} */
 
 type Item =
   SearchPages['Returns'][number]['filtered_portfolio_pages']['data'][number];
