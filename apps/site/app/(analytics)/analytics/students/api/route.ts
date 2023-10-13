@@ -81,9 +81,9 @@ export async function GET(request: Request) {
             title: portfolio.title,
             url: portfolio.url,
             image_url: portfolio.image_url,
-            portfolio_pages: portfolio.portfolio_pages.length,
           };
         }),
+        portfolio_pages: profile.portfolios[0].portfolio_pages.length,
         lastActivity:
           profile.portfolios[0]?.portfolio_pages
             .map((page) =>

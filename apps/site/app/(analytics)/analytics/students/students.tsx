@@ -160,13 +160,7 @@ export default function StudentsList() {
                     ]}
                   />
                   </td>*/}
-                <td className="px-6 py-4">
-                  {student.portfolios.length > 0
-                    ? student.portfolio_pages != 0
-                      ? student.portfolio_pages
-                      : '-'
-                    : '-'}
-                </td>
+                <td className="px-6 py-4">{student?.portfolio_pages}</td>
                 {cohorts === null && (
                   <td className="px-6 py-4">
                     {(student.study_start_semester_year || '') +
