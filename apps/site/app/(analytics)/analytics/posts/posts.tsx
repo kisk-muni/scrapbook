@@ -77,6 +77,9 @@ const TableColName = ({ children }: { children: React.ReactNode }) => {
 export default function Posts() {
   const { url } = useUrlWithParams();
   const [debouncedUrl] = useDebounce(url, 400);
+  const { sha256Password } = useAnalyticsAuth();
+  const logged =
+    sha256Password === process.env.NEXT_PUBLIC_ANALYTICS_PASSWORD_SHA;
 
   const { data, error, size, setSize, isLoading, isValidating } =
     useSWRInfinite<PostsApiResult>(
@@ -257,6 +260,79 @@ export default function Posts() {
     }
   }, []);
 
+  const columns = [
+    {
+      key: 'title',
+      label: <TableColName>Příspěvek</TableColName>,
+    },
+    {
+      key: 'content_types',
+      label: (
+        <TableColName>
+          Druh
+          <Tooltip sideOffset={20} text="AI odhad typu obsahu.">
+            <span className="h-4 w-4 inline-block text-center text-sm font-normal mb-px ml-1 cursor-help bg-muted text-white normal-case leading-tight rounded-full">
+              i
+            </span>
+          </Tooltip>
+        </TableColName>
+      ),
+    },
+    {
+      key: 'categories',
+      label: (
+        <TableColName>
+          Profilace
+          <Tooltip
+            sideOffset={20}
+            text="AI odhad profilace na základě blízkých témat."
+          >
+            <span className="h-4 w-4 inline-block text-center text-sm font-normal mb-px ml-1 cursor-help bg-muted text-white normal-case leading-tight rounded-full">
+              i
+            </span>
+          </Tooltip>
+        </TableColName>
+      ),
+    },
+    {
+      key: 'courses',
+      label: (
+        <TableColName>
+          Kurz
+          <Tooltip sideOffset={20} text="Výskyt názvu nebo kódu kurzu.">
+            <span className="h-4 w-4 inline-block text-center text-sm font-normal mb-px ml-1 cursor-help bg-muted text-white normal-case leading-tight rounded-full">
+              i
+            </span>
+          </Tooltip>
+        </TableColName>
+      ),
+    },
+    {
+      key: 'published_at',
+      label: <TableColName>Datum</TableColName>,
+    },
+    {
+      key: 'portfolios',
+      label: <TableColName>Autor</TableColName>,
+    },
+  ];
+
+  const sentimentCol = {
+    key: 'tones',
+    label: (
+      <TableColName>
+        Sentiment{' '}
+        <Tooltip sideOffset={20} text="AI odhad celkového tónu příspěvku.">
+          <span className="h-4 w-4 inline-block text-center text-sm font-normal mb-px ml-1 cursor-help bg-muted text-white normal-case leading-tight rounded-full">
+            i
+          </span>
+        </Tooltip>
+      </TableColName>
+    ),
+  };
+
+  if (logged) columns.splice(3, 0, sentimentCol);
+
   return (
     <div>
       <PostsFilter />
@@ -352,62 +428,27 @@ export default function Posts() {
             </div>
           }
         >
-          <TableHeader>
-            <TableColumn key="title">
-              <TableColName>Příspěvek</TableColName>
-            </TableColumn>
-            <TableColumn key="content_types">
-              <TableColName>
-                Druh
-                <Tooltip sideOffset={20} text="AI odhad typu obsahu.">
-                  <span className="h-4 w-4 inline-block text-center text-sm font-normal mb-px ml-1 cursor-help bg-muted text-white normal-case leading-tight rounded-full">
-                    i
-                  </span>
-                </Tooltip>
-              </TableColName>
-            </TableColumn>
-            <TableColumn key="categories">
-              <TableColName>
-                Profilace
-                <Tooltip
-                  sideOffset={20}
-                  text="AI odhad profilace na základě blízkých témat."
-                >
-                  <span className="h-4 w-4 inline-block text-center text-sm font-normal mb-px ml-1 cursor-help bg-muted text-white normal-case leading-tight rounded-full">
-                    i
-                  </span>
-                </Tooltip>
-              </TableColName>
-            </TableColumn>
-            <TableColumn key="tones">
-              <TableColName>
-                Sentiment{' '}
-                <Tooltip
-                  sideOffset={20}
-                  text="AI odhad celkového tónu příspěvku."
-                >
-                  <span className="h-4 w-4 inline-block text-center text-sm font-normal mb-px ml-1 cursor-help bg-muted text-white normal-case leading-tight rounded-full">
-                    i
-                  </span>
-                </Tooltip>
-              </TableColName>
-            </TableColumn>
-            <TableColumn key="courses">
-              <TableColName>
-                Kurz
-                <Tooltip sideOffset={20} text="Výskyt názvu nebo kódu kurzu.">
-                  <span className="h-4 w-4 inline-block text-center text-sm font-normal mb-px ml-1 cursor-help bg-muted text-white normal-case leading-tight rounded-full">
-                    i
-                  </span>
-                </Tooltip>
-              </TableColName>
-            </TableColumn>
-            <TableColumn key="published_at">
-              <TableColName>Datum</TableColName>
-            </TableColumn>
-            <TableColumn key="portfolios">
-              <TableColName>Autor</TableColName>
-            </TableColumn>
+          <TableHeader columns={columns}>
+            {(column) => (
+              <TableColumn key={column?.key as string}>
+                {column?.label}
+              </TableColumn>
+            )}
+            {/*logged && (
+              <TableColumn key="tones">
+                <TableColName>
+                  Sentiment{' '}
+                  <Tooltip
+                    sideOffset={20}
+                    text="AI odhad celkového tónu příspěvku."
+                  >
+                    <span className="h-4 w-4 inline-block text-center text-sm font-normal mb-px ml-1 cursor-help bg-muted text-white normal-case leading-tight rounded-full">
+                      i
+                    </span>
+                  </Tooltip>
+                </TableColName>
+              </TableColumn>
+            )*/}
           </TableHeader>
           <TableBody
             isLoading={isLoading || isValidating}

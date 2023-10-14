@@ -6,7 +6,7 @@ import { contentTypes, profilations as profilationOptions } from 'shared';
 import { EmojiItem, tones as toneOptions } from 'shared';
 import { usePostsFilter } from './use-posts-filter';
 import { useDebounce, useDebouncedCallback } from 'use-debounce';
-import { useRef } from 'react';
+import useAnalyticsAuth from 'lib/hooks/use-analytics-auth';
 
 const renderEmojiOption = (option: EmojiItem) => (
   <div className="flex items-center">
@@ -35,6 +35,10 @@ export default function PostsFilter() {
     cleanup,
   } = usePostsFilter();
   const [defaultQuery] = useDebounce(keywordQuery, 1000);
+  const { sha256Password } = useAnalyticsAuth();
+
+  const logged =
+    sha256Password === process.env.NEXT_PUBLIC_ANALYTICS_PASSWORD_SHA;
 
   const debouncedSetKeyword = useDebouncedCallback((value) => {
     setKeywordQuery(value);
@@ -94,16 +98,18 @@ export default function PostsFilter() {
           filterTitle="Filtrovat podle profilace"
           filterPlaceholder="Filtrovat profilace"
         />
-        <FilterSelect<EmojiItem>
-          value={tones}
-          onChange={(v) => setTones(v)}
-          ariaLabel="Sentiment"
-          placeholder="Sentiment"
-          options={toneOptions}
-          renderOption={renderEmojiOption}
-          filterTitle="Filtrovat podle sentimentu"
-          filterPlaceholder="Filtrovat sentiment"
-        />
+        {logged && (
+          <FilterSelect<EmojiItem>
+            value={tones}
+            onChange={(v) => setTones(v)}
+            ariaLabel="Sentiment"
+            placeholder="Sentiment"
+            options={toneOptions}
+            renderOption={renderEmojiOption}
+            filterTitle="Filtrovat podle sentimentu"
+            filterPlaceholder="Filtrovat sentiment"
+          />
+        )}
       </div>
       {!isEmpty && (
         <div className="mt-3 flex justify-between">

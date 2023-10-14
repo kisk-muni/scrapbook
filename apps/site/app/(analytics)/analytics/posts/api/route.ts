@@ -122,7 +122,13 @@ export async function GET(request: Request) {
 
     // return
     return NextResponse.json({
-      data: dbResult.data || [],
+      data:
+        p === process.env.ANALYTICS_PASSWORD
+          ? dbResult.data
+          : dbResult.data.map((item) => {
+              item['tones'] = undefined;
+              return item;
+            }) || [],
       counts:
         dbResult.counts?.map((count) => {
           const period = count.filter_period_begin

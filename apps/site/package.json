@@ -24,6 +24,7 @@
     "date-fns": "^2.29.3",
     "interweave": "^13.0.0",
     "interweave-ssr": "^2.0.0",
+    "js-sha256": "^0.10.1",
     "masonic": "^3.7.0",
     "next": "^13.4.0",
     "next-plausible": "^3.6.4",

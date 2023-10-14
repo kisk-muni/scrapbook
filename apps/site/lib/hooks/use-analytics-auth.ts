@@ -5,6 +5,8 @@ export type Password = string;
 type AnalyticsAuthContextType = {
   password?: string;
   setPassword: Dispatch<SetStateAction<Password>>;
+  sha256Password?: string;
+  setSha256Password?: Dispatch<SetStateAction<Password>>;
 };
 
 export const AnalyticsAuthContext =

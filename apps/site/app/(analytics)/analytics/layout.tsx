@@ -46,6 +46,8 @@ export default function RootLayout({
 }) {
   const pathname = usePathname();
   const [password, setPassword] = useState<Password>(defaultPassword);
+  const [sha256Password, setSha256Password] =
+    useState<Password>(defaultPassword);
   const [cohorts, setCohorts] = useQueryState('cohorts', cohortsParser);
 
   useEffect(() => {
@@ -60,7 +62,9 @@ export default function RootLayout({
   }, [password]);
 
   return (
-    <AnalyticsAuthContext.Provider value={{ password, setPassword }}>
+    <AnalyticsAuthContext.Provider
+      value={{ password, setPassword, sha256Password, setSha256Password }}
+    >
       <AnalyticsGlobalFilterContext.Provider
         value={{
           cohorts,
