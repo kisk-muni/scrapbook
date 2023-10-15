@@ -125,7 +125,7 @@ export async function GET(request: Request) {
       data:
         p === process.env.ANALYTICS_PASSWORD
           ? dbResult.data
-          : dbResult.data.map((item) => {
+          : dbResult.data?.map((item) => {
               item['tones'] = undefined;
               return item;
             }) || [],
