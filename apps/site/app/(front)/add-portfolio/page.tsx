@@ -33,30 +33,14 @@ export default function AddPortfolioPage() {
             Připojení portfolia
           </span>
         </h1>
-        <Step number={1}>
-          <CardGroup
-            onChange={handlePlatformSelect}
-            label="Na jaké platformě běží tvé portfólio?"
-            defaultValue="bg-red"
-          >
-            <Card value="wordpress" aria-label="Wordpress">
-              Wordpress
-            </Card>
-            <Card value="wix" aria-label="Wix">
-              Wix
-            </Card>
-            <Card value="other-platform" aria-label="Jiná platforma">
-              Jiná platforma
-            </Card>
-            <Card value="custom" aria-label="Vlastní">
-              Vlastní
-            </Card>
-            <Card value="no-portfolio" aria-label="Vlastní">
-              Nemám portfólio
-            </Card>
-          </CardGroup>
-        </Step>
-        {platform != '' && secondStep[platform]}
+        <p>
+          Pro připojení tvého portfolia prosím napiš na KISKový Discord nebo na
+          cernockyd@mail.muni.cz. Ve zprávě uveď své jméno, příjmení, ročník
+          nastoupení do studia a URL.
+        </p>
+        <p>
+          Příklad: Dalibor Černocký, 2023 jaro, https://cernockyd.wordpress.com
+        </p>
       </div>
     </div>
   );

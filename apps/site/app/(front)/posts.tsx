@@ -181,7 +181,7 @@ function Card({ data }: CardProps) {
           {Object.keys(reactions).map((key) => {
             return (
               <div
-                className="pointer-events-auto flex pt-px items-center justify-center h-9 px-3 mr-2 -ml-1 rounded-full ring-1 ring-inset transition duration-200 ease-in-out bg-yellow ring-yellow"
+                className="pointer-events-auto flex pt-px items-center justify-center h-9 px-3 mr-2 -ml-1 rounded-full ring-1 ring-inset transition duration-200 ease-in-out bg-background ring-background"
                 key={key}
               >
                 <span className="text-sm -mt-px mr-1 text-slate">
