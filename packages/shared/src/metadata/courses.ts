@@ -18,11 +18,6 @@ export const courses: Course[] = [
     href: "/auth/predmet/phil/ISKB46",
   },
   {
-    title: "Rozvoj kompetencí učícího knihovníka",
-    code: "ISKB51",
-    href: "/auth/predmet/phil/ISKB51",
-  },
-  {
     title: "Blok expertů",
     code: "ISKB65",
     href: "/auth/predmet/phil/ISKB65",
@@ -813,11 +808,6 @@ export const courses: Course[] = [
     title: "Commons, P2P a digitální identita",
     code: "ISKM73",
     href: "/auth/predmet/phil/ISKM73",
-  },
-  {
-    title: "Digital competence development course",
-    code: "KPI33e",
-    href: "/auth/predmet/phil/KPI33e",
   },
   {
     title: "DigCompEdu: Technologie ve vzdělávání",

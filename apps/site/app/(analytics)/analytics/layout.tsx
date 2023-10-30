@@ -16,6 +16,7 @@ import { ChevronRightIcon } from '@radix-ui/react-icons';
 import FilterSelect from 'components/input/filter-select';
 import { useQueryState } from 'next-usequerystate';
 import { cohortsOptions, cohortsParser } from 'shared';
+import { sha256 } from 'js-sha256';
 
 const tabs = [
   /*   {
@@ -51,9 +52,11 @@ export default function RootLayout({
   const [cohorts, setCohorts] = useQueryState('cohorts', cohortsParser);
 
   useEffect(() => {
+    console.log('useEffect called');
     const password = JSON.parse(localStorage.getItem('ap') as string);
     if (password) {
       setPassword(password);
+      setSha256Password(sha256(password));
     }
   }, []);
 
