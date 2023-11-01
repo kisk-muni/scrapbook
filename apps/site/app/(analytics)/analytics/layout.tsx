@@ -89,8 +89,11 @@ export default function RootLayout({
                 className="text-xl pt-px flex items-center text-muted hover:text-purple font-bold"
                 href="/analytics/posts"
               >
-                <span className="font-header mt-0.5">Analytics (beta)</span>
+                <span className="font-header mt-0.5">Analytics</span>
               </Link>
+              <p className="text-muted ml-4 mt-1 mb-0">
+                (poslední aktualizace dat: 13. října 2023)
+              </p>
             </div>
             <div className="flex mt-2 space-x-6">
               {pathname != '/analytics/settings' && (
