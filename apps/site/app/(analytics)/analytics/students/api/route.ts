@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import supabase from 'lib/supabase';
+import { getCohortsFromParamsString } from 'shared';
 
 export type StudentsApiResult = {
   data: {
@@ -23,9 +24,12 @@ export type StudentsApiResult = {
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
-    const cohort = searchParams.get('cohort');
-    // const keyword = searchParams.get('keyword');
+    const cohortsParam = searchParams.get('cohorts');
+    const cohorts = cohortsParam
+      ? getCohortsFromParamsString(cohortsParam)
+      : [];
     const p = searchParams.get('p'); // password
+
     if (p !== process.env.ANALYTICS_PASSWORD && p !== null)
       throw new Error('Password is incorrect.');
     // get pages from portfolios for given study cohort
@@ -52,20 +56,19 @@ export async function GET(request: Request) {
     if (!(p === process.env.ANALYTICS_PASSWORD))
       query = query.eq('is_public', true);
 
-    if (cohort && cohort != 'all' && cohort != '') {
-      const matches = (cohort as string).match(/^(\d+)([a-zA-Z]+)/);
-      if (matches) {
-        const year = parseInt(matches[1], 10);
-        console.log(year);
-        query = query.eq('study_start_semester_year', year);
-        //const kind = matches[2];
-        //query = query.eq('portfolios.profiles.study_start_semester_kind', kind);
-      }
+    if (cohorts && cohorts.length) {
+      const cohortsQuery = cohorts
+        .map((cohort) => {
+          return `and(study_start_semester_year.eq.${cohort.year},study_start_semester_kind.eq.${cohort.kind}))`;
+        })
+        .join(',');
+      console.log(cohortsQuery);
+      query = query.or(cohortsQuery);
     }
 
     const { data, error } = await query;
     if (error) throw new Error(error.message);
-    //console.log(data);
+
     // count the number of portfolios published per month
     const profiles = data.map((profile) => {
       return {
@@ -93,13 +96,12 @@ export async function GET(request: Request) {
       };
     });
 
-    console.log(profiles);
-    // return
     return NextResponse.json({
       data: profiles // sort profiles by lastActivity param, nulls last,
         .sort((a, b) => (a.lastActivity < b.lastActivity ? 1 : -1)),
     });
   } catch (error) {
+    console.log(error);
     return new Response(JSON.stringify({ message: error.message }), {
       status: 500,
     });

@@ -27,3 +27,27 @@ export const cohortsFilter = {
     parser: cohortsParser,
   },
 };
+
+export const getGranularCohorts = (cohorts: string[]) => {
+  return cohorts
+    .map((cohort) => {
+      const matches = cohort.match(/^(\d+)([a-zA-Z]+)/);
+      if (matches) {
+        const year = parseInt(matches[1], 10);
+        const kind = matches[2];
+        return {
+          year,
+          kind: kind === "jaro" ? kind : "podzim",
+        };
+      }
+    })
+    .filter((cohort) => cohort != undefined) as {
+    year: number;
+    kind: "jaro" | "podzim";
+  }[];
+};
+
+export const getCohortsFromParamsString = (urlParam: string) => {
+  const parsed = cohortsFilter.cohorts.parser.parse(urlParam);
+  return getGranularCohorts((parsed || []).map((cohort) => cohort.value));
+};

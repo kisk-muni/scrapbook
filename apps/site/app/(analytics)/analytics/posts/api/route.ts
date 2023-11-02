@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import supabase from 'lib/supabase';
-import { SearchPages } from 'shared';
+import { SearchPages, getGranularCohorts } from 'shared';
 import { parseISO } from 'date-fns';
 import { filters } from '../filters';
 import { cohortsFilter } from 'shared';
@@ -52,22 +52,7 @@ export async function GET(request: Request) {
       }
     });
     const cohortsJson = Array.isArray(parsedParams.cohorts)
-      ? ((parsedParams.cohorts as unknown as string[])
-          .map((cohort) => {
-            const matches = cohort.match(/^(\d+)([a-zA-Z]+)/);
-            if (matches) {
-              const year = parseInt(matches[1], 10);
-              const kind = matches[2];
-              return {
-                year,
-                kind: kind === 'jaro' ? kind : null,
-              };
-            }
-          })
-          .filter((cohort) => cohort != undefined) as {
-          year: number;
-          kind: 'jaro' | null;
-        }[])
+      ? getGranularCohorts(parsedParams.cohorts as string[])
       : [];
 
     const page = parseInt(searchParams.get('page') || '1', 10);
@@ -92,35 +77,8 @@ export async function GET(request: Request) {
       'filtered_portfolio_pages'
     ] as unknown as DatabaseResult[number]['filtered_portfolio_pages'];
 
-    //const { data, error } = await query;
     if (error) throw new Error(error.message);
-    //console.log(data);
-    // count the number of portfolios published per month
-    /* const countsObj = (data as unknown as Row[]).reduce((counts, obj) => {
-      const publishedAt = !obj['published_at']
-        ? null
-        : parseISO(obj['published_at']);
-      if (!publishedAt) {
-        counts['bez datumu'] = (counts['bez datumu'] || 0) + 1;
-        return counts;
-      }
 
-      const year = publishedAt.getFullYear();
-      const month = publishedAt.getMonth();
-
-      const key = `${year}-${month}`;
-      counts[key] = (counts[key] || 0) + 1;
-
-      return counts;
-    }, {});
-
-    // convert to array of objects for recharts.js
-    const counts = Object.keys(countsObj).map((key) => ({
-      name: key,
-      'Počet příspěvků': countsObj[key],
-    })); */
-
-    // return
     return NextResponse.json({
       data:
         p === process.env.ANALYTICS_PASSWORD
