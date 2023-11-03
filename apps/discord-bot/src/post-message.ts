@@ -5,7 +5,7 @@ import { z } from "zod";
 const payloadSchema = z.object({
   channelId: z.string(),
   messageTextContent: z.string().min(1),
-  // reactions: are not supported yet
+  reactions: z.string().array().optional(),
 });
 
 export const postMessage = async (
@@ -23,8 +23,11 @@ export const postMessage = async (
     }
 
     // parse message payload
-    const { channelId: payloadChannelId, messageTextContent } =
-      payloadSchema.parse(req.body);
+    const {
+      channelId: payloadChannelId,
+      messageTextContent,
+      reactions,
+    } = payloadSchema.parse(req.body);
 
     // get discord channel
     const channelId =
@@ -45,7 +48,14 @@ export const postMessage = async (
     }
 
     // send message
-    await channel.send(messageTextContent);
+    const message = await channel.send(messageTextContent);
+    // loop over reactions using index and await message.react(reaction)
+    if (reactions) {
+      for (let index = 0; index < reactions.length; index++) {
+        const reaction = reactions[index];
+        await message.react(reaction);
+      }
+    }
 
     res.json({
       message: "The message was successfully posted.",
