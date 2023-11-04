@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { cloudinaryImageFetch } from 'lib/cloudinary';
+import { cloudinaryImageLoader } from 'lib/cloudinary';
 import Image from 'next/image';
 
 type AvatarProps = {
@@ -18,7 +18,8 @@ export function Avatar({ size, imageUrl, name, className }: AvatarProps) {
         alt={alt}
         width={size}
         height={size}
-        src={cloudinaryImageFetch(imageUrl)}
+        loader={cloudinaryImageLoader}
+        src={imageUrl}
       />
     );
   const acronym =

@@ -1,4 +1,4 @@
-import { cloudinaryImageFetch } from 'lib/cloudinary';
+import { cloudinaryImageFetch, cloudinaryImageLoader } from 'lib/cloudinary';
 import Image from 'next/image';
 import classNames from 'classnames';
 
@@ -23,7 +23,13 @@ export function PostImage({ alt, src, isThumbnail = false }: PostImageProps) {
               (max-width: 1200px) 500px,
               500px"
         className="object-contain"
-        src={cloudinaryImageFetch(src, 'ar_1.333,b_auto,c_pad,w_800')}
+        loader={({ src }) =>
+          cloudinaryImageLoader({
+            src: src,
+            params: 'ar_1.333,b_auto,c_pad,w_800',
+          })
+        }
+        src={src}
       />
     </div>
   );

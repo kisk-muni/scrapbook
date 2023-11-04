@@ -3,3 +3,13 @@ export const CloudinaryURL = `https://res.cloudinary.com/${process.env.NEXT_PUBL
 export function cloudinaryImageFetch(src: string, params?: string) {
   return `${CloudinaryURL}/image/fetch${params ? '/' + params : ''}/${src}`;
 }
+
+export const cloudinaryImageLoader = ({
+  src,
+  params,
+}: {
+  src: string;
+  params?: string;
+}) => {
+  return `${CloudinaryURL}/image/fetch${params ? '/' + params : ''}/${src}`;
+};
