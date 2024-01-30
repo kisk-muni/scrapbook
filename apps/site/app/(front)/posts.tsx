@@ -43,6 +43,9 @@ const emojis = {
     'https://cdn.discordapp.com/emojis/898997662383239229.webp?size=64&quality=lossless',
   KISK_logo:
     'https://cdn.discordapp.com/emojis/898941770459648000.webp?size=64&quality=lossless',
+  skyrik:
+    'https://cdn.discordapp.com/emojis/1156537341830238208.webp?size=64&quality=lossless',
+  brno: 'https://cdn.discordapp.com/emojis/1174837732825124986.webp?size=64&quality=lossless',
 };
 
 const locale = {
