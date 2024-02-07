@@ -13,7 +13,7 @@
     "analyser": "dotenv -c -- turbo start --filter=analyser",
     "gen-types": "dotenv -c -- npx supabase gen types typescript --project-id '$SUPABASE_PROJECT_REF_ID' --schema public > packages/shared/src/database/schema-generated.ts ",
     "dev-discord-bot": "dotenv -c -- turbo dev --filter=discord-bot",
-    "run-discord-bot": "dotenv -c -- turbo start --filter=discord-bot"
+    "prod-run-discord-bot": "dotenv -c -- turbo build --filter=discord-bot && turbo start --filter=discord-bot"
   },
   "devDependencies": {
     "eslint": "7.32.0",

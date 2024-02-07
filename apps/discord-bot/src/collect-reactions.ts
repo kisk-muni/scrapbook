@@ -15,6 +15,7 @@ export const onReactionAdd: OnReactionHandler = async (
     discord_user_id: user.id,
     emoji_id: emoji.id,
   });
+
   if (error)
     console.error(
       `Couldnt insert discord_message_reaction ${message.id} ${error.message}.`

@@ -6,6 +6,7 @@
     "start": "dotenv -c -- node --respawn dist/index.js",
     "dev": "dotenv -c -- ts-node-dev --respawn src/index.ts",
     "build": "tsc",
+    "prod-start": "npm run build && npm run start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "license": "MIT",
