@@ -1,0 +1,9 @@
+{
+  "extends": "tsconfig/cli-app.json",
+  "include": ["src/**/*.ts"],
+  "compilerOptions": {
+    "strict": true,
+    "strictNullChecks": true
+  },
+  "exclude": ["node_modules", "dist"]
+}

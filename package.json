@@ -11,6 +11,7 @@
     "lint": "dotenv -c -- turbo lint",
     "crawler": "dotenv -c -- turbo dev --filter=crawler",
     "analyser": "dotenv -c -- turbo start --filter=analyser",
+    "importer": "dotenv -c -- turbo start --filter=importer --",
     "gen-types": "dotenv -c -- npx supabase gen types typescript --project-id '$SUPABASE_PROJECT_REF_ID' --schema public > packages/shared/src/database/schema-generated.ts ",
     "dev-discord-bot": "dotenv -c -- turbo dev --filter=discord-bot",
     "prod-run-discord-bot": "dotenv -c -- turbo build --filter=discord-bot && turbo start --filter=discord-bot"

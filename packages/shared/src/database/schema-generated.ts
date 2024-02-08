@@ -6,7 +6,7 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
-export interface Database {
+export type Database = {
   public: {
     Tables: {
       ai_annotation_log: {
@@ -62,6 +62,7 @@ export interface Database {
           {
             foreignKeyName: "discord_message_reactions_message_id_fkey"
             columns: ["message_id"]
+            isOneToOne: false
             referencedRelation: "portfolio_posts"
             referencedColumns: ["discord_message_id"]
           }
@@ -106,6 +107,7 @@ export interface Database {
           {
             foreignKeyName: "portfolio_pages_portfolio_id_fkey"
             columns: ["portfolio_id"]
+            isOneToOne: false
             referencedRelation: "portfolios"
             referencedColumns: ["id"]
           }
@@ -149,6 +151,7 @@ export interface Database {
           {
             foreignKeyName: "portfolio_posts_portfolio_id_fkey"
             columns: ["portfolio_id"]
+            isOneToOne: false
             referencedRelation: "portfolios"
             referencedColumns: ["id"]
           }
@@ -156,6 +159,7 @@ export interface Database {
       }
       portfolios: {
         Row: {
+          can_be_used_in_research: boolean | null
           created_at: string | null
           description: string | null
           feed_url: string | null
@@ -165,12 +169,11 @@ export interface Database {
           name: string | null
           platform: string
           profile_id: string | null
-          study_start_semester_kind: string | null
-          study_start_semester_year: number | null
           title: string | null
           url: string | null
         }
         Insert: {
+          can_be_used_in_research?: boolean | null
           created_at?: string | null
           description?: string | null
           feed_url?: string | null
@@ -180,12 +183,11 @@ export interface Database {
           name?: string | null
           platform?: string
           profile_id?: string | null
-          study_start_semester_kind?: string | null
-          study_start_semester_year?: number | null
           title?: string | null
           url?: string | null
         }
         Update: {
+          can_be_used_in_research?: boolean | null
           created_at?: string | null
           description?: string | null
           feed_url?: string | null
@@ -195,8 +197,6 @@ export interface Database {
           name?: string | null
           platform?: string
           profile_id?: string | null
-          study_start_semester_kind?: string | null
-          study_start_semester_year?: number | null
           title?: string | null
           url?: string | null
         }
@@ -204,6 +204,7 @@ export interface Database {
           {
             foreignKeyName: "portfolios_profile_id_fkey"
             columns: ["profile_id"]
+            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           }
@@ -259,6 +260,7 @@ export interface Database {
           {
             foreignKeyName: "portfolios_duplicate_profile_id_fkey"
             columns: ["profile_id"]
+            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           }
@@ -266,36 +268,71 @@ export interface Database {
       }
       profiles: {
         Row: {
-          analytics_access: boolean | null
+          can_be_used_in_research: boolean | null
           full_name: string | null
           id: string
           is_public: boolean
+          is_teacher: boolean | null
           study_start_semester_kind: string | null
           study_start_semester_year: number | null
           updated_at: string | null
           username: string | null
         }
         Insert: {
-          analytics_access?: boolean | null
+          can_be_used_in_research?: boolean | null
           full_name?: string | null
           id?: string
           is_public?: boolean
+          is_teacher?: boolean | null
           study_start_semester_kind?: string | null
           study_start_semester_year?: number | null
           updated_at?: string | null
           username?: string | null
         }
         Update: {
-          analytics_access?: boolean | null
+          can_be_used_in_research?: boolean | null
           full_name?: string | null
           id?: string
           is_public?: boolean
+          is_teacher?: boolean | null
           study_start_semester_kind?: string | null
           study_start_semester_year?: number | null
           updated_at?: string | null
           username?: string | null
         }
         Relationships: []
+      }
+      profiles_surveys: {
+        Row: {
+          created_at: string
+          id: number
+          profile: string | null
+          results: Json | null
+          type: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          profile?: string | null
+          results?: Json | null
+          type?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          profile?: string | null
+          results?: Json | null
+          type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_surveys_profile_fkey"
+            columns: ["profile"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
       }
     }
     Views: {
@@ -415,16 +452,7 @@ export interface Database {
           items_offset?: number
         }
         Returns: {
-          id: string
-          title: string
-          url: string
-          published_at: string
-          courses: Json
-          content_types: Json
-          profilations: Json
-          tones: Json
-          dominant_language: string
-          portfolios: Json
+          filtered_portfolio_pages: Json
         }[]
       }
       set_limit: {
@@ -458,3 +486,83 @@ export interface Database {
     }
   }
 }
+
+export type Tables<
+  PublicTableNameOrOptions extends
+    | keyof (Database["public"]["Tables"] & Database["public"]["Views"])
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+        Database[PublicTableNameOrOptions["schema"]]["Views"])
+    : never = never
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+      Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : PublicTableNameOrOptions extends keyof (Database["public"]["Tables"] &
+      Database["public"]["Views"])
+  ? (Database["public"]["Tables"] &
+      Database["public"]["Views"])[PublicTableNameOrOptions] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : never
+
+export type TablesInsert<
+  PublicTableNameOrOptions extends
+    | keyof Database["public"]["Tables"]
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+    : never = never
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
+  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : never
+
+export type TablesUpdate<
+  PublicTableNameOrOptions extends
+    | keyof Database["public"]["Tables"]
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+    : never = never
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
+  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : never
+
+export type Enums<
+  PublicEnumNameOrOptions extends
+    | keyof Database["public"]["Enums"]
+    | { schema: keyof Database },
+  EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
+    : never = never
+> = PublicEnumNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : PublicEnumNameOrOptions extends keyof Database["public"]["Enums"]
+  ? Database["public"]["Enums"][PublicEnumNameOrOptions]
+  : never
