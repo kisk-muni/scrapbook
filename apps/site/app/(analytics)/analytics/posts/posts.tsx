@@ -179,7 +179,7 @@ export default function Posts() {
       case 'courses':
         return (
           <div className="max-w-48">
-            {post.courses.slice(0, 4).map((code) => {
+            {post.courses?.slice(0, 4).map((code) => {
               const course = coursesByCode[code];
               if (!course) return null;
               return (
@@ -188,7 +188,7 @@ export default function Posts() {
                 </Tooltip>
               );
             })}
-            {post.courses.length > 4 && (
+            {post.courses?.length > 4 && (
               <Tooltip
                 content={
                   <div className="block text-sm leading-none text-white grid grid-cols-1 gap-2">
