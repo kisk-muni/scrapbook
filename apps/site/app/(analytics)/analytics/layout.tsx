@@ -92,7 +92,7 @@ export default function RootLayout({
                 <span className="font-header mt-0.5">Analytics</span>
               </Link>
               <p className="text-muted ml-4 mt-1 mb-0">
-                (poslední aktualizace dat: 13. října 2023)
+                (poslední aktualizace dat: 29. května 2024)
               </p>
             </div>
             <div className="flex mt-2 space-x-6">
