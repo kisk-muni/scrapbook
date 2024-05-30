@@ -3,13 +3,17 @@ import { supabase } from "shared";
 import { findCourses, cleanupTitle } from "shared";
 
 export async function annotate() {
-  const pages = await getPortfolioPages({ regexAnnotation: true });
+  const pages = await getPortfolioPages({ regexAnnotation: true, max: 500 });
   console.info(`Running on ${pages.length} pages`);
   const runLog = await pages.map(async (page) => {
     const { id, text, data, url, scraped_data: scraped } = page;
     try {
       const title = scraped?.title ? cleanupTitle(scraped?.title) : url;
+      console.log(
+        `text is not null or undefined: ${text !== null && text !== undefined}`
+      );
       const courses = findCourses(title + " " + text);
+      // console.log(`Courses found: ${courses.length}`);
       const rowUpdate = {
         data: { ...data, title, courses },
       };

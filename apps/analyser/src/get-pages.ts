@@ -28,8 +28,11 @@ export async function getPortfolioPages(options: {
       .not("scraped_data->simplifiedContent->text", "is", null);
     // .not("ai_annotation->failed", "is", null);
     //.eq("scraped_data->wordpress->>pageTypes", "page");
-  } else if (options.regexAnnotation) {
-  } else if (options.rewriteAnnotation) {
+  }
+  if (options.regexAnnotation) {
+    query = query.is("data", null);
+  }
+  if (options.rewriteAnnotation) {
     console.log("rewriteAnnotation is active");
     query = query.not("ai_annotation->data", "is", null);
   }
@@ -48,7 +51,13 @@ export async function getPortfolioPages(options: {
 
   return (
     pages
-      /* .filter((page) => {
+      .filter((page) => {
+        // filter out pages where the url contains cernyedtech or solcovad substring
+        return (
+          !page.url.includes("cernyedtech") && !page.url.includes("solcovad")
+        );
+      })
+      .filter((page) => {
         if (
           options.aiAnnotation &&
           ((page.scraped_data?.platform === "wordpress" &&
@@ -67,7 +76,7 @@ export async function getPortfolioPages(options: {
           return true;
         if (options.regexAnnotation) return true;
         return false;
-      }) */
+      })
       /* .filter((page) => {
       return page.scraped_data?.platform == "wordpress"
         ? page.scraped_data.wordpress?.pageTypes.includes("single")
@@ -83,6 +92,6 @@ export async function getPortfolioPages(options: {
           ai_annotation: page.ai_annotation,
         };
       })
-    //.slice(0, options.max ? options.max : undefined)
+      .slice(0, options.max ? options.max : undefined)
   );
 }

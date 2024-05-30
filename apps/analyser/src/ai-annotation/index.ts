@@ -25,6 +25,10 @@ type Page = {
 export async function annotate() {
   const annotatePage = async (page: Page) => {
     const { id, text, scraped_data, url } = page;
+    if (url.includes("cernyedtech.wordpress.com")) {
+      console.info("Skipping page from cernyedtech.wordpress.com" + url);
+      return { success: false, message: "Skipping page from cernyedtech" };
+    }
     const title = page.data?.title
       ? page.data.title
       : scraped_data?.title
@@ -44,8 +48,8 @@ export async function annotate() {
           content: title + " " + text?.slice(0, 15000 - prompt.length),
         },
       ],
-      model: "gpt-3.5-turbo-16k",
-      temperature: 0.2, // should make predictions more deterministic
+      model: "gpt-3.5-turbo",
+      temperature: 0.4, // should make predictions more deterministic
     });
 
     const openaiResponse = completion.choices[0].message.content || null;
@@ -118,7 +122,7 @@ export async function annotate() {
     const pages = await getPortfolioPages({ aiAnnotation: true });
     if (pages.length > 0) {
       console.log(`${pages.length} more pages to annotate`);
-      const forstats = await annotatePages(pages?.slice(0, 3));
+      const forstats = await annotatePages(pages?.slice(0, 8));
       const stats = await forstats.reduce(
         (acc, curr) => {
           if (curr?.success) acc.success++;
@@ -133,7 +137,7 @@ export async function annotate() {
       console.info("No pages to annotate");
       break;
     }
-    await new Promise((resolve) => setTimeout(resolve, 3000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
   }
 
   console.info("Done");

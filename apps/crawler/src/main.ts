@@ -53,9 +53,18 @@ const crawler = new PlaywrightCrawler({
   const dataset = await Dataset.open();
   await KeyValueStore.setValue("OUTPUT", (await dataset.getData()).items);
   // remove items with duplicate url
-  const portfolioPages = (await dataset.getData()).items.filter(
-    (item, index, array) => array.findIndex((i) => i.url === item.url) === index
-  );
+  const portfolioPages = (await dataset.getData()).items
+    .filter(
+      (item, index, array) =>
+        array.findIndex((i) => i.url === item.url) === index
+    )
+    .map(({ portfolioId, url, data }) => {
+      return {
+        portfolioId,
+        url,
+        scrapedData: data,
+      };
+    });
   console.log(`Crawler finished in ${(performance.now() - start) / 1000} s.`);
 
   // bulk update the database
