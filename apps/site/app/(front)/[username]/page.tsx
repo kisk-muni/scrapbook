@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import { Profile } from './profile';
 
-export function PortfolioSkeleton() {
+function PortfolioSkeleton() {
   return (
     <div className="flex items-center animate-pulse">
       <div className="rounded-full w-32 h-32 bg-smoke grow-0 shrink-0 mr-2 sm:mr-4"></div>

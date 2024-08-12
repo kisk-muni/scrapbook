@@ -1,5 +1,4 @@
 import { auth } from 'auth';
-import DeleteAccount from 'components/setting-delete-account';
 import NameSetting from 'components/setting-name';
 import { redirect } from 'next/navigation';
 import { updateUsername, updateFullName, updateBio } from 'app/actions';

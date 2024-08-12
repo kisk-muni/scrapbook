@@ -1,6 +1,7 @@
 const nextConfig = {
   experimental: {
     mdxRs: true,
+    missingSuspenseWithCSRBailout: false,
   },
   transpilePackages: ['shared'],
   pageExtensions: ['ts', 'tsx', 'mdx'],

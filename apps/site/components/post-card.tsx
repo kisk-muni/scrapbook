@@ -1,38 +1,12 @@
 'use client';
-import { Post as PostSchema, PostWithProfiles } from 'db/schema/posts';
 import { usePlausible } from 'next-plausible';
 import Link from 'next/link';
 import { Avatar } from './avatar';
-import { formatRelative, parseISO } from 'date-fns';
+import { formatRelative } from 'date-fns';
 import csLocale from 'date-fns/locale/cs';
-import Image from 'next/image';
 import { PostDescription } from './post-description';
 import { PostImage } from './post-image';
 import { UniversalPost } from 'lib/actions/get-posts';
-
-const emojis = {
-  scrappy:
-    'https://cdn.discordapp.com/emojis/1063939454848467005.webp?size=64&quality=lossless',
-  thank_you:
-    'https://cdn.discordapp.com/emojis/1052364641143111760.webp?size=64&quality=lossless',
-  mooc: 'https://cdn.discordapp.com/emojis/1046821807417720902.webp?size=64&quality=lossless',
-  double_diamond:
-    'https://cdn.discordapp.com/emojis/1046792628353650688.webp?size=64&quality=lossless',
-  plechacek:
-    'https://cdn.discordapp.com/emojis/1046783925097336922.webp?size=64&quality=lossless',
-  upvote:
-    'https://cdn.discordapp.com/emojis/1046769888078876773.webp?size=64&quality=lossless',
-  this_tbh:
-    'https://cdn.discordapp.com/emojis/1046565288478507008.webp?size=64&quality=lossless',
-  okk: 'https://cdn.discordapp.com/emojis/1044281424250945647.webp?size=64&quality=lossless',
-  zluta_bible:
-    'https://cdn.discordapp.com/emojis/898997662383239229.webp?size=64&quality=lossless',
-  KISK_logo:
-    'https://cdn.discordapp.com/emojis/898941770459648000.webp?size=64&quality=lossless',
-  skyrik:
-    'https://cdn.discordapp.com/emojis/1156537341830238208.webp?size=64&quality=lossless',
-  brno: 'https://cdn.discordapp.com/emojis/1174837732825124986.webp?size=64&quality=lossless',
-};
 
 const formatRelativeLocale = {
   lastWeek: "eeee 'v' p",
@@ -42,30 +16,6 @@ const formatRelativeLocale = {
   nextWeek: 'do MMMM yyyy',
   other: 'do MMMM yyyy',
 };
-
-interface Post {
-  skeleton?: boolean;
-  id?: string;
-  title?: string | null;
-  published_at?: string | null;
-  url?: string | null;
-  description?: string | null;
-  thumbnail_url?: string | null;
-  portfolios?: {
-    id: string;
-    title: string | null;
-    url: string | null;
-    image_url: string | null;
-    feed_url: string | null;
-    profiles?: {
-      username: string;
-      full_name: string;
-    };
-  };
-  discord_message_reactions: {
-    emoji_name: string;
-  }[];
-}
 
 interface CardProps {
   index: number;

@@ -1,7 +1,6 @@
 import { Interweave, Node } from 'interweave';
 import { PostImage } from './post-image';
 import Link from 'next/link';
-import { useMDXComponents } from 'mdx-components';
 
 interface PostDescriptionProps {
   content: string;
