@@ -1,15 +1,17 @@
 'use client';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import PlausibleProvider from 'next-plausible';
-import { OverlayProvider, SSRProvider } from 'react-aria';
+import { OverlayProvider } from 'react-aria';
 
 export function Providers({ children }) {
+  const queryClient = new QueryClient();
   return (
-    <SSRProvider>
-      <PlausibleProvider
-        domain={process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN as string}
-      >
+    <PlausibleProvider
+      domain={process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN as string}
+    >
+      <QueryClientProvider client={queryClient}>
         <OverlayProvider>{children}</OverlayProvider>
-      </PlausibleProvider>
-    </SSRProvider>
+      </QueryClientProvider>
+    </PlausibleProvider>
   );
 }

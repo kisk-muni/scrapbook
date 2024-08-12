@@ -2,3 +2,85 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+.bn-container[data-theming-css-variables-demo] {
+  --bn-colors-editor-text: #1d201d;
+  --bn-colors-menu-text: #1d201d;
+  --bn-colors-editor-background: #ffffff;
+  --bn-colors-menu-text: #1d201d;
+  --bn-colors-menu-background: #ffffff;
+  --bn-colors-tooltip-text: #1d201d;
+  --bn-colors-tooltip-background: #efefef;
+  --bn-colors-hovered-text: #1d201d;
+  --bn-colors-hovered-background: #f5f5f4;
+  --bn-colors-selected-text: #ffffff;
+  --bn-colors-selected-background: #1d201d;
+  --bn-colors-disabled-text: #777f76;
+  --bn-colors-disabled-background: #efefef;
+  --bn-colors-border: #d5d8d5;
+  --bn-colors-shadow: transparent;
+  --bn-colors-side-menu: #777f76;
+  --bn-colors-highlights-gray-text: #9b9a97;
+  --bn-colors-highlights-gray-background: #ebeced;
+  --bn-colors-highlights-brown-text: #64473a;
+  --bn-colors-highlights-brown-background: #e9e5e3;
+  --bn-colors-highlights-red-text: #e03e3e;
+  --bn-colors-highlights-red-background: #fbe4e4;
+  --bn-colors-highlights-orange-text: #d9730d;
+  --bn-colors-highlights-orange-background: #f6e9d9;
+  --bn-colors-highlights-yellow-text: #dfab01;
+  --bn-colors-highlights-yellow-background: #fbf3db;
+  --bn-colors-highlights-green-text: #4d6461;
+  --bn-colors-highlights-green-background: #ddedea;
+  --bn-colors-highlights-blue-text: #0b6e99;
+  --bn-colors-highlights-blue-background: #ddebf1;
+  --bn-colors-highlights-purple-text: #6940a5;
+  --bn-colors-highlights-purple-background: #eae4f2;
+  --bn-colors-highlights-pink-text: #ad1a72;
+  --bn-colors-highlights-pink-background: #f4dfeb;
+  --bn-font-family: 'Baloo 2', 'SF Pro Display', -apple-system,
+    BlinkMacSystemFont, 'Open Sans', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  --bn-border-radius: 12px;
+  --border-radius: 12px;
+  --bn-border: 2px solid var(--bn-colors-border);
+}
+
+.bn-mantine .bn-suggestion-menu {
+  box-shadow: none;
+}
+
+.bn-mantine .mantine-Menu-dropdown {
+  box-shadow: none;
+}
+
+.bn-mantine .mantine-Tooltip-tooltip {
+  box-shadow: none;
+}
+
+.bn-mantine .bn-toolbar {
+  box-shadow: none;
+}
+.bn-mantine .bn-form-popover {
+  box-shadow: none;
+}
+.bn-mantine .bn-suggestion-menu {
+  box-shadow: none;
+}
+.bn-mantine .bn-grid-suggestion-menu {
+  box-shadow: none;
+}
+
+.bn-container[data-theming-css-variables-demo] .bn-editor * {
+  font-family: 'Baloo 2', sans-serif;
+  -webkit-font-smoothing: unset;
+}
+
+.bn-container[data-theming-css-variables-demo] .bn-editor {
+  padding-inline: 56px;
+}
+
+.bn-container[data-theming-css-variables-demo] .bn-default-styles {
+  font-size: 1.125rem;
+  -webkit-font-smoothing: unset;
+}

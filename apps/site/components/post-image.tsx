@@ -1,4 +1,4 @@
-import { cloudinaryImageFetch, cloudinaryImageLoader } from 'lib/cloudinary';
+import { cloudinaryImageLoader } from 'lib/cloudinary';
 import Image from 'next/image';
 import classNames from 'classnames';
 
@@ -6,9 +6,15 @@ interface PostImageProps {
   alt?: string | null;
   src: string;
   isThumbnail?: boolean;
+  local?: boolean;
 }
 
-export function PostImage({ alt, src, isThumbnail = false }: PostImageProps) {
+export function PostImage({
+  alt,
+  local,
+  src,
+  isThumbnail = false,
+}: PostImageProps) {
   return (
     <div
       className={classNames(
@@ -22,12 +28,14 @@ export function PostImage({ alt, src, isThumbnail = false }: PostImageProps) {
         sizes="(max-width: 768px) 600px,
               (max-width: 1200px) 500px,
               500px"
-        className="object-contain"
+        className="object-contain "
         loader={({ src }) =>
-          cloudinaryImageLoader({
-            src: src,
-            params: 'ar_1.333,b_auto,c_pad,w_800',
-          })
+          local
+            ? `${process.env.NEXT_PUBLIC_APP_URL}/${src}`
+            : cloudinaryImageLoader({
+                src: src,
+                params: 'ar_1.333,b_auto,c_pad,w_800',
+              })
         }
         src={src}
       />

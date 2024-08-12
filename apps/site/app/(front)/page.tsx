@@ -1,31 +1,71 @@
-'use client';
-import { ErrorBoundary } from 'react-error-boundary';
-import { Posts } from './posts';
+import { auth } from 'auth';
+import { cache, Suspense } from 'react';
 import Link from 'next/link';
+import { Button } from 'components/ui/button-radix';
+import { Avatar } from 'components/avatar';
+import { ArrowsPointingOutIcon } from '@heroicons/react/20/solid';
+import NewPostCard from 'components/new-post';
+import { post } from 'app/actions';
+import { Posts } from 'components/posts';
+import getPosts from 'lib/actions/get-posts';
+import classNames from 'classnames';
 
-function Alert() {
+const loadPosts = cache(async () => {
+  const posts = await getPosts({ pageParam: { native: 0, portfolio: 0 } });
+  return posts;
+});
+
+export default async function HomePage() {
+  const session = await auth();
+
+  const initialPosts = await loadPosts();
+  // console.log('initialPosts', initialPosts);
   return (
-    <div className="text-center lg:px-4 sm:-mb-2 lg:-mt-3">
-      <Link target="_blank" href="https://discord.gg/HDacGhAhj8">
+    <div>
+      <div className="">
         <div
-          className="py-1.5 sm:my-3 xl:mb-3 px-1.5 bg-green cursor-pointer duration-500 hover:scale-105 items-center text-black leading-none rounded-full flex sm:inline-flex"
-          role="alert"
+          className={classNames('space-y-6 pt-10 lg:py-8', {
+            'mx-auto max-w-4xl': session?.user,
+          })}
         >
-          <span className="font-semibold mr-1.5 ml-1.5 text-left flex-auto">
-            Diskuze nad články probíhá na KISK Discordu
-          </span>
-          <span className="bg-black relative rounded-full -rotate-1 uppercase px-2 py-1 text-xs font-bold text-green text-center flex justify-between items-center">
-            získat pozvánku<span className="ml-1.5">&gt;</span>
-          </span>
+          {session?.user ? (
+            <div className="space-y-2 -mt-4">
+              <div className="px-3 pb-3 pt-2 bg-elevated rounded-xl relative">
+                {/* <Button
+                  asChild
+                  variant="outline"
+                  size="sm"
+                  className="absolute h-auto z-50 pt-[3px] pb-[3px] top-0 right-0 py-2 pl-2 pr-2 border-0 hover:bg-smoke text-muted bg-elevated text-sm items-center font-normal justify-start"
+                >
+                  <Link href={`/new`}>
+                    <ArrowsPointingOutIcon className="w-3 h-3 -mt-[1px] mr-1" />{' '}
+                    Zvětšit
+                  </Link>
+                </Button> */}
+                <div className="flex items-start justify-start ">
+                  <Avatar
+                    imageUrl={session.user.image || ''}
+                    name={session.user.fullName || session.user.username}
+                    className="rounded-full border w-12 h-12 mr-2 text- mt-1"
+                    size={48}
+                  />
+                  <NewPostCard post={post} defaultPost="" />
+                </div>
+              </div>
+            </div>
+          ) : (
+            <Hero />
+          )}
+          <Posts posts={initialPosts} maxColumnCount={session?.user ? 1 : 4} />
         </div>
-      </Link>
+      </div>
     </div>
   );
 }
 
 function Hero() {
   return (
-    <div className="mx-auto mt-6 mb-10 px-4 sm:mt-6 sm:mb-16 sm:px-6 md:mt-8 md:mb-24">
+    <div className="mx-auto mb-6 px-4 sm:mt-6 sm:mb-16 sm:px-6 md:mt-10 md:mb-24">
       <div className="text-center justify-center items-center flex flex-col">
         <svg
           className="mb-3 px-4 -mr-2 sm:px-0 w-auto sm:w-330 md:w-440"
@@ -109,17 +149,6 @@ function Hero() {
           Co se studenti KISKu na svých portfoliích právě učí a na čem pracují.
         </p>
       </div>
-    </div>
-  );
-}
-
-export default function HomePage() {
-  return (
-    <div>
-      <Hero />
-      <ErrorBoundary fallback={<div>Příspěvky se nepodařilo načíst.</div>}>
-        <Posts />
-      </ErrorBoundary>
     </div>
   );
 }

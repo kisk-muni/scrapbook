@@ -21,7 +21,7 @@
     "prettier": "^2.5.1",
     "supabase": "^1.99.5",
     "tsconfig": "*",
-    "turbo": "^1.9.3",
+    "turbo": "^2.0.7",
     "typescript": "^5.2.2"
   },
   "packageManager": "npm@8.19.4",

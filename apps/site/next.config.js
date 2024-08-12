@@ -1,5 +1,13 @@
-module.exports = {
+const nextConfig = {
+  experimental: {
+    mdxRs: true,
+  },
   transpilePackages: ['shared'],
+  pageExtensions: ['ts', 'tsx', 'mdx'],
+  serverComponentsExternalPackages: [
+    '@aws-sdk/client-s3',
+    '@aws-sdk/s3-request-presigner',
+  ],
   images: {
     dangerouslyAllowSVG: true,
     remotePatterns: [
@@ -12,6 +20,18 @@ module.exports = {
       {
         protocol: 'https',
         hostname: 'cdn.discordapp.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+        port: '',
+        pathname: '**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'avatars.githubusercontent.com',
+        port: '',
+        pathname: '**',
       },
     ],
   },
@@ -28,3 +48,6 @@ module.exports = {
     ];
   },
 };
+
+const withMDX = require('@next/mdx')();
+module.exports = withMDX(nextConfig);
