@@ -1,10 +1,13 @@
 'use client';
+import { Suspense } from 'react';
 import StudentsList from './students';
 
 export default function AnalyticsHomePage() {
   return (
-    <div className="w-full">
-      <StudentsList />
-    </div>
+    <Suspense>
+      <div className="w-full">
+        <StudentsList />
+      </div>
+    </Suspense>
   );
 }
