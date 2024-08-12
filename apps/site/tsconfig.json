@@ -1,6 +1,8 @@
 {
   "extends": "tsconfig/nextjs.json",
   "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "plugins": [
       {
         "name": "next"
@@ -15,7 +17,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "../../packages/shared/src/filter-data/parsers.ts"
+    "../../packages/shared/src/filter-data/parsers.ts",
+    "app/(front)/(docs)/privacy/page.mdx"
   ],
   "exclude": ["node_modules", "supabase"]
 }

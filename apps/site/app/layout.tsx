@@ -1,7 +1,8 @@
-'use client';
 import { Providers } from './providers';
+import '@blocknote/mantine/style.css';
 import '../styles/globals.css';
 import { TailwindIndicator } from 'components/tailwind-indicator';
+import { Header } from 'components/header';
 
 export default function RootLayout({
   children,
@@ -36,8 +37,13 @@ export default function RootLayout({
         <meta name="msapplication-TileColor" content="#da532c" />
         <meta name="theme-color" content="#da532c" />
       </head>
-      <body className="bg-background px-4 md:px-6 lg:px-8">
-        <Providers>{children}</Providers>
+      <body>
+        <Providers>
+          <div className="flex flex-col min-h-screen bg-background">
+            <Header />
+            <main className="px-4 md:px-6 lg:px-8">{children}</main>
+          </div>
+        </Providers>
         <TailwindIndicator />
       </body>
     </html>

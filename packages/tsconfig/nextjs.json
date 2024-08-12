@@ -15,6 +15,7 @@
     "resolveJsonModule": true,
     "strict": false,
     "downlevelIteration": true,
+    "moduleResolution": "Bundler",
     "target": "ES6"
   },
   "include": ["src", "next-env.d.ts"],

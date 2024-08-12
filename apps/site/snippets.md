@@ -186,6 +186,9 @@ index on on portfolio pages
 ```sql
 select * from portfolio_pages where data &@~ 'tech';
 
+CREATE INDEX IF NOT EXISTS pr_index
+    ON profiles (id, study_start_semester_year, study_start_semester_kind, username, is_public);
+
 ALTER TABLE portfolio_posts ADD COLUMN fts tsvector generated always as (to_tsvector('english', title || ' ' || description || ' ' || url)) stored;
 
 CREATE INDEX portfolio_posts_fts on portfolio_posts using gin (fts);

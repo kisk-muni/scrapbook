@@ -75,55 +75,7 @@ export default function RootLayout({
         }}
       >
         <header className="mb-6">
-          <nav className="flex w-full justify-between items-center h-16">
-            <div className="flex items-center">
-              <Link
-                className="text-xl pt-px flex items-center text-muted hover:text-purple font-bold"
-                href="/"
-              >
-                <Logo />
-                <span className="font-header mt-0.5">Scrapbook</span>
-              </Link>
-              <ChevronRightIcon className="w-6 h-6 text-muted mx-1" />
-              <Link
-                className="text-xl pt-px flex items-center text-muted hover:text-purple font-bold"
-                href="/analytics/posts"
-              >
-                <span className="font-header mt-0.5">Analytics</span>
-              </Link>
-              <p className="text-muted ml-4 mt-1 mb-0">
-                (poslední aktualizace dat: 29. května 2024)
-              </p>
-            </div>
-            <div className="flex mt-2 space-x-6">
-              {pathname != '/analytics/settings' && (
-                <FilterSelect
-                  ariaLabel="Ročník"
-                  placeholder="Ročník"
-                  options={cohortsOptions}
-                  renderLabel={(selected) => {
-                    if (!selected || selected.length == 0)
-                      return <span>Všechny ročníky</span>;
-                    const label = selected
-                      .map((value) => value.label)
-                      .slice(0, 3)
-                      .join(', ');
-                    return (
-                      <span className="">
-                        {label}
-                        {selected.length > 3 && ' ...'}
-                      </span>
-                    );
-                  }}
-                  filterPlaceholder="Filtrovat ročníky"
-                  filterTitle="Filtrovat podle ročníku"
-                  value={cohorts}
-                  onChange={(v) => setCohorts(v)}
-                />
-              )}
-            </div>
-          </nav>
-          <nav className="border-b-2 border-smoke border-dashed">
+          <nav className="border-b-2 mt-5 border-smoke border-dashed flex justify-between">
             <div className="flex w-full justify-start items-center -mb-0.5">
               {tabs.map((tab) => (
                 <Link
@@ -152,6 +104,36 @@ export default function RootLayout({
                   ></div>
                 </Link>
               ))}
+            </div>
+            <div className="flex -mt-3 shrink-0  space-x-6">
+              <p className="text-muted ml-4 mt-4 mb-0">
+                (poslední aktualizace dat: 29. května 2024)
+              </p>
+              {pathname != '/analytics/settings' && (
+                <FilterSelect
+                  ariaLabel="Ročník"
+                  placeholder="Ročník"
+                  options={cohortsOptions}
+                  renderLabel={(selected) => {
+                    if (!selected || selected.length == 0)
+                      return <span>Všechny ročníky</span>;
+                    const label = selected
+                      .map((value) => value.label)
+                      .slice(0, 3)
+                      .join(', ');
+                    return (
+                      <span className="">
+                        {label}
+                        {selected.length > 3 && ' ...'}
+                      </span>
+                    );
+                  }}
+                  filterPlaceholder="Filtrovat ročníky"
+                  filterTitle="Filtrovat podle ročníku"
+                  value={cohorts}
+                  onChange={(v) => setCohorts(v)}
+                />
+              )}
             </div>
           </nav>
         </header>

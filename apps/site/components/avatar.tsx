@@ -1,3 +1,4 @@
+'use client';
 import classNames from 'classnames';
 import { cloudinaryImageLoader } from 'lib/cloudinary';
 import Image from 'next/image';

@@ -1,0 +1,23 @@
+{
+  "name": "db",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "private": true,
+  "dependencies": {
+    "postgres": "^3.4.3",
+    "drizzle-orm": "^0.29.3"
+  },
+  "scripts": {
+    "db:push": "drizzle-kit push:pg",
+    "db:studio": "drizzle-kit studio",
+    "db:introspect": "drizzle-kit introspect:pg",
+    "generate": "drizzle-kit generate:pg"
+  },
+  "devDependencies": {
+    "@types/node": "^18.15.5",
+    "dotenv": "^16.0.3",
+    "drizzle-kit": "^0.20.14",
+    "tsconfig": "*",
+    "typescript": "^5.0.2"
+  }
+}

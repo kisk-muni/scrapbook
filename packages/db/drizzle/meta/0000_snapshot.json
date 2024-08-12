@@ -1,0 +1,797 @@
+{
+  "id": "00000000-0000-0000-0000-000000000000",
+  "prevId": "",
+  "version": "5",
+  "dialect": "pg",
+  "tables": {
+    "portfolio_pages": {
+      "name": "portfolio_pages",
+      "schema": "",
+      "columns": {
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "scraped_data": {
+          "name": "scraped_data",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "portfolio_id": {
+          "name": "portfolio_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "url": {
+          "name": "url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "ai_annotation": {
+          "name": "ai_annotation",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "annotated_at": {
+          "name": "annotated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "data": {
+          "name": "data",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "portfolio_pages_portfolio_id_fkey": {
+          "name": "portfolio_pages_portfolio_id_fkey",
+          "tableFrom": "portfolio_pages",
+          "tableTo": "portfolios",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "portfolio_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "portfolio_pages_url_key": {
+          "columns": [
+            "url"
+          ],
+          "nullsNotDistinct": false,
+          "name": "portfolio_pages_url_key"
+        },
+        "portfolio_pages_id_key": {
+          "columns": [
+            "id"
+          ],
+          "nullsNotDistinct": false,
+          "name": "portfolio_pages_id_key"
+        }
+      }
+    },
+    "profiles_surveys": {
+      "name": "profiles_surveys",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "bigint",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "results": {
+          "name": "results",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "profile": {
+          "name": "profile",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "profiles_surveys_profile_fkey": {
+          "name": "profiles_surveys_profile_fkey",
+          "tableFrom": "profiles_surveys",
+          "tableTo": "profiles",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "profile"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "ai_annotation_log": {
+      "name": "ai_annotation_log",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "bigint",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "page_id": {
+          "name": "page_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "page_url": {
+          "name": "page_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "message": {
+          "name": "message",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "discord_message_reactions": {
+      "name": "discord_message_reactions",
+      "schema": "",
+      "columns": {
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "emoji_name": {
+          "name": "emoji_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "discord_user_id": {
+          "name": "discord_user_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "emoji_id": {
+          "name": "emoji_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id": {
+          "name": "id",
+          "type": "bigint",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "message_id": {
+          "name": "message_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "idx_discord_message_reactions_message_id": {
+          "name": "idx_discord_message_reactions_message_id",
+          "columns": [
+            "message_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "discord_message_reactions_message_id_fkey": {
+          "name": "discord_message_reactions_message_id_fkey",
+          "tableFrom": "discord_message_reactions",
+          "tableTo": "portfolio_posts",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "message_id"
+          ],
+          "columnsTo": [
+            "discord_message_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "portfolio_posts": {
+      "name": "portfolio_posts",
+      "schema": "",
+      "columns": {
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "url": {
+          "name": "url",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "published_at": {
+          "name": "published_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "uuid_generate_v4()"
+        },
+        "portfolio_id": {
+          "name": "portfolio_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "thumbnail_url": {
+          "name": "thumbnail_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "discord_message_id": {
+          "name": "discord_message_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "idx_portfolio_posts_discord_message_id": {
+          "name": "idx_portfolio_posts_discord_message_id",
+          "columns": [
+            "discord_message_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "portfolio_posts_portfolio_id_fkey": {
+          "name": "portfolio_posts_portfolio_id_fkey",
+          "tableFrom": "portfolio_posts",
+          "tableTo": "portfolios",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "portfolio_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "portfolio_posts_url_key": {
+          "columns": [
+            "url"
+          ],
+          "nullsNotDistinct": false,
+          "name": "portfolio_posts_url_key"
+        },
+        "portfolio_posts_discord_message_id_key": {
+          "columns": [
+            "discord_message_id"
+          ],
+          "nullsNotDistinct": false,
+          "name": "portfolio_posts_discord_message_id_key"
+        }
+      }
+    },
+    "portfolios": {
+      "name": "portfolios",
+      "schema": "",
+      "columns": {
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "url": {
+          "name": "url",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "feed_url": {
+          "name": "feed_url",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "platform": {
+          "name": "platform",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'custom'"
+        },
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "uuid_generate_v4()"
+        },
+        "profile_id": {
+          "name": "profile_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "image_url": {
+          "name": "image_url",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_public": {
+          "name": "is_public",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "can_be_used_in_research": {
+          "name": "can_be_used_in_research",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "portfolios_profile_id_fkey": {
+          "name": "portfolios_profile_id_fkey",
+          "tableFrom": "portfolios",
+          "tableTo": "profiles",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "profile_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "portfolios_url_key": {
+          "columns": [
+            "url"
+          ],
+          "nullsNotDistinct": false,
+          "name": "portfolios_url_key"
+        },
+        "portfolios_feed_url_key": {
+          "columns": [
+            "feed_url"
+          ],
+          "nullsNotDistinct": false,
+          "name": "portfolios_feed_url_key"
+        }
+      }
+    },
+    "portfolios_duplicate": {
+      "name": "portfolios_duplicate",
+      "schema": "",
+      "columns": {
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "url": {
+          "name": "url",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "feed_url": {
+          "name": "feed_url",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "platform": {
+          "name": "platform",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'custom'"
+        },
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "uuid_generate_v4()"
+        },
+        "profile_id": {
+          "name": "profile_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "image_url": {
+          "name": "image_url",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_public": {
+          "name": "is_public",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "study_start_semester_year": {
+          "name": "study_start_semester_year",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "study_start_semester_kind": {
+          "name": "study_start_semester_kind",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "portfolios_duplicate_profile_id_fkey": {
+          "name": "portfolios_duplicate_profile_id_fkey",
+          "tableFrom": "portfolios_duplicate",
+          "tableTo": "profiles",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "profile_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "portfolios_duplicate_feed_url_key": {
+          "columns": [
+            "feed_url"
+          ],
+          "nullsNotDistinct": false,
+          "name": "portfolios_duplicate_feed_url_key"
+        }
+      }
+    },
+    "profiles": {
+      "name": "profiles",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "uuid_generate_v4()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "(now() AT TIME ZONE 'utc'::text)"
+        },
+        "username": {
+          "name": "username",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "full_name": {
+          "name": "full_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_public": {
+          "name": "is_public",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "study_start_semester_year": {
+          "name": "study_start_semester_year",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "study_start_semester_kind": {
+          "name": "study_start_semester_kind",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_teacher": {
+          "name": "is_teacher",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "can_be_used_in_research": {
+          "name": "can_be_used_in_research",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "pr_index": {
+          "name": "pr_index",
+          "columns": [
+            "id",
+            "username",
+            "is_public",
+            "study_start_semester_year",
+            "study_start_semester_kind"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "profiles_username_key": {
+          "columns": [
+            "username"
+          ],
+          "nullsNotDistinct": false,
+          "name": "profiles_username_key"
+        }
+      }
+    }
+  },
+  "enums": {
+    "one_time_token_type": {
+      "name": "one_time_token_type",
+      "values": {
+        "confirmation_token": "confirmation_token",
+        "reauthentication_token": "reauthentication_token",
+        "recovery_token": "recovery_token",
+        "email_change_token_new": "email_change_token_new",
+        "email_change_token_current": "email_change_token_current",
+        "phone_change_token": "phone_change_token"
+      }
+    },
+    "equality_op": {
+      "name": "equality_op",
+      "values": {
+        "eq": "eq",
+        "neq": "neq",
+        "lt": "lt",
+        "lte": "lte",
+        "gt": "gt",
+        "gte": "gte",
+        "in": "in"
+      }
+    },
+    "action": {
+      "name": "action",
+      "values": {
+        "INSERT": "INSERT",
+        "UPDATE": "UPDATE",
+        "DELETE": "DELETE",
+        "TRUNCATE": "TRUNCATE",
+        "ERROR": "ERROR"
+      }
+    },
+    "request_status": {
+      "name": "request_status",
+      "values": {
+        "PENDING": "PENDING",
+        "SUCCESS": "SUCCESS",
+        "ERROR": "ERROR"
+      }
+    },
+    "key_status": {
+      "name": "key_status",
+      "values": {
+        "default": "default",
+        "valid": "valid",
+        "invalid": "invalid",
+        "expired": "expired"
+      }
+    },
+    "key_type": {
+      "name": "key_type",
+      "values": {
+        "aead-ietf": "aead-ietf",
+        "aead-det": "aead-det",
+        "hmacsha512": "hmacsha512",
+        "hmacsha256": "hmacsha256",
+        "auth": "auth",
+        "shorthash": "shorthash",
+        "generichash": "generichash",
+        "kdf": "kdf",
+        "secretbox": "secretbox",
+        "secretstream": "secretstream",
+        "stream_xchacha20": "stream_xchacha20"
+      }
+    },
+    "aal_level": {
+      "name": "aal_level",
+      "values": {
+        "aal1": "aal1",
+        "aal2": "aal2",
+        "aal3": "aal3"
+      }
+    },
+    "code_challenge_method": {
+      "name": "code_challenge_method",
+      "values": {
+        "s256": "s256",
+        "plain": "plain"
+      }
+    },
+    "factor_status": {
+      "name": "factor_status",
+      "values": {
+        "unverified": "unverified",
+        "verified": "verified"
+      }
+    },
+    "factor_type": {
+      "name": "factor_type",
+      "values": {
+        "totp": "totp",
+        "webauthn": "webauthn"
+      }
+    }
+  },
+  "schemas": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  }
+}
