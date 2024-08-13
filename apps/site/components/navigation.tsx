@@ -2,7 +2,6 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Logo from 'components/logo';
-import { ChevronRightIcon } from '@radix-ui/react-icons';
 import {
   IconChartPie,
   IconHouse,
@@ -23,7 +22,7 @@ export function Navigation() {
   const pathname = usePathname();
   return (
     <>
-      <div className="flex items-center">
+      <div className="hidden sm:flex items-center">
         <Link
           href="/"
           className="text-xl pt-px flex items-center text-muted hover:text-purple font-bold"

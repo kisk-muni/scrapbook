@@ -3,7 +3,7 @@ import { usePlausible } from 'next-plausible';
 import Link from 'next/link';
 import { Avatar } from './avatar';
 import { formatRelative } from 'date-fns';
-import csLocale from 'date-fns/locale/cs';
+import { cs } from 'date-fns/locale';
 import { PostDescription } from './post-description';
 import { PostImage } from './post-image';
 import { UniversalPost } from 'lib/actions/get-posts';
@@ -26,7 +26,7 @@ interface CardProps {
 }
 
 const locale = {
-  ...csLocale,
+  ...cs,
   formatRelative: (token) => formatRelativeLocale[token],
 };
 
@@ -60,6 +60,7 @@ export function PostCard({ data }: CardProps) {
                 {data?.publishedAt &&
                   formatRelative(data?.publishedAt, new Date(), {
                     locale: locale,
+                    weekStartsOn: 2,
                   })}
               </p>
             </div>

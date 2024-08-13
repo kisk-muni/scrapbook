@@ -1,10 +1,10 @@
 'use client';
-import csLocale from 'date-fns/locale/cs';
-import format from 'date-fns/format';
+import { cs } from 'date-fns/locale';
 import { PostImage } from 'components/post-image';
 import { PostDescription } from 'components/post-description';
 import Link from 'next/link';
 import { UniversalPost } from 'lib/actions/get-posts';
+import { format } from 'date-fns';
 
 interface CardProps {
   index?: number;
@@ -20,7 +20,7 @@ export function ProfilePostCard(props: CardProps) {
       {publishedAt && (
         <p className="text-muted font-bold mb-2">
           {format(data.publishedAt, 'do MMMM yyyy', {
-            locale: csLocale,
+            locale: cs,
           })}
         </p>
       )}

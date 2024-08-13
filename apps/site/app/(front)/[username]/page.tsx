@@ -5,12 +5,13 @@ function PortfolioSkeleton() {
   return (
     <div className="flex items-center animate-pulse">
       <div className="rounded-full w-32 h-32 bg-smoke grow-0 shrink-0 mr-2 sm:mr-4"></div>
-      <div>
+      <div className="mr-8">
         <div className="h-7 mt-3 mb-3 w-56 rounded-full bg-smoke"></div>
         <div className="flex gap-2">
           <div className="h-5 w-20 mt-0.5 mb-2.5 rounded-full bg-smoke"></div>
         </div>
       </div>
+      <div className="hidden md:block h-[150px] w-[300px]"></div>
     </div>
   );
 }

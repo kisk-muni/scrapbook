@@ -1,9 +1,6 @@
 import { auth } from 'auth';
-import { cache, Suspense } from 'react';
-import Link from 'next/link';
-import { Button } from 'components/ui/button-radix';
+import { cache } from 'react';
 import { Avatar } from 'components/avatar';
-import { ArrowsPointingOutIcon } from '@heroicons/react/20/solid';
 import NewPostCard from 'components/new-post';
 import { post } from 'app/actions';
 import { Posts } from 'components/posts';

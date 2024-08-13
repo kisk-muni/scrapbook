@@ -13,7 +13,7 @@ type NavItem = {
 export function SidebarNav({ items }: { items: NavItem[] }) {
   const pathname = usePathname();
   return (
-    <div className="h-full shrink-0 w-auto min-w-[160px] md:max-w-[200px] md:flex mt-10 flex-col items-start fixed md:sticky top-[64px] z-10 hidden">
+    <div className="h-full shrink-0 w-auto min-w-[180px] md:max-w-[230px] md:flex mt-10 flex-col items-start fixed md:sticky top-[64px] z-10 hidden">
       <ul className="block w-full">
         {items.map(({ title, href }, i) => (
           <li key={i} className="mb-1">

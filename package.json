@@ -26,6 +26,7 @@
   },
   "packageManager": "npm@8.19.4",
   "dependencies": {
+    "@radix-ui/react-checkbox": "^1.1.1",
     "dotenv-cli": "^7.3.0"
   }
 }
