@@ -14,9 +14,8 @@ import {
 } from 'date-fns';
 import { fromZonedTime } from 'date-fns-tz';
 import classNames from 'classnames';
-import { Suspense } from 'react';
 
-async function Graph({ userId }: { userId: string }) {
+export async function Graph({ userId }: { userId: string }) {
   const now = endOfWeek(fromZonedTime(new Date(), 'Europe/Prague'), {
     weekStartsOn: 2,
   });
@@ -171,13 +170,5 @@ async function Graph({ userId }: { userId: string }) {
         </div>
       </div>
     </>
-  );
-}
-
-export async function HeatMap({ userId }: { userId: string }) {
-  return (
-    <Suspense fallback={<div className="flex-1 overflow-auto" />}>
-      <Graph userId={userId} />
-    </Suspense>
   );
 }

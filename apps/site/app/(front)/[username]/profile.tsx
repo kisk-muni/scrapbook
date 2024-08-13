@@ -1,5 +1,5 @@
 import { auth } from 'auth';
-import { cache } from 'react';
+import { cache, Suspense } from 'react';
 import { db } from 'db';
 import { Avatar } from 'components/avatar';
 import { LinkIcon } from '@heroicons/react/20/solid';
@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { ProfilePostCard } from 'components/profile-post-card';
 import { Button } from 'components/ui/button-radix';
 import { UniversalPost } from 'lib/actions/get-posts';
-import { HeatMap } from 'components/profile-heatmap';
+import { Graph } from 'components/profile-heatmap';
 
 const loadProfile = cache(async (username: string) => {
   const session = await auth();
@@ -100,7 +100,9 @@ export async function Profile(props: { userName?: string }) {
               )}
             </div>{' '}
           </div>
-          <HeatMap userId={id} />
+          <Suspense fallback=<div></div>>
+            <Graph userId={id} />
+          </Suspense>
         </div>
       </div>
       <div className="mt-10 md:mt-12 overflow-hidden rounded-xl grid gap-1 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
