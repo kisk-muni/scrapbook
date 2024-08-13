@@ -1,9 +1,8 @@
-'use server';
 import { cs } from 'date-fns/locale';
 import { db } from 'db';
 import { sql } from 'drizzle-orm';
 import { portfolioPosts, portfolios, posts, profilesToPosts } from 'db/schema';
-import { inTime } from 'lib/date-utils';
+import { inTime, ServerDateInterval } from 'lib/date-utils';
 import {
   format,
   subMonths,
@@ -14,24 +13,18 @@ import {
 } from 'date-fns';
 import { fromZonedTime } from 'date-fns-tz';
 import classNames from 'classnames';
+import { cache } from 'react';
 
-export async function Graph({ userId }: { userId: string }) {
-  const now = endOfWeek(fromZonedTime(new Date(), 'Europe/Prague'), {
-    weekStartsOn: 2,
-  });
-  const subTime = subMonths(now, 4);
-  const start = startOfWeek(subTime, {
-    weekStartsOn: 2,
-  });
-  const queryRange = { start: start, end: now };
-  const { granularity, currentRange } = inTime(queryRange, 'week');
+const loadHeatmap = cache(
+  async (id: string, queryRange: ServerDateInterval) => {
+    const { granularity, currentRange } = inTime(queryRange, 'week');
 
-  /*return <pre>{JSON.stringify(some, null, 2)}</pre>; */
-  const profileId = userId;
+    /*return <pre>{JSON.stringify(some, null, 2)}</pre>; */
+    const profileId = id;
 
-  // join profiles and posts given user id and m:n relation
-  const res = (await db.execute(
-    sql`with
+    // join profiles and posts given user id and m:n relation
+    const res = (await db.execute(
+      sql`with
       profiles_portfolio_posts as (
         select
           ${portfolioPosts.id} as id,
@@ -74,23 +67,36 @@ export async function Graph({ userId }: { userId: string }) {
       )
       select * from posts_by_period
     `
-  )) as { period: Date; posts: number }[];
+    )) as { period: Date; posts: number }[];
 
-  // convert res to a map of date and count
-  const counts = res.reduce((acc, { period, posts }) => {
-    acc[
-      format(period, 'yyyy/MM/dd', {
-        weekStartsOn: 2,
-        locale: cs,
-      })
-    ] = posts;
-    return acc;
-  }, {} as Map<string, number>);
+    const counts = res.reduce((acc, { period, posts }) => {
+      acc[
+        format(period, 'yyyy/MM/dd', {
+          weekStartsOn: 2,
+          locale: cs,
+        })
+      ] = posts;
+      return acc;
+    }, {} as Map<string, number>);
+    return counts;
+  }
+);
+
+export async function Graph({ userId }: { userId: string }) {
+  const now = endOfWeek(fromZonedTime(new Date(), 'Europe/Prague'), {
+    weekStartsOn: 2,
+  });
+  const subTime = subMonths(now, 4);
+  const start = startOfWeek(subTime, {
+    weekStartsOn: 2,
+  });
+  const queryRange = { start: start, end: now };
 
   /* const data = res.map((r) => ({
     date: format(r.period, 'yyyy/MM/dd'),
     count: r.posts,
   })); */
+  const counts = await loadHeatmap(userId, queryRange);
   const weeks = eachWeekOfInterval(
     {
       start: subTime,

@@ -100,7 +100,7 @@ export async function Profile(props: { userName?: string }) {
               )}
             </div>{' '}
           </div>
-          <Suspense fallback=<div></div>>
+          <Suspense fallback={<div></div>}>
             <Graph userId={id} />
           </Suspense>
         </div>
