@@ -7,6 +7,8 @@ import csLocale from 'date-fns/locale/cs';
 import { PostDescription } from './post-description';
 import { PostImage } from './post-image';
 import { UniversalPost } from 'lib/actions/get-posts';
+import { useSession } from 'next-auth/react';
+import { PostMenu } from './post-menu';
 
 const formatRelativeLocale = {
   lastWeek: "eeee 'v' p",
@@ -30,38 +32,45 @@ const locale = {
 
 export function PostCard({ data }: CardProps) {
   const plausible = usePlausible();
-  // if (data.skeleton) return <PostCard.Skeleton />;
+  const session = useSession();
   return (
     <div className="bg-white rounded-xl mb-4 mr-4 md:mb-6 md:mr-6">
-      <Link
-        className="cursor-pointer"
-        onClick={() => plausible('Portfolio Link: Click')}
-        href={'/' + data?.profile?.username}
-      >
-        <div className="flex flex-column pt-3 px-3 mb-2">
-          <Avatar
-            className="rounded-full w-12 h-12 mr-2"
-            name={data.profile?.fullName || 'Beze jména'}
-            size={48}
-            imageUrl={data.profile?.image}
-          />
-          <div className="mt-1">
-            {data.profile?.fullName && (
-              <p className="mb-0 mt-0.5 text-text text-base leading-5 font-bold hover:text-dark">
-                {data.profile?.fullName
-                  ? data.profile?.fullName
-                  : data.profile?.username || 'Beze jména'}
+      <div className="flex justify-between">
+        <Link
+          className="cursor-pointer"
+          onClick={() => plausible('Portfolio Link: Click')}
+          href={'/' + data?.profile?.username}
+        >
+          <div className="flex flex-column pt-3 px-3 mb-2">
+            <Avatar
+              className="rounded-full w-12 h-12 mr-2"
+              name={data.profile?.fullName || 'Beze jména'}
+              size={48}
+              imageUrl={data.profile?.image}
+            />
+            <div className="mt-1">
+              {data.profile?.fullName && (
+                <p className="mb-0 mt-0.5 text-text text-base leading-5 font-bold hover:text-dark">
+                  {data.profile?.fullName
+                    ? data.profile?.fullName
+                    : data.profile?.username || 'Beze jména'}
+                </p>
+              )}
+              <p className="text-muted text-base leading-4">
+                {data?.publishedAt &&
+                  formatRelative(data?.publishedAt, new Date(), {
+                    locale: locale,
+                  })}
               </p>
-            )}
-            <p className="text-muted text-base leading-4">
-              {data?.publishedAt &&
-                formatRelative(data?.publishedAt, new Date(), {
-                  locale: locale,
-                })}
-            </p>
+            </div>
           </div>
+        </Link>
+        <div>
+          {data.profile.id === session?.data?.user?.id && (
+            <PostMenu post={data} />
+          )}
         </div>
-      </Link>
+      </div>
       <div className="px-4 pb-4">
         <p className="mb-2 text-lg leading-6 hover:text-muted">
           <Link
@@ -83,6 +92,7 @@ export function PostCard({ data }: CardProps) {
             />
           </div>
         )}
+        {/* https://github.com/kisk-muni/scrapbook/blob/f5b664c4e342f542f124a5817e11bca944d51e5f/apps/site/app/(front)/posts.tsx */}
       </div>
     </div>
   );

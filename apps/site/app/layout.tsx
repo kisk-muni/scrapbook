@@ -3,6 +3,7 @@ import '@blocknote/mantine/style.css';
 import '../styles/globals.css';
 import { TailwindIndicator } from 'components/tailwind-indicator';
 import { Header } from 'components/header';
+import { Toaster } from 'react-hot-toast';
 
 export default function RootLayout({
   children,
@@ -42,6 +43,7 @@ export default function RootLayout({
           <div className="flex flex-col min-h-screen bg-background">
             <Header />
             <main className="px-4 md:px-6 lg:px-8">{children}</main>
+            <Toaster />
           </div>
         </Providers>
         <TailwindIndicator />

@@ -3,6 +3,21 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Logo from 'components/logo';
 import { ChevronRightIcon } from '@radix-ui/react-icons';
+import {
+  IconChartPie,
+  IconHouse,
+  IconQuestion,
+  IconUsersThree,
+} from './ui/icons';
+import { Button } from './ui/button-radix';
+import classNames from 'classnames';
+
+const navigation = [
+  { href: '/', label: 'Domů', icon: IconHouse },
+  { href: '/students', label: 'Studenti', icon: IconUsersThree },
+  { href: '/analytics/posts', label: 'Analytika', icon: IconChartPie },
+  { href: '/about', label: 'O Scrapbooku', icon: IconQuestion },
+];
 
 export function Navigation() {
   const pathname = usePathname();
@@ -11,48 +26,31 @@ export function Navigation() {
       <div className="flex items-center">
         <Link
           href="/"
-          className="text-xl pt-px flex items-center text-muted hover:text-purple font-bol"
+          className="text-xl pt-px flex items-center text-muted hover:text-purple font-bold"
         >
           <Logo />
-          {pathname != '/' && (
-            <span className="font-header mt-0.5">Scrapbook</span>
-          )}
+          <span className="font-header hidden md:inline-block mt-0.5">
+            Scrapbook
+          </span>
         </Link>
-        {pathname.match('/analytics') && (
-          <>
-            <ChevronRightIcon className="w-6 h-6 text-muted mx-1" />
-            <Link
-              className="text-xl pt-px flex items-center text-muted hover:text-purple font-bold"
-              href="/analytics/posts"
-            >
-              <span className="font-header mt-0.5">Analytics</span>
-            </Link>
-          </>
-        )}
       </div>
-      <div className="flex items-baseline space-x-6 ml-auto mr-8">
-        {pathname != '/' && (
-          <Link
-            className="text-muted hover:text-purple hover:text-gray relative md:flex justify-center text-base font space-x-6"
-            href="/"
-          >
-            Nejnovější příspěvky
-          </Link>
-        )}
-        {pathname != '/students' && (
-          <Link
-            className="text-muted hover:text-purple hover:text-gray relative md:flex justify-center text-base font space-x-6"
-            href="/students"
-          >
-            Studenti
-          </Link>
-        )}
-        <Link
-          className="text-muted hover:text-purple hover:text-gray relative md:flex justify-center text-base font space-x-6"
-          href="/about"
-        >
-          O Scrapbooku
-        </Link>
+      <div className="flex grow items-baseline justify-center space-x-3 lg:space-x-6 mx-auto mr-8">
+        {navigation.map((item: any) => (
+          <Button asChild variant="ghost" key={item.href}>
+            <Link
+              href={item.href}
+              className={classNames(
+                'text-muted hover:text-slate hover:text-gray relative md:flex justify-center text-base font',
+                {
+                  'bg-white text-text hover:bg-white': pathname === item.href,
+                }
+              )}
+            >
+              <item.icon className="h-5 w-5 md:mr-1 -mt-0.5" />{' '}
+              <span className="hidden md:inline">{item.label}</span>
+            </Link>
+          </Button>
+        ))}
       </div>
     </>
   );

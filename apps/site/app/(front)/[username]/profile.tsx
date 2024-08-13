@@ -4,10 +4,8 @@ import { db } from 'db';
 import { Avatar } from 'components/avatar';
 import { LinkIcon } from '@heroicons/react/20/solid';
 import Link from 'next/link';
-import { parseISO } from 'date-fns';
 import { ProfilePostCard } from 'components/profile-post-card';
 import { Button } from 'components/ui/button-radix';
-import { PortfolioPosts, Post } from 'db/schema';
 import { UniversalPost } from 'lib/actions/get-posts';
 
 const loadProfile = cache(async (username: string) => {

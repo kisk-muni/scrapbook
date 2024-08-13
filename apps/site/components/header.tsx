@@ -19,7 +19,7 @@ async function UserOrLogin() {
 
 export async function Header() {
   return (
-    <header className="sticky top-0 left-0 right-0 z-30 flex items-center justify-between w-full h-16 px-4 md:px-6 lg:px-8 border-b border-sunken shrink-0 bg-background backdrop-blur-xl">
+    <header className="fixed bottom-0 md:sticky md:bottom-[none] md:top-0 inset-x-0 z-30 flex items-center justify-between w-full h-16 px-4 md:px-6 lg:px-8 border-b border-sunken shrink-0 bg-background backdrop-blur-xl">
       <nav className="flex w-full justify-between items-center h-16">
         <Navigation />
         <div className="flex items-center">

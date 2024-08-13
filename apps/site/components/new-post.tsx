@@ -2,7 +2,7 @@
 'use client';
 import { useEffect, useState, useTransition, useMemo } from 'react';
 import { Button } from 'components/ui/button-radix';
-import { IconSpinner } from './ui/icons';
+import { IconImage, IconSpinner } from './ui/icons';
 import { ServerActionResult } from 'lib/types';
 import { BlockNoteView } from '@blocknote/mantine';
 import toast from 'react-hot-toast';
@@ -160,7 +160,7 @@ export default function NewPostCard({
   return (
     <div className="flex-1">
       <BlockNoteView
-        sideMenu={true}
+        sideMenu={false}
         className="mt-3"
         editor={editor}
         onChange={() => {
@@ -169,7 +169,11 @@ export default function NewPostCard({
         data-theming-css-variables-demo
       />
       <div className="pr-4 pl-1 mt-4 pt-4 pb-2 flex space-x-6 items-center rounded-b-xl border-t border-dashed border-border justify-between">
-        <div></div>
+        <div>
+          {/* <Button variant="ghost" className="text-muted">
+            <IconImage className="w-5 h-5 mr-1 -mt-0.5" /> Přidat obrázek
+          </Button> */}
+        </div>
         <Button
           variant="secondary"
           disabled={isSubmitPending}
@@ -187,7 +191,7 @@ export default function NewPostCard({
                 return;
               }
               await removeStorage();
-              toast.success('Jméno bylo úspěšně uloženo');
+              toast.success('Příspěvek byl úspěšně publikován');
               queryClient.resetQueries();
             });
           }}

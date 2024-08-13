@@ -42,7 +42,7 @@ export default async function HomePage() {
                     Zvětšit
                   </Link>
                 </Button> */}
-                <div className="flex items-start justify-start ">
+                <div className="flex flex items-start justify-start ">
                   <Avatar
                     imageUrl={session.user.image || ''}
                     name={session.user.fullName || session.user.username}

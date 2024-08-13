@@ -1,8 +1,8 @@
 'use server';
 import { auth } from 'auth';
 import { db } from 'db';
-import { profiles, accounts } from 'db/schema';
-import { eq } from 'drizzle-orm';
+import { profiles, accounts, posts, profilesToPosts } from 'db/schema';
+import { and, eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
@@ -144,4 +144,42 @@ export async function post(args: { post: string }) {
   }
 
   return { post: args.post };
+}
+
+export async function deletePost(args: { postId: string }) {
+  const session = await auth();
+
+  if (!session) {
+    return {
+      error: 'Unauthorized',
+    };
+  }
+
+  const uid = session.user.id;
+
+  if (uid !== session?.user?.id) {
+    return {
+      error: 'Unauthorized',
+    };
+  }
+
+  const result = await db.transaction(async (tx) => {
+    await tx
+      .delete(profilesToPosts)
+      .where(
+        and(
+          eq(profilesToPosts.postId, args.postId),
+          eq(profilesToPosts.profileId, uid)
+        )
+      );
+    return await tx.delete(posts).where(eq(posts.id, args.postId)).returning();
+  });
+
+  if (result.length > 0) {
+    revalidatePath('/');
+    return {
+      deleted: true,
+    };
+  }
+  return { deleted: false };
 }
