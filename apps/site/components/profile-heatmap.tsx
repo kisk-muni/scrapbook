@@ -1,5 +1,4 @@
-import * as React from 'react';
-
+'use server';
 import { cs } from 'date-fns/locale';
 import { db } from 'db';
 import { sql } from 'drizzle-orm';
@@ -15,32 +14,18 @@ import {
 } from 'date-fns';
 import { fromZonedTime } from 'date-fns-tz';
 import classNames from 'classnames';
+import { Suspense } from 'react';
 
 async function Graph({ userId }: { userId: string }) {
   const now = endOfWeek(fromZonedTime(new Date(), 'Europe/Prague'), {
     weekStartsOn: 2,
   });
-  //currentDate.setHours(23, 59, 59, 999);
   const subTime = subMonths(now, 4);
   const start = startOfWeek(subTime, {
     weekStartsOn: 2,
   });
   const queryRange = { start: start, end: now };
-  const {
-    granularity,
-    interval,
-    currentRange,
-    startDateString,
-    endDateString,
-  } = inTime(queryRange, 'week');
-
-  const some = {
-    granularity: granularity,
-    interval: interval,
-    currentRange: currentRange,
-    startDateString: startDateString,
-    endDateString: endDateString,
-  };
+  const { granularity, currentRange } = inTime(queryRange, 'week');
 
   /*return <pre>{JSON.stringify(some, null, 2)}</pre>; */
   const profileId = userId;
@@ -191,8 +176,8 @@ async function Graph({ userId }: { userId: string }) {
 
 export async function HeatMap({ userId }: { userId: string }) {
   return (
-    <React.Suspense fallback={<div className="flex-1 overflow-auto" />}>
+    <Suspense fallback={<div className="flex-1 overflow-auto" />}>
       <Graph userId={userId} />
-    </React.Suspense>
+    </Suspense>
   );
 }
