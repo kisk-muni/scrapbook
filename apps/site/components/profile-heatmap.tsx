@@ -1,3 +1,4 @@
+'use server';
 import { cs } from 'date-fns/locale';
 import { db } from 'db';
 import { sql } from 'drizzle-orm';
@@ -9,11 +10,13 @@ import {
   endOfWeek,
   startOfWeek,
   eachWeekOfInterval,
-  getWeek,
+  getMonth,
+  subWeeks,
 } from 'date-fns';
 import { fromZonedTime } from 'date-fns-tz';
 import classNames from 'classnames';
 import { cache } from 'react';
+import { unstable_noStore as noStore } from 'next/cache';
 
 const loadHeatmap = cache(
   async (id: string, queryRange: ServerDateInterval) => {
@@ -83,10 +86,11 @@ const loadHeatmap = cache(
 );
 
 export async function Graph({ userId }: { userId: string }) {
+  noStore();
   const now = endOfWeek(fromZonedTime(new Date(), 'Europe/Prague'), {
     weekStartsOn: 2,
   });
-  const subTime = subMonths(now, 4);
+  const subTime = subMonths(now, 6);
   const start = startOfWeek(subTime, {
     weekStartsOn: 2,
   });
@@ -105,7 +109,17 @@ export async function Graph({ userId }: { userId: string }) {
     {
       weekStartsOn: 1,
     }
-  ).map((week) => fromZonedTime(week, 'Europe/Prague'));
+  )
+    .map((week) => fromZonedTime(week, 'Europe/Prague'))
+    .map((week) => {
+      const month = getMonth(week);
+      const prevWeek = subWeeks(week, 1);
+      const prevWeekMonth = getMonth(prevWeek);
+      return {
+        week: week,
+        startOfMonth: prevWeekMonth !== month,
+      };
+    });
   weeks.pop();
 
   /* return (
@@ -132,11 +146,7 @@ export async function Graph({ userId }: { userId: string }) {
         <p className="font-semibold text-slate">Týdenní pravidelnost</p>
         <div className="flex h-12 mt-6 space-x-1 items-center">
           {weeks.map((week, i) => {
-            const weekNum = getWeek(week, {
-              weekStartsOn: 2,
-              locale: cs,
-            });
-            const weekstr = format(week, 'yyyy/MM/dd', {
+            const weekstr = format(week.week, 'yyyy/MM/dd', {
               weekStartsOn: 2,
               locale: cs,
             });
@@ -151,22 +161,27 @@ export async function Graph({ userId }: { userId: string }) {
                 })}
               >
                 <div
-                  className={classNames('absolute left-[1px]', {
-                    '-top-[42px] text-base text-center': isThisWeek,
-                    '-top-[20px] text-sm': !isThisWeek,
+                  className={classNames('absolute text-sm left-[1px]', {
+                    '-top-[16px] left-[8px] text-center': isThisWeek,
+                    '-top-[20px]': !isThisWeek,
                   })}
                 >
-                  {(isThisWeek || weekNum % 5 == 0) && (
+                  {(week.startOfMonth ||
+                    (i == 0 &&
+                      !weeks[1].startOfMonth &&
+                      !weeks[2].startOfMonth)) && (
                     <span
                       className={classNames(
-                        'font-semibold block whitespace-wrap leading-none -rotate-45',
+                        'font-semibold block leading-none',
                         {
-                          'text-text': isThisWeek,
                           'text-slate': !isThisWeek,
                         }
                       )}
                     >
-                      {isThisWeek ? `Aktuální týden` : 'T' + weekNum}
+                      {format(week.week, 'MMM', {
+                        weekStartsOn: 2,
+                        locale: cs,
+                      })}
                     </span>
                   )}
                 </div>
