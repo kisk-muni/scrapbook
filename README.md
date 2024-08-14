@@ -11,13 +11,15 @@ The project is a monorepo containing following workspaces:
 apps:
 
 - [site](./apps/site) - Next.js app for the public website
-- [crawler](./apps/crawler) - App for crawling student portfolios for new content and analysis
-- [analyser](./apps/analyser) - App for generating metadata for student posts (such as tags, etc.)
+- [crawler](./apps/crawler) - App for crawling study blogs for new content and analysis
+- [analyser](./apps/analyser) - App for generating metadata for study blog posts (such as tags, etc.)
+- [importer](./apps/importer) - App for importing student profiles based on questionnares (such as tags, etc.)
 - [discord-bot](./apps/discord-bot) - Discord bot for posting new content to discord, collecting reactions etc.
 
 packages:
 
-- [shared](./packages/shared) - Shared code between apps such as database connection, types, etc.
+- [db](./packages/db) - Database schema, migrations and connection
+- [shared](./packages/shared) - Shared code between apps such as types, etc. There is also an old database connection that is still used in some places.
 - [tsconfig](./packages/tsconfig) - Shared typescript configuration
 
 ## Get started
