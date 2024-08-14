@@ -17,11 +17,17 @@ import classNames from 'classnames';
 import { unstable_cache, unstable_noStore as noStore } from 'next/cache';
 
 const loadHeatmap = unstable_cache(
-  async (id: string, queryRange: ServerDateInterval) => {
+  async (userName: string, queryRange: ServerDateInterval) => {
     const { granularity, currentRange } = inTime(queryRange, 'week');
 
-    /*return <pre>{JSON.stringify(some, null, 2)}</pre>; */
-    const profileId = id;
+    const profileId = await db.query.profiles
+      .findFirst({
+        where: (profiles, { eq }) => eq(profiles.username, userName),
+      })
+      .then((profile) => {
+        if (!profile) return null;
+        return profile.id;
+      });
 
     // join profiles and posts given user id and m:n relation
     const res = (await db.execute(
@@ -83,7 +89,7 @@ const loadHeatmap = unstable_cache(
   }
 );
 
-export async function Graph({ userId }: { userId: string }) {
+export async function ProfileHeatmap({ userName }: { userName: string }) {
   noStore();
   const now = endOfWeek(fromZonedTime(new Date(), 'Europe/Prague'), {
     weekStartsOn: 2,
@@ -98,7 +104,8 @@ export async function Graph({ userId }: { userId: string }) {
     date: format(r.period, 'yyyy/MM/dd'),
     count: r.posts,
   })); */
-  const counts = await loadHeatmap(userId, queryRange);
+  const counts = await loadHeatmap(userName, queryRange);
+  console.log(counts);
   const weeks = eachWeekOfInterval(
     {
       start: subTime,
@@ -139,55 +146,51 @@ export async function Graph({ userId }: { userId: string }) {
   ); */
 
   return (
-    <>
-      <div className="">
-        <p className="font-semibold text-slate">Týdenní pravidelnost</p>
-        <div className="flex h-12 mt-6 space-x-1 items-center">
-          {weeks.map((week, i) => {
-            const weekstr = format(week.week, 'yyyy/MM/dd', {
-              weekStartsOn: 2,
-              locale: cs,
-            });
-            const isThisWeek = i === weeks.length - 1;
-            return (
+    <div className="hidden lg:flex flex-col justify-center">
+      <p className="font-semibold text-slate">Týdenní pravidelnost</p>
+      <div className="flex h-12 mt-6 space-x-1 items-center">
+        {weeks.map((week, i) => {
+          const weekstr = format(week.week, 'yyyy/MM/dd', {
+            weekStartsOn: 2,
+            locale: cs,
+          });
+          const isThisWeek = i === weeks.length - 1;
+          return (
+            <div
+              key={i}
+              className={classNames('relative h-4 w-4 rounded-md ', {
+                'bg-muted/60': !counts[weekstr],
+                'bg-purple': counts[weekstr] > 0,
+                'h-6 w-6': isThisWeek,
+                'hidden xl:block': i < 5,
+              })}
+            >
               <div
-                key={i}
-                className={classNames('relative h-4 w-4 rounded-md ', {
-                  'bg-muted/60': !counts[weekstr],
-                  'bg-purple': counts[weekstr] > 0,
-                  'h-6 w-6': isThisWeek,
+                className={classNames('absolute text-sm left-[1px]', {
+                  '-top-[16px] left-[8px] text-center': isThisWeek,
+                  '-top-[20px]': !isThisWeek,
                 })}
               >
-                <div
-                  className={classNames('absolute text-sm left-[1px]', {
-                    '-top-[16px] left-[8px] text-center': isThisWeek,
-                    '-top-[20px]': !isThisWeek,
-                  })}
-                >
-                  {(week.startOfMonth ||
-                    (i == 0 &&
-                      !weeks[1].startOfMonth &&
-                      !weeks[2].startOfMonth)) && (
-                    <span
-                      className={classNames(
-                        'font-semibold block leading-none',
-                        {
-                          'text-slate': !isThisWeek,
-                        }
-                      )}
-                    >
-                      {format(week.week, 'MMM', {
-                        weekStartsOn: 2,
-                        locale: cs,
-                      })}
-                    </span>
-                  )}
-                </div>
+                {(week.startOfMonth ||
+                  (i == 0 &&
+                    !weeks[1].startOfMonth &&
+                    !weeks[2].startOfMonth)) && (
+                  <span
+                    className={classNames('font-semibold block leading-none', {
+                      'text-slate': !isThisWeek,
+                    })}
+                  >
+                    {format(week.week, 'MMM', {
+                      weekStartsOn: 2,
+                      locale: cs,
+                    })}
+                  </span>
+                )}
               </div>
-            );
-          })}
-        </div>
+            </div>
+          );
+        })}
       </div>
-    </>
+    </div>
   );
 }
