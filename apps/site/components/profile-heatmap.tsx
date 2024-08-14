@@ -1,4 +1,3 @@
-'use server';
 import { cs } from 'date-fns/locale';
 import { db } from 'db';
 import { sql } from 'drizzle-orm';
@@ -15,10 +14,9 @@ import {
 } from 'date-fns';
 import { fromZonedTime } from 'date-fns-tz';
 import classNames from 'classnames';
-import { cache } from 'react';
-import { unstable_noStore as noStore } from 'next/cache';
+import { unstable_cache, unstable_noStore as noStore } from 'next/cache';
 
-const loadHeatmap = cache(
+const loadHeatmap = unstable_cache(
   async (id: string, queryRange: ServerDateInterval) => {
     const { granularity, currentRange } = inTime(queryRange, 'week');
 
