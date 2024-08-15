@@ -12,7 +12,6 @@ import {
   getMonth,
   subWeeks,
 } from 'date-fns';
-import { fromZonedTime } from 'date-fns-tz';
 import classNames from 'classnames';
 import { unstable_cache, unstable_noStore as noStore } from 'next/cache';
 
@@ -93,19 +92,11 @@ const loadHeatmap = unstable_cache(
 
 export async function ProfileHeatmap({ userName }: { userName: string }) {
   noStore();
-  const now = endOfWeek(fromZonedTime(new Date(), 'Europe/Prague'), {
-    weekStartsOn: 2,
-  });
+  const now = endOfWeek(new Date());
   const subTime = subMonths(now, 6);
-  const start = startOfWeek(subTime, {
-    weekStartsOn: 2,
-  });
+  const start = startOfWeek(subTime);
   const queryRange = { start: start, end: now };
 
-  /* const data = res.map((r) => ({
-    date: format(r.period, 'yyyy/MM/dd'),
-    count: r.posts,
-  })); */
   const counts = await loadHeatmap(userName, queryRange);
   console.log('counts', counts);
   const weeks = eachWeekOfInterval(
@@ -116,46 +107,23 @@ export async function ProfileHeatmap({ userName }: { userName: string }) {
     {
       weekStartsOn: 1,
     }
-  )
-    .map((week) => fromZonedTime(week, 'Europe/Prague'))
-    .map((week) => {
-      const month = getMonth(week);
-      const prevWeek = subWeeks(week, 1);
-      const prevWeekMonth = getMonth(prevWeek);
-      return {
-        week: week,
-        startOfMonth: prevWeekMonth !== month,
-      };
-    });
-  weeks.pop();
-
-  return (
-    <pre className="text-xs">
-      {JSON.stringify(weeks, null, 2)}
-      {JSON.stringify(counts, null, 2)}
-      {JSON.stringify(
-        weeks.map((week) =>
-          format(week.week, 'yyyy/MM/dd', {
-            weekStartsOn: 2,
-            locale: cs,
-          })
-        ),
-        null,
-        2
-      )}
-      {JSON.stringify(counts, null, 2)}
-    </pre>
-  );
+  ).map((week) => {
+    const month = getMonth(week);
+    const prevWeek = subWeeks(week, 1);
+    const prevWeekMonth = getMonth(prevWeek);
+    return {
+      week: week,
+      startOfMonth: prevWeekMonth !== month,
+    };
+  });
+  console.log('weeks', weeks);
 
   return (
     <div className="hidden lg:flex flex-col justify-center">
       <p className="font-semibold text-slate">Týdenní pravidelnost</p>
       <div className="flex h-12 mt-6 space-x-1 items-center">
         {weeks.map((week, i) => {
-          const weekstr = format(week.week, 'yyyy/MM/dd', {
-            weekStartsOn: 2,
-            locale: cs,
-          });
+          const weekstr = format(week.week, 'yyyy/MM/dd');
           const isThisWeek = i === weeks.length - 1;
           return (
             <div
@@ -183,7 +151,6 @@ export async function ProfileHeatmap({ userName }: { userName: string }) {
                     })}
                   >
                     {format(week.week, 'MMM', {
-                      weekStartsOn: 2,
                       locale: cs,
                     })}
                   </span>
