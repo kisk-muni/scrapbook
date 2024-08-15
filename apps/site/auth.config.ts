@@ -1,4 +1,4 @@
-import type { DefaultSession, NextAuthConfig } from 'next-auth';
+import type { DefaultSession, NextAuthConfig, User } from 'next-auth';
 import 'next-auth/jwt';
 import Google from 'next-auth/providers/google';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
@@ -15,7 +15,18 @@ declare module 'next-auth' {
       username: string;
       fullName: string;
       isTeacher: boolean;
+      isProfileComplete: boolean;
     } & DefaultSession['user'];
+  }
+  interface User {
+    username?: string | null;
+    fullName?: string | null;
+    avatar?: string | null;
+    isTeacher?: boolean;
+    id?: string;
+    name?: string | null;
+    email?: string | null;
+    image?: string | null;
   }
 }
 
@@ -40,11 +51,14 @@ export const authConfig = {
     }),
   ],
   callbacks: {
-    jwt({ token, profile }) {
+    jwt: async ({ token, profile, user }) => {
       // console.log('jwt just got called', token)
       if (profile) {
         token.id = profile.email;
-        token.username = profile.username as string;
+        token.username = user?.username;
+        token.avatar = user?.avatar;
+        token.fullName = user?.fullName;
+        token.isTeacher = user?.isTeacher;
         token.image = profile.avatar_url || profile.picture;
       }
       return token;
@@ -55,13 +69,11 @@ export const authConfig = {
       //console.log(session, token)
       // console.log('session just got called', session)
       if (session?.user && token?.email) {
-        const profile = await db.query.profiles.findFirst({
-          where: (profiles, { eq }) => eq(profiles.id, token.sub),
-        });
         session.user.id = String(token.sub);
-        session.user.username = profile.username;
-        session.user.isTeacher = profile.isTeacher;
-        session.user.fullName = profile.fullName;
+        session.user.username = token.username;
+        session.user.fullName = token.name;
+        session.user.isProfileComplete =
+          token.username === null || token.username !== '';
       }
       return session;
     },

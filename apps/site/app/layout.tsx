@@ -4,12 +4,19 @@ import '../styles/globals.css';
 import { TailwindIndicator } from 'components/tailwind-indicator';
 import { Header } from 'components/header';
 import { Toaster } from 'react-hot-toast';
+import { auth } from 'auth';
+import { Fragment } from 'react';
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
+  newprofile,
 }: {
   children: React.ReactNode;
+  newprofile: React.ReactNode;
 }) {
+  const session = await auth();
+  const isLogged = !!session?.user;
+  const isProfileComplete = session?.user.isProfileComplete;
   return (
     <html>
       <head>
@@ -41,8 +48,14 @@ export default function RootLayout({
       <body>
         <Providers>
           <div className="flex flex-col min-h-screen bg-background">
-            <Header />
-            <main className="px-4 md:px-6 lg:px-8">{children}</main>
+            {isLogged && !isProfileComplete ? (
+              newprofile
+            ) : (
+              <Fragment>
+                <Header />
+                <main className="px-4 md:px-6 lg:px-8">{children}</main>
+              </Fragment>
+            )}
             <Toaster />
           </div>
         </Providers>

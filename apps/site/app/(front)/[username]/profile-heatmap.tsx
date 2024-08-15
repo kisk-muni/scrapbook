@@ -13,9 +13,9 @@ import {
   subWeeks,
 } from 'date-fns';
 import classNames from 'classnames';
-import { unstable_cache, unstable_noStore as noStore } from 'next/cache';
+import { cache } from 'react';
 
-const loadHeatmap = unstable_cache(
+const loadHeatmap = cache(
   async (userName: string, queryRange: ServerDateInterval) => {
     const { granularity, currentRange } = inTime(queryRange, 'week');
 
@@ -91,14 +91,12 @@ const loadHeatmap = unstable_cache(
 );
 
 export async function ProfileHeatmap({ userName }: { userName: string }) {
-  noStore();
   const now = endOfWeek(new Date());
   const subTime = subMonths(now, 6);
   const start = startOfWeek(subTime);
   const queryRange = { start: start, end: now };
 
   const counts = await loadHeatmap(userName, queryRange);
-  console.log('counts', counts);
   const weeks = eachWeekOfInterval(
     {
       start: subTime,
@@ -116,7 +114,6 @@ export async function ProfileHeatmap({ userName }: { userName: string }) {
       startOfMonth: prevWeekMonth !== month,
     };
   });
-  console.log('weeks', weeks);
 
   return (
     <div className="hidden lg:flex flex-col justify-center">

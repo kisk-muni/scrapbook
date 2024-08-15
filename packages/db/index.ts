@@ -7,7 +7,7 @@ if (!process.env.DB_URL) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-const queryClient = postgres(process.env.DB_URL, { prepare: false });
+const queryClient = postgres(process.env.DB_URL, { prepare: false, max: 200 });
 
 export const db = drizzle(queryClient, {
   schema: {
