@@ -43,7 +43,7 @@ export default function ProfilePage({
   params: { username: string };
 }) {
   return (
-    <div className="mx-auto sm:max-w-8xl mt-6 mb-8 sm:mt-6 sm:mb-16 sm:px-6 md:mt-8 md:mb-20">
+    <div className="mx-auto sm:max-w-7xl mt-6 mb-8 sm:mt-6 sm:mb-16 sm:px-6 md:mt-8 md:mb-20">
       <div>
         <div className="flex">
           <Suspense fallback={<PortfolioSkeleton />}>

@@ -76,6 +76,8 @@ const loadHeatmap = unstable_cache(
     `
     )) as { period: Date; posts: number }[];
 
+    console.log('res', res);
+
     const counts = res.reduce((acc, { period, posts }) => {
       acc[
         format(period, 'yyyy/MM/dd', {
@@ -105,7 +107,7 @@ export async function ProfileHeatmap({ userName }: { userName: string }) {
     count: r.posts,
   })); */
   const counts = await loadHeatmap(userName, queryRange);
-  console.log(counts);
+  console.log('counts', counts);
   const weeks = eachWeekOfInterval(
     {
       start: subTime,
@@ -127,13 +129,13 @@ export async function ProfileHeatmap({ userName }: { userName: string }) {
     });
   weeks.pop();
 
-  /* return (
-    <pre>
-      {JSON.stringify(res, null, 2)}
-      {JSON.stringify(some, null, 2)}
+  return (
+    <pre className="text-xs">
+      {JSON.stringify(weeks, null, 2)}
+      {JSON.stringify(counts, null, 2)}
       {JSON.stringify(
         weeks.map((week) =>
-          format(week, 'yyyy/MM/dd', {
+          format(week.week, 'yyyy/MM/dd', {
             weekStartsOn: 2,
             locale: cs,
           })
@@ -143,7 +145,7 @@ export async function ProfileHeatmap({ userName }: { userName: string }) {
       )}
       {JSON.stringify(counts, null, 2)}
     </pre>
-  ); */
+  );
 
   return (
     <div className="hidden lg:flex flex-col justify-center">
