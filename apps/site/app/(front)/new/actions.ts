@@ -10,7 +10,7 @@ import { auth } from 'auth';
 import { db } from 'db';
 import { posts } from 'db/schema/posts';
 import { profilesToPosts } from 'db/schema/profiles-to-posts';
-import { revalidatePath, revalidateTag } from 'next/cache';
+import { revalidatePath } from 'next/cache';
 
 const client = new S3Client({
   region: process.env.S3_REGION,

@@ -42,7 +42,6 @@ export const authConfig = {
   },
   pages: {
     signIn: '/login', // overrides the next-auth default signin page https://authjs.dev/guides/basics/pages
-    newUser: '/signup',
   },
   providers: [
     Google({
@@ -51,9 +50,9 @@ export const authConfig = {
     }),
   ],
   callbacks: {
-    jwt: async ({ token, profile, user }) => {
+    jwt: async ({ token, profile, account, user, trigger, session }) => {
       // console.log('jwt just got called', token)
-      if (profile) {
+      if (profile && account) {
         token.id = profile.email;
         token.username = user?.username;
         token.avatar = user?.avatar;
@@ -61,6 +60,14 @@ export const authConfig = {
         token.isTeacher = user?.isTeacher;
         token.image = profile.avatar_url || profile.picture;
       }
+      if (trigger == 'update') {
+        token.username = session.user.username;
+        token.fullName = session.user.fullName;
+        token.avatar = session.user.avatar;
+        token.isProfileComplete =
+          !!session.user.username && !!session.user.fullName;
+      }
+      console.log('JWT', token);
       return token;
     },
     session: async ({ session, token, newSession, user }) => {
@@ -68,12 +75,13 @@ export const authConfig = {
       if (user) return session;
       //console.log(session, token)
       // console.log('session just got called', session)
-      if (session?.user && token?.email) {
+      if (session?.user) {
         session.user.id = String(token.sub);
         session.user.username = token.username;
-        session.user.fullName = token.name;
+        session.user.fullName = token.fullName as unknown as string | null;
         session.user.isProfileComplete =
-          token.username === null || token.username !== '';
+          !!token.username && !!session.user.fullName;
+        console.log(token);
       }
       return session;
     },

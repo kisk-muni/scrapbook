@@ -9,14 +9,14 @@ import { Fragment } from 'react';
 
 export default async function RootLayout({
   children,
-  newprofile,
+  initialsetup,
 }: {
   children: React.ReactNode;
-  newprofile: React.ReactNode;
+  initialsetup: React.ReactNode;
 }) {
   const session = await auth();
-  const isLogged = !!session?.user;
-  const isProfileComplete = session?.user.isProfileComplete;
+  const isLogged = !!session;
+  const isProfileComplete = session?.user.username && session.user.fullName;
   return (
     <html>
       <head>
@@ -49,7 +49,7 @@ export default async function RootLayout({
         <Providers>
           <div className="flex flex-col min-h-screen bg-background">
             {isLogged && !isProfileComplete ? (
-              newprofile
+              initialsetup
             ) : (
               <Fragment>
                 <Header />
