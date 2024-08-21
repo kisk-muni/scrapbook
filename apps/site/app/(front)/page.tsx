@@ -6,6 +6,7 @@ import { post } from 'app/actions';
 import { Posts } from 'components/posts';
 import getPosts from 'lib/actions/get-posts';
 import classNames from 'classnames';
+import Link from 'next/link';
 
 const loadPosts = cache(async () => {
   const posts = await getPosts({ pageParam: { native: 0, portfolio: 0 } });
@@ -40,12 +41,14 @@ export default async function HomePage() {
                   </Link>
                 </Button> */}
                 <div className="flex flex items-start justify-start ">
-                  <Avatar
-                    imageUrl={session.user.image || ''}
-                    name={session.user.fullName || session.user.username}
-                    className="rounded-full border w-12 h-12 mr-2 text- mt-1"
-                    size={48}
-                  />
+                  <Link href={`/${session.user.username}`}>
+                    <Avatar
+                      imageUrl={session.user.image || ''}
+                      name={session.user.fullName || session.user.username}
+                      className="rounded-full border w-12 h-12 mr-2 text- mt-1"
+                      size={48}
+                    />
+                  </Link>
                   <NewPostCard post={post} defaultPost="" />
                 </div>
               </div>
