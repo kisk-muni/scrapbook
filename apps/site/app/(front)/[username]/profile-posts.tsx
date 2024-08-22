@@ -7,8 +7,11 @@ import { UniversalPost } from 'lib/actions/get-posts';
 const loadProfilePosts = cache(async (userName: string) => {
   const session = await auth();
   const profile = await db.query.profiles.findFirst({
-    where: (profiles, { eq, and }) =>
-      and(eq(profiles.username, userName), eq(profiles.isPublic, true)),
+    where: (profiles, { eq, and, or }) =>
+      and(
+        eq(profiles.username, userName),
+        or(eq(profiles.isPublic, true), eq(profiles.id, session?.user?.id))
+      ),
     with: {
       profilesToPosts: {
         with: {

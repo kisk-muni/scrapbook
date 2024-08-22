@@ -1,10 +1,16 @@
 import { auth } from 'auth';
 import NameSetting from 'components/setting-name';
 import { redirect } from 'next/navigation';
-import { updateUsername, updateFullName, updateBio } from 'app/actions';
+import {
+  updateUsername,
+  updateFullName,
+  updateBio,
+  updatePrivacy,
+} from 'app/actions';
 import { db } from 'db';
 import UsernameSetting from 'components/setting-username';
 import BioSetting from 'components/setting-bio';
+import PrivacySetting from 'components/setting-privacy';
 
 export default async function IndexPage() {
   const session = await auth();
@@ -24,6 +30,10 @@ export default async function IndexPage() {
       <UsernameSetting
         defaultName={user?.username || ''}
         updateUserName={updateUsername}
+      />
+      <PrivacySetting
+        defaultIsPublic={user.isPublic || false}
+        updatePrivacy={updatePrivacy}
       />
     </div>
   );

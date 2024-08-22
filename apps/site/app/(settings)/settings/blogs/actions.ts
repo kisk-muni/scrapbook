@@ -1,6 +1,5 @@
 'use server';
 import { auth } from 'auth';
-import { profile } from 'console';
 import { db } from 'db';
 import { portfolios, profiles } from 'db/schema';
 import { and, eq, ne, sql } from 'drizzle-orm';

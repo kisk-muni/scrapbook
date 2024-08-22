@@ -275,3 +275,32 @@ export async function deletePost(args: { postId: string }) {
   }
   return { deleted: false };
 }
+
+export async function updatePrivacy(args: { isPublic: boolean }) {
+  const session = await auth();
+
+  if (!session) {
+    return {
+      error: 'Unauthorized',
+    };
+  }
+
+  const uid = session.user.id;
+
+  if (uid !== session?.user?.id) {
+    return {
+      error: 'Unauthorized',
+    };
+  }
+
+  const result = await db
+    .update(profiles)
+    .set({ isPublic: args.isPublic })
+    .where(eq(profiles.id, uid))
+    .returning();
+
+  revalidatePath(`/${session.user.username}`);
+  revalidatePath(`/settings/profile`);
+
+  return result[0];
+}
