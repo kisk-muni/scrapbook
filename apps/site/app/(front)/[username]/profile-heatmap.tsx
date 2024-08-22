@@ -14,19 +14,25 @@ import {
 } from 'date-fns';
 import classNames from 'classnames';
 import { cache } from 'react';
+import { auth } from 'auth';
 
 const loadHeatmap = cache(
   async (userName: string, queryRange: ServerDateInterval) => {
+    const session = await auth();
     const { granularity, currentRange } = inTime(queryRange, 'week');
 
-    const profileId = await db.query.profiles
+    const profile = await db.query.profiles
       .findFirst({
         where: (profiles, { eq }) => eq(profiles.username, userName),
       })
       .then((profile) => {
         if (!profile) return null;
-        return profile.id;
+        return profile;
       });
+
+    if (!profile) return null;
+    if (!profile.isPublic && session?.user?.id !== profile.id) return null;
+    const profileId = profile?.id;
 
     // join profiles and posts given user id and m:n relation
     const res = (await db.execute(
@@ -97,6 +103,7 @@ export async function ProfileHeatmap({ userName }: { userName: string }) {
   const queryRange = { start: start, end: now };
 
   const counts = await loadHeatmap(userName, queryRange);
+  if (!counts) return null;
   const weeks = eachWeekOfInterval(
     {
       start: subTime,

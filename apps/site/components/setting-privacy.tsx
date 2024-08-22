@@ -25,9 +25,6 @@ export default function PrivacySettingCard({
   defaultIsPublic: boolean;
   updatePrivacy: (args: { isPublic: boolean }) => ServerActionResult<Profile>;
 }) {
-  const maxLength = 32;
-  const { formRef, onKeyDown } = useEnterSubmit();
-  const ref = useRef<HTMLInputElement>(null);
   const [isSubmitPending, startSubmitTransition] = useTransition();
   const [isPublic, setIsPublic] = useState<boolean | 'indeterminate'>(
     defaultIsPublic
@@ -36,7 +33,6 @@ export default function PrivacySettingCard({
   return (
     <SettingCard>
       <form
-        ref={formRef}
         onSubmit={(e) => {
           e.preventDefault();
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -73,7 +69,7 @@ export default function PrivacySettingCard({
                 </Checkbox.Indicator>
               </Checkbox.Root>
               <label className="pl-3 text-base text-text" htmlFor="c1">
-                Profil je soukromý.
+                Profil je soukromý
               </label>
             </div>
           </SettingCardContent>

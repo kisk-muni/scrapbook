@@ -15,6 +15,7 @@ const loadProfileInfo = cache(async (username: string) => {
     },
   });
   if (!profile) return null;
+  if (!profile.isPublic && session?.user?.id !== profile.id) return null;
   return {
     profile,
     session: session,
