@@ -95,11 +95,10 @@ export async function addBlog(args: { url: string; feedUrl?: string }) {
             profileId: uid,
           })
           .where(and(eq(portfolios.profileId, existingPortfolio.profileId)));
-        const deletedProfile = await tx
+        await tx
           .delete(profiles)
           .where(eq(profiles.id, existingPortfolio.profileId))
           .returning();
-        return { success: deletedProfile.length > 0 };
       }
     }
   });

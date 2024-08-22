@@ -27,31 +27,35 @@ export default async function getPosts({
   const nativeOffset = (pageParam as any).native || 0;
   const portfolioOffset = (pageParam as any).portfolio || 0;
 
-  const nativePosts = await db.query.posts.findMany({
-    limit: FETCH_POSTS_LIMIT,
-    orderBy: (posts, { desc }) => [desc(posts.publishedAt)],
-    offset: nativeOffset,
-    with: {
-      profiles: {
-        with: {
-          profile: true,
+  const nativePosts = (
+    await db.query.posts.findMany({
+      limit: FETCH_POSTS_LIMIT,
+      orderBy: (posts, { desc }) => [desc(posts.publishedAt)],
+      offset: nativeOffset,
+      with: {
+        profiles: {
+          with: {
+            profile: true,
+          },
         },
       },
-    },
-  });
+    })
+  ).filter((post) => post.profiles[0].profile.isPublic);
 
-  const portfolioPosts = await db.query.portfolioPosts.findMany({
-    limit: FETCH_POSTS_LIMIT,
-    orderBy: (posts, { desc }) => [desc(posts.publishedAt)],
-    offset: portfolioOffset,
-    with: {
-      portfolio: {
-        with: {
-          profile: true,
+  const portfolioPosts = (
+    await db.query.portfolioPosts.findMany({
+      limit: FETCH_POSTS_LIMIT,
+      orderBy: (posts, { desc }) => [desc(posts.publishedAt)],
+      offset: portfolioOffset,
+      with: {
+        portfolio: {
+          with: {
+            profile: true,
+          },
         },
       },
-    },
-  });
+    })
+  ).filter((post) => post.portfolio.profile.isPublic);
 
   const allPosts = [
     ...nativePosts.map((post) => ({
