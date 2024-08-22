@@ -1,8 +1,9 @@
 'use server';
 import { auth } from 'auth';
+import { profile } from 'console';
 import { db } from 'db';
-import { portfolios } from 'db/schema';
-import { and, eq, sql } from 'drizzle-orm';
+import { portfolios, profiles } from 'db/schema';
+import { and, eq, ne, sql } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { parse } from 'node-html-parser';
 
@@ -68,6 +69,45 @@ export async function addBlog(args: { url: string; feedUrl?: string }) {
     }
   }
 
+  const claimOrNotAllowed = await db.transaction(async (tx) => {
+    const existingPortfolio = await tx.query.portfolios.findFirst({
+      where: (portfolios, { eq }) => eq(portfolios.url, urlObj.toString()),
+    });
+
+    if (existingPortfolio) {
+      // the portfolio exists, we need to check if it is claimed by the current user
+      const existingAccount = await tx.query.accounts.findFirst({
+        where: (accounts, { eq }) =>
+          and(eq(accounts.userId, existingPortfolio.profileId)),
+      });
+      if (existingAccount && existingAccount.userId !== uid) {
+        // the existing portfolio is already claimed by another account
+        return {
+          error: 'Tento blog již byl přidán jiným profilem.',
+        };
+      } else if (!existingAccount) {
+        // the profile exists but it has no auth account, we can claim its data and delete the old profile
+        // update all portfolios of existingPortfolio.profile_id to current uid
+        // delete the profile of existingPortfolio.profile_id
+        await tx
+          .update(portfolios)
+          .set({
+            profileId: uid,
+          })
+          .where(and(eq(portfolios.profileId, existingPortfolio.profileId)));
+        const deletedProfile = await tx
+          .delete(profiles)
+          .where(eq(profiles.id, existingPortfolio.profileId))
+          .returning();
+        return { success: deletedProfile.length > 0 };
+      }
+    }
+  });
+
+  if (claimOrNotAllowed?.error) {
+    return claimOrNotAllowed;
+  }
+
   const result = await db
     .insert(portfolios)
     .values({
@@ -77,9 +117,15 @@ export async function addBlog(args: { url: string; feedUrl?: string }) {
     })
     .returning();
 
-  revalidatePath('/settings/blogs');
+  if (result.length > 0 && result[0].feedUrl) {
+    await db.execute(sql`select sync_single_portfolio_posts(${result[0].id})`);
+    revalidatePath('/settings/blogs');
+    return result[0];
+  }
 
-  return result[0];
+  return {
+    error: 'Připojení portfolia se nezdařilo.',
+  };
 }
 
 export async function updateBlog(args: {

@@ -51,6 +51,8 @@ export default function AddBlog({
             toast.error(result.error);
             return;
           }
+          urlRef.current.value = defaultUrl;
+
           toast.success('Připojení bylo úspěšně uloženo');
         });
       }}
@@ -58,7 +60,7 @@ export default function AddBlog({
       <Input
         ref={urlRef}
         type="text"
-        className="bg-white placeholder:text-muted"
+        className="bg-white placeholder:text-input"
         placeholder="URL adresa"
         onChange={(e) => {
           setUrl(e.target.value);

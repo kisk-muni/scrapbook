@@ -198,45 +198,36 @@ export const portfolioPostsRelations = relations(portfolioPosts, ({ one }) => ({
   }),
 }));
 
-export const portfolios = pgTable(
-  "portfolios",
-  {
-    createdAt: timestamp("created_at", {
-      withTimezone: true,
-      mode: "string",
-    }).defaultNow(),
-    name: varchar("name"),
-    url: varchar("url"),
-    feedUrl: varchar("feed_url"),
-    platform: varchar("platform").default("custom").notNull(),
-    id: uuid("id")
-      .default(sql`uuid_generate_v4()`)
-      .primaryKey()
-      .notNull(),
-    profileId: uuid("profile_id").references(() => profiles.id),
-    title: varchar("title"),
-    description: varchar("description"),
-    imageUrl: varchar("image_url"),
-    isPublic: boolean("is_public").default(false).notNull(),
-    canBeUsedInResearch: boolean("can_be_used_in_research"),
-    lastCrawledAt: timestamp("last_crawled_at", {
-      withTimezone: true,
-    }),
-    lastCrawledFeedAt: timestamp("last_crawled_feed_at", {
-      withTimezone: true,
-    }),
-    lastCrawlFeedlStatus: text("last_crawl_feed_status")
-      .default("waiting")
-      .notNull(),
-    lastCrawlFeedMessage: text("last_crawl_feed_message"),
-  },
-  (table) => {
-    return {
-      portfoliosUrlKey: unique("portfolios_url_key").on(table.url),
-      portfoliosFeedUrlKey: unique("portfolios_feed_url_key").on(table.feedUrl),
-    };
-  }
-);
+export const portfolios = pgTable("portfolios", {
+  createdAt: timestamp("created_at", {
+    withTimezone: true,
+    mode: "string",
+  }).defaultNow(),
+  name: varchar("name"),
+  url: varchar("url"),
+  feedUrl: varchar("feed_url"),
+  platform: varchar("platform").default("custom").notNull(),
+  id: uuid("id")
+    .default(sql`uuid_generate_v4()`)
+    .primaryKey()
+    .notNull(),
+  profileId: uuid("profile_id").references(() => profiles.id),
+  title: varchar("title"),
+  description: varchar("description"),
+  imageUrl: varchar("image_url"),
+  isPublic: boolean("is_public").default(false).notNull(),
+  canBeUsedInResearch: boolean("can_be_used_in_research"),
+  lastCrawledAt: timestamp("last_crawled_at", {
+    withTimezone: true,
+  }),
+  lastCrawledFeedAt: timestamp("last_crawled_feed_at", {
+    withTimezone: true,
+  }),
+  lastCrawlFeedlStatus: text("last_crawl_feed_status")
+    .default("waiting")
+    .notNull(),
+  lastCrawlFeedMessage: text("last_crawl_feed_message"),
+});
 
 export type Portfolio = typeof portfolios.$inferSelect;
 
