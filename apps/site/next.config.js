@@ -30,6 +30,12 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'medium.com',
+        port: '',
+        pathname: '**',
+      },
+      {
+        protocol: 'https',
         hostname: 'avatars.githubusercontent.com',
         port: '',
         pathname: '**',

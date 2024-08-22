@@ -47,7 +47,7 @@ export function SettingHeader({
 }) {
   return (
     <div
-      className={classNames('p-8 rounded-t-xl bg-sheet ', {
+      className={classNames('px-8 py-6 rounded-t-xl bg-sheet ', {
         'border-destructive/40': destructive,
       })}
     >

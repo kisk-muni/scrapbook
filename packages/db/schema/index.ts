@@ -219,6 +219,16 @@ export const portfolios = pgTable(
     imageUrl: varchar("image_url"),
     isPublic: boolean("is_public").default(false).notNull(),
     canBeUsedInResearch: boolean("can_be_used_in_research"),
+    lastCrawledAt: timestamp("last_crawled_at", {
+      withTimezone: true,
+    }),
+    lastCrawledFeedAt: timestamp("last_crawled_feed_at", {
+      withTimezone: true,
+    }),
+    lastCrawlFeedlStatus: text("last_crawl_feed_status")
+      .default("waiting")
+      .notNull(),
+    lastCrawlFeedMessage: text("last_crawl_feed_message"),
   },
   (table) => {
     return {
@@ -227,6 +237,8 @@ export const portfolios = pgTable(
     };
   }
 );
+
+export type Portfolio = typeof portfolios.$inferSelect;
 
 export const portfoliosRelations = relations(portfolios, ({ one, many }) => ({
   profile: one(profiles, {

@@ -19,8 +19,8 @@ export function SidebarNav({ items }: { items: NavItem[] }) {
           <li key={i} className="mb-1">
             <Link
               className={classNames(
-                buttonVariants({ variant: 'ghost' }),
-                'group w-full px-4 transition-colors  hover:bg-sheet/60',
+                buttonVariants({ variant: 'ghost', justify: 'start' }),
+                'group w-full px-4 transition-colors  hover:bg-sheet/60 items-start',
                 href === pathname && 'bg-sheet font-medium'
               )}
               href={href}

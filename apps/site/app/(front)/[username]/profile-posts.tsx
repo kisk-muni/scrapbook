@@ -49,7 +49,7 @@ export async function ProfilePosts(props: { userName?: string }) {
       return b.publishedAt.getTime() - a.publishedAt.getTime();
     });
   return (
-    <div className="mt-10 md:mt-12 overflow-hidden rounded-xl grid gap-1 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+    <div className="mt-10 md:mt-12 overflow-hidden rounded-xl grid gap-1 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
       {portfolios?.length != 0 &&
         portfolioPosts &&
         portfolioPosts?.map((item, i) => (

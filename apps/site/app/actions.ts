@@ -1,7 +1,13 @@
 'use server';
 import { auth } from 'auth';
 import { db } from 'db';
-import { profiles, accounts, posts, profilesToPosts } from 'db/schema';
+import {
+  profiles,
+  accounts,
+  posts,
+  profilesToPosts,
+  portfolios,
+} from 'db/schema';
 import { and, eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
@@ -54,6 +60,92 @@ export async function updateUsername(args: { username: string }) {
     .update(profiles)
     .set({ username: args.username })
     .where(eq(profiles.id, uid))
+    .returning();
+
+  return result[0];
+}
+
+export async function addBlog(args: { url: string; feedUrl: string }) {
+  const session = await auth();
+
+  if (!session) {
+    return {
+      error: 'Unauthorized',
+    };
+  }
+
+  const uid = session.user.id;
+
+  if (!args.url || !args.url.trim() || !args.feedUrl || !args.feedUrl.trim()) {
+    return {
+      error: 'Invalid',
+    };
+  }
+
+  const result = await db
+    .update(portfolios)
+    .set({ url: args.url, feedUrl: args.feedUrl, profileId: uid })
+    .returning();
+
+  return result[0];
+}
+
+export async function updateBlog(args: {
+  id: string;
+  url: string;
+  feedUrl: string;
+}) {
+  const session = await auth();
+
+  if (!session) {
+    return {
+      error: 'Unauthorized',
+    };
+  }
+
+  const uid = session.user.id;
+
+  if (
+    !args.id ||
+    !args.url ||
+    !args.url.trim() ||
+    !args.feedUrl ||
+    !args.feedUrl.trim()
+  ) {
+    return {
+      error: 'Invalid',
+    };
+  }
+
+  const result = await db
+    .update(portfolios)
+    .set({ url: args.url, feedUrl: args.feedUrl })
+    .where(and(eq(portfolios.profileId, uid), eq(portfolios.id, args.id)))
+    .returning();
+
+  return result[0];
+}
+
+export async function deleteBlog(args: { id: string }) {
+  const session = await auth();
+
+  if (!session) {
+    return {
+      error: 'Unauthorized',
+    };
+  }
+
+  const uid = session.user.id;
+
+  if (!args.id) {
+    return {
+      error: 'Invalid',
+    };
+  }
+
+  const result = await db
+    .delete(portfolios)
+    .where(and(eq(portfolios.profileId, uid), eq(portfolios.id, args.id)))
     .returning();
 
   return result[0];

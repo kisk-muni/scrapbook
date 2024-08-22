@@ -2,9 +2,8 @@
 // https://deno.land/manual/getting_started/setup_your_environment
 // This enables autocomplete, go to definition, etc.
 
-import { serve } from 'https://deno.land/std@0.131.0/http/server.ts';
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.0.2';
-import { parseFeed } from 'https://deno.land/x/rss/mod.ts';
+import { createClient } from 'jsr:@supabase/supabase-js@2';
+import { parseFeed } from 'jsr:@mikaelporttila/rss@1.0.3';
 
 async function sourceFeed(
   supabase: any,
@@ -15,50 +14,61 @@ async function sourceFeed(
   const xml = await response.text();
   const feed = await parseFeed(xml);
 
-  await supabase
-    .from('portfolios')
-    .update({
-      title: feed?.title?.value || undefined,
-      description: feed?.description || undefined,
-      url: feed?.links[0] || undefined,
-      image_url:
-        feed?.image?.url &&
-        feed?.image?.url != 'https://s0.wp.com/i/buttonw-com.png'
-          ? feed?.image?.url
-          : undefined,
-    })
-    .eq('id', portfolio_id);
+  try {
+    // [cernockyd] naive wordpress support
+    // fields can be eventually accessed using DublinCore and MediaRss enums
+    const parsed = feed?.entries?.map((item) => ({
+      portfolio_id,
+      title: item?.title?.value || undefined,
+      url: item?.links[0]?.href || undefined,
+      published_at: item?.published || undefined,
+      description:
+        item?.description?.value || item?.content?.value || undefined,
 
-  // [cernockyd] naive wordpress support
-  // fields can be eventually accessed using DublinCore and MediaRss enums
-  const parsed = feed?.entries?.map((item) => ({
-    portfolio_id,
-    title: item?.title?.value || undefined,
-    url: item?.links[0]?.href || undefined,
-    published_at: item?.published || undefined,
-    description: item?.description?.value || undefined,
-    // following media type is not declared in library’s typings but exits on the object
-    // https://github.com/MikaelPorttila/rss/blob/5632aa76f1bede380da519118841e0a8dacbd3ff/src/types/media_rss.ts#L47
-    thumbnail_url: (item as any)['media:thumbnail']?.url || undefined,
-  }));
+      // following media type is not declared in library’s typings but exits on the object
+      // https://github.com/MikaelPorttila/rss/blob/5632aa76f1bede380da519118841e0a8dacbd3ff/src/types/media_rss.ts#L47
+      thumbnail_url: (item as any)['media:thumbnail']?.url || null,
+    }));
 
-  const { data, error } = await supabase
-    .from('portfolio_posts')
-    .upsert(parsed, {
-      ignoreDuplicates: true,
-      onConflict: 'url',
-    })
-    .select();
+    console.log('FEED ENTRIES', feed.entries);
+    console.log('PARSED', parsed);
 
-  if (error)
-    throw new Error(`Error upserting portfolio posts: '${error.message}'.`);
+    const { data, error } = await supabase
+      .from('portfolio_posts')
+      .upsert(parsed, {
+        ignoreDuplicates: true,
+        onConflict: 'url',
+      })
+      .select();
 
-  return new Response(JSON.stringify(data), {
-    status: 200,
-  });
+    console.log('DATA', data);
+    console.log('ERR', error);
+
+    const { data: _portfolio, error: _portfolio_err } = await supabase
+      .from('portfolios')
+      .update({
+        last_crawl_feed_status: 'success',
+        last_crawled_feed_at: new Date().toISOString(),
+        last_crawl_feed_message: null,
+      })
+      .eq('id', portfolio_id);
+
+    return new Response(JSON.stringify(data), {
+      status: 200,
+    });
+  } catch (error) {
+    await supabase
+      .from('portfolios')
+      .update({
+        last_crawl_feed_status: 'error',
+        last_crawled_feed_at: new Date().toISOString(),
+        last_crawl_feed_message: error.message,
+      })
+      .eq('id', portfolio_id);
+  }
 }
 
-serve(async (req) => {
+Deno.serve(async (req) => {
   const { method, headers } = req;
   try {
     if (method !== 'POST') throw new Error('Invalid method.');
@@ -70,12 +80,7 @@ serve(async (req) => {
     if (!portfolio_id) throw new Error('Portfolio id not provided.');
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
-      {
-        global: {
-          headers: { Authorization: auth },
-        },
-      }
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
     return sourceFeed(supabase, feed_url, portfolio_id);
   } catch (error) {

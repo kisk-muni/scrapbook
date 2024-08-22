@@ -6,6 +6,7 @@ const documents = [
     title: 'Profil',
     href: '/settings/profile',
   },
+  { title: 'Externí blog', href: '/settings/blogs' },
   { title: 'Obecné', href: '/settings/general' },
 ];
 
