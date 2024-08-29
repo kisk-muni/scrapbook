@@ -70,13 +70,20 @@ export function BlogCard({ portfolio }: { portfolio: PortfolioWithPosts }) {
               <SynchronizationStatus
                 status={portfolio.lastCrawlFeedlStatus as SynchronizationStatus}
               />
-
               {portfolio.lastCrawlFeedlStatus === 'success' && (
                 <div className="flex items-center">
                   <div className="h-5 px-1 text-sm font-semibold flex items-center justify-center rounded-full bg-muted text-white">
                     {portfolio.portfolioPosts.length}
                   </div>
                   <span className="text-base ml-2">Příspěvků</span>
+                </div>
+              )}
+              {portfolio.portfolioPages.length > 0 && (
+                <div className="flex items-center">
+                  <div className="h-5 px-1 text-sm font-semibold flex items-center justify-center rounded-full bg-muted text-white">
+                    {portfolio.portfolioPages.length}
+                  </div>
+                  <span className="text-base ml-2">Stránek</span>
                 </div>
               )}
             </div>

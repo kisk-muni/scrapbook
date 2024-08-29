@@ -26,7 +26,7 @@ export default async function DeleteAccount() {
           {user?.email && user.name && (
             <AccountDeleteDialog
               email={user.email}
-              name={user.name}
+              name={user.fullName}
               deleteAccount={deleteAccount}
             />
           )}

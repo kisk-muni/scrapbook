@@ -7,19 +7,17 @@ import {
   SettingCardContent,
   SettingDescription,
   SettingFooter,
-  SettingFooterDescription,
   SettingHeader,
   SettingHeadline,
 } from 'components/ui/settings-card';
-import { IconCheck, IconCheckSquare, IconSpinner } from './ui/icons';
-import { useEnterSubmit } from 'lib/hooks/use-enter-submit';
+import { IconCheck, IconSpinner } from './ui/icons';
 import toast from 'react-hot-toast';
 import { ServerActionResult } from 'lib/types';
 import { Profile } from 'db/schema';
 import * as Checkbox from '@radix-ui/react-checkbox';
 
 export default function PrivacySettingCard({
-  defaultIsPublic,
+  defaultIsPublic = false,
   updatePrivacy,
 }: {
   defaultIsPublic: boolean;
@@ -60,7 +58,7 @@ export default function PrivacySettingCard({
               <Checkbox.Root
                 className="flex h-5 w-5 appearance-none hover:bg-smoke/25 items-center justify-center rounded-md bg-white border-[2px] border-border focus:border-text outline-none"
                 defaultChecked={defaultIsPublic}
-                checked={isPublic}
+                checked={!isPublic}
                 onCheckedChange={setIsPublic}
                 id="c1"
               >
@@ -75,7 +73,11 @@ export default function PrivacySettingCard({
           </SettingCardContent>
         </SettingHeader>
         <SettingFooter>
-          <Button variant="secondary" disabled={isSubmitPending} type="submit">
+          <Button
+            variant="secondary"
+            disabled={isSubmitPending || isPublic === defaultIsPublic}
+            type="submit"
+          >
             {isSubmitPending ? (
               <>
                 <IconSpinner className="mr-2 animate-spin" />

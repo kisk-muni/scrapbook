@@ -8,6 +8,9 @@ export type PortfolioWithPosts = Portfolio & {
   portfolioPosts: {
     id: string;
   }[];
+  portfolioPages: {
+    id: string;
+  }[];
 };
 
 const loadProfileBlogs = cache(async () => {
@@ -16,6 +19,11 @@ const loadProfileBlogs = cache(async () => {
     where: (portfolios, { eq }) => eq(portfolios.profileId, session.user.id),
     with: {
       portfolioPosts: {
+        columns: {
+          id: true,
+        },
+      },
+      portfolioPages: {
         columns: {
           id: true,
         },

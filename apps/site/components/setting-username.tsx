@@ -30,7 +30,9 @@ export default function UsernameSettingCard({
   const [isSubmitPending, startSubmitTransition] = useTransition();
   const [value, setValue] = useState(defaultName);
   const notValid = (value: string) =>
-    !value.trim() || value.trim().length > maxLength;
+    !value.trim() ||
+    value.trim().length > maxLength ||
+    value.trim() === defaultName;
 
   return (
     <SettingCard>

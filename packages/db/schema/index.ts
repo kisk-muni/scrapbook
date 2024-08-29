@@ -107,6 +107,13 @@ export const portfolioPages = pgTable(
   }
 );
 
+export const portfolioPagesRelations = relations(portfolioPages, ({ one }) => ({
+  portfolio: one(portfolios, {
+    fields: [portfolioPages.portfolioId],
+    references: [portfolios.id],
+  }),
+}));
+
 export const profilesSurveys = pgTable("profiles_surveys", {
   // You can use { mode: "bigint" } if numbers are exceeding js number limitations
   id: bigint("id", { mode: "number" }).primaryKey().notNull(),
@@ -237,6 +244,7 @@ export const portfoliosRelations = relations(portfolios, ({ one, many }) => ({
     references: [profiles.id],
   }),
   portfolioPosts: many(portfolioPosts),
+  portfolioPages: many(portfolioPages),
 }));
 
 export const portfoliosDuplicate = pgTable(
