@@ -32,7 +32,15 @@ export async function deleteAccount() {
   await db.delete(accounts).where(eq(accounts.userId, uid));
   await db
     .update(profiles)
-    .set({ name: 'deleted', email: '', image: null })
+    .set({
+      name: 'deleted',
+      fullName: 'deleted',
+      bio: 'deleted',
+      username: 'deleted',
+      email: '',
+      isPublic: false,
+      image: null,
+    })
     .where(eq(profiles.id, uid));
 
   revalidatePath('/');
