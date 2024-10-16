@@ -40,7 +40,16 @@ export default async function getPosts({
         },
       },
     })
-  ).filter((post) => post.profiles[0].profile.isPublic);
+  )
+    .map((post) => {
+      if (!post.profiles.length) {
+        console.log('post', post);
+      }
+      return post;
+    })
+    .filter(
+      (post) => post.profiles.length > 0 && post.profiles[0].profile.isPublic
+    );
 
   const portfolioPosts = (
     await db.query.portfolioPosts.findMany({
@@ -55,7 +64,16 @@ export default async function getPosts({
         },
       },
     })
-  ).filter((post) => post.portfolio.profile.isPublic);
+  )
+    .map((post) => {
+      if (!post.portfolio.profile) {
+        console.log('post', post);
+      }
+      return post;
+    })
+    .filter(
+      (post) => post.portfolio.profile && post.portfolio.profile.isPublic
+    );
 
   const allPosts = [
     ...nativePosts.map((post) => ({
