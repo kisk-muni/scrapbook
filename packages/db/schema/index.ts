@@ -222,7 +222,7 @@ export const portfolios = pgTable("portfolios", {
   title: varchar("title"),
   description: varchar("description"),
   imageUrl: varchar("image_url"),
-  isPublic: boolean("is_public").default(false).notNull(),
+  isPublic: boolean("is_public").default(true).notNull(),
   canBeUsedInResearch: boolean("can_be_used_in_research"),
   lastCrawledAt: timestamp("last_crawled_at", {
     withTimezone: true,
@@ -266,7 +266,7 @@ export const portfoliosDuplicate = pgTable(
     title: varchar("title"),
     description: varchar("description"),
     imageUrl: varchar("image_url"),
-    isPublic: boolean("is_public").default(false).notNull(),
+    isPublic: boolean("is_public").default(true).notNull(),
     studyStartSemesterYear: integer("study_start_semester_year"),
     studyStartSemesterKind: text("study_start_semester_kind"),
   },
@@ -292,7 +292,7 @@ export const profiles = pgTable(
     }).defaultNow(),
     username: text("username"),
     fullName: text("full_name"),
-    isPublic: boolean("is_public").default(false).notNull(),
+    isPublic: boolean("is_public").default(true).notNull(),
     // You can use { mode: "bigint" } if numbers are exceeding js number limitations
     studyStartSemesterYear: bigint("study_start_semester_year", {
       mode: "number",
