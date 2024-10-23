@@ -32,7 +32,7 @@ export default async function IndexPage() {
         updateUserName={updateUsername}
       />
       <PrivacySetting
-        defaultIsPublic={user.isPublic || false}
+        defaultIsPrivate={!user.isPublic}
         updatePrivacy={updatePrivacy}
       />
     </div>

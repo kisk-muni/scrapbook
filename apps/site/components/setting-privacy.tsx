@@ -1,7 +1,6 @@
 'use client';
-import { useRef, useState, useTransition } from 'react';
+import { useState, useTransition } from 'react';
 import { Button } from 'components/ui/button-radix';
-import { Input } from 'components/ui/input-radix';
 import {
   SettingCard,
   SettingCardContent,
@@ -17,15 +16,15 @@ import { Profile } from 'db/schema';
 import * as Checkbox from '@radix-ui/react-checkbox';
 
 export default function PrivacySettingCard({
-  defaultIsPublic = false,
+  defaultIsPrivate = false,
   updatePrivacy,
 }: {
-  defaultIsPublic: boolean;
+  defaultIsPrivate: boolean;
   updatePrivacy: (args: { isPublic: boolean }) => ServerActionResult<Profile>;
 }) {
   const [isSubmitPending, startSubmitTransition] = useTransition();
-  const [isPublic, setIsPublic] = useState<boolean | 'indeterminate'>(
-    defaultIsPublic
+  const [checked, setChecked] = useState<boolean | 'indeterminate'>(
+    defaultIsPrivate
   );
 
   return (
@@ -36,9 +35,9 @@ export default function PrivacySettingCard({
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           startSubmitTransition(async () => {
-            console.log('submitting', isPublic);
+            console.log('submitting', checked);
             const result = await updatePrivacy({
-              isPublic: isPublic === 'indeterminate' ? false : isPublic,
+              isPublic: checked === 'indeterminate' ? false : !checked,
             });
             if (result && 'error' in result) {
               toast.error(result.error);
@@ -57,9 +56,9 @@ export default function PrivacySettingCard({
             <div className="flex items-center">
               <Checkbox.Root
                 className="flex h-5 w-5 appearance-none hover:bg-smoke/25 items-center justify-center rounded-md bg-white border-[2px] border-border focus:border-text outline-none"
-                defaultChecked={defaultIsPublic}
-                checked={!isPublic}
-                onCheckedChange={setIsPublic}
+                defaultChecked={defaultIsPrivate}
+                checked={checked}
+                onCheckedChange={setChecked}
                 id="c1"
               >
                 <Checkbox.Indicator className="text-text">
@@ -75,7 +74,7 @@ export default function PrivacySettingCard({
         <SettingFooter>
           <Button
             variant="secondary"
-            disabled={isSubmitPending || isPublic === defaultIsPublic}
+            disabled={isSubmitPending || checked === defaultIsPrivate}
             type="submit"
           >
             {isSubmitPending ? (

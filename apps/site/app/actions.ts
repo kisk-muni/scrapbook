@@ -307,6 +307,7 @@ export async function updatePrivacy(args: { isPublic: boolean }) {
     .where(eq(profiles.id, uid))
     .returning();
 
+  revalidatePath(`/`);
   revalidatePath(`/${session.user.username}`);
   revalidatePath(`/settings/profile`);
 
