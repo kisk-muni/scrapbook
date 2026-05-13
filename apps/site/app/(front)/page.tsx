@@ -9,7 +9,7 @@ import classNames from 'classnames';
 import Link from 'next/link';
 
 const loadPosts = cache(async () => {
-  const posts = await getPosts({ pageParam: { native: 0, portfolio: 0 } });
+  const posts = await getPosts({ pageParam: 0 });
   return posts;
 });
 
