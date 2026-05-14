@@ -3,11 +3,15 @@ import { SidebarNav } from './ui/sidebar-nav';
 
 const documents = [
   {
-    title: 'Profil',
-    href: '/settings/profile',
+    pages: [
+      {
+        title: 'Profil',
+        href: '/settings/profile',
+      },
+      { title: 'Externí blog', href: '/settings/blogs' },
+      { title: 'Obecné', href: '/settings/general' },
+    ],
   },
-  { title: 'Externí blog', href: '/settings/blogs' },
-  { title: 'Obecné', href: '/settings/general' },
 ];
 
 export function SidebarSettings() {

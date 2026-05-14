@@ -68,7 +68,6 @@ export const keyType = pgEnum("key_type", [
   "secretstream",
   "stream_xchacha20",
 ]);
-export const aalLevel = pgEnum("aal_level", ["aal1", "aal2", "aal3"]);
 export const codeChallengeMethod = pgEnum("code_challenge_method", [
   "s256",
   "plain",

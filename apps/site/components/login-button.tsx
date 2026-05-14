@@ -12,7 +12,6 @@ interface LoginButtonProps extends ButtonProps {
 }
 
 export function LoginButton({
-  text = 'Přihlásit se',
   variant = 'subtle',
   className,
   ...props
@@ -27,13 +26,15 @@ export function LoginButton({
         // next-auth signIn() function doesn't work yet at Edge Runtime due to usage of BroadcastChannel
         signIn('google', { callbackUrl: `localhost:3000/` });
       }}
-      className="uppercase"
+      className="text-nowrap whitespace-nowrap"
       rounded="full"
       disabled={isLoading}
       {...props}
     >
       {isLoading && <IconSpinner className="mr-2 animate-spin" />}
-      <span className="text-nowrap shrink-0">{text}</span>
+      <span className="text-nowrap">Přihlásit se</span>
+      <span className="hidden md:inline mx-1.5 text-xl">/</span>
+      <span className="hidden md:inline">Registrace</span>
     </Button>
   );
 }

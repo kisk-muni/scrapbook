@@ -2,10 +2,22 @@
 import { SidebarNav } from './ui/sidebar-nav';
 
 const documents = [
-  { title: 'Soukromí a nakládání s daty', href: '/privacy' },
   {
-    title: 'Podmínky využívání služby',
-    href: '/terms',
+    sectionTitle: 'Úvod',
+    pages: [
+      { title: 'Jak začít se Scrapbookem', href: '/start' },
+      { title: 'O scrapbooku', href: '/about' },
+    ],
+  },
+  {
+    sectionTitle: 'Právní dokumenty',
+    pages: [
+      { title: 'Soukromí a nakládání s daty', href: '/privacy' },
+      {
+        title: 'Podmínky využívání služby',
+        href: '/terms',
+      },
+    ],
   },
 ];
 

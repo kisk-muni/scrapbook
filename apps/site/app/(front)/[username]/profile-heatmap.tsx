@@ -1,4 +1,3 @@
-import { cs } from 'date-fns/locale';
 import { db } from 'db';
 import { sql } from 'drizzle-orm';
 import { portfolioPosts, portfolios, posts, profilesToPosts } from 'db/schema';
@@ -12,6 +11,7 @@ import {
   getMonth,
   subWeeks,
 } from 'date-fns';
+import { cs } from 'date-fns/locale';
 import classNames from 'classnames';
 import { cache } from 'react';
 import { auth } from 'auth';
@@ -36,48 +36,48 @@ const loadHeatmap = cache(
 
     // join profiles and posts given user id and m:n relation
     const res = (await db.execute(
-      sql`with
-      profiles_portfolio_posts as (
-        select
-          ${portfolioPosts.id} as id,
-          ${portfolioPosts.publishedAt} as created_at
-        from ${portfolioPosts}
-        join ${portfolios} on 
+      sql`WITH
+      profiles_portfolio_posts AS (
+        SELECT
+          ${portfolioPosts.id} AS id,
+          ${portfolioPosts.publishedAt} AS created_at
+        FROM ${portfolioPosts}
+        JOIN ${portfolios} ON
           ${portfolios.id} = ${portfolioPosts.portfolioId}
-        where 
+        WHERE
           ${portfolios.profileId} = ${profileId}
-          and ${portfolioPosts.publishedAt}::date <@ ${currentRange}::daterange
+          AND ${portfolioPosts.publishedAt}::date <@ ${currentRange}::daterange
       ),
-      profiles_posts as (
-        select
-          ${posts.id} as id,
-          ${posts.createdAt} as created_at
-        from ${posts}
-        join ${profilesToPosts} on 
+      profiles_posts AS (
+        SELECT
+          ${posts.id} AS id,
+          ${posts.createdAt} AS created_at
+        FROM ${posts}
+        JOIN ${profilesToPosts} ON
           ${profilesToPosts.postId} = ${posts.id}
-        where 
+        WHERE
           ${profilesToPosts.profileId} = ${profileId}
-          and ${posts.createdAt}::date <@ ${currentRange}::daterange
+          AND ${posts.createdAt}::date <@ ${currentRange}::daterange
       ),
-      posts_with_period as (
-        select
+      posts_with_period AS (
+        SELECT
           id,
-          date_trunc(${granularity}, profiles_posts.created_at) as period 
-        from profiles_posts 
-        union
-        select
+          date_trunc(${granularity}, profiles_posts.created_at) AS period
+        FROM profiles_posts
+        UNION
+        SELECT
           id,
-          date_trunc(${granularity}, profiles_portfolio_posts.created_at) as period 
-        from profiles_portfolio_posts
+          date_trunc(${granularity}, profiles_portfolio_posts.created_at) AS period
+        FROM profiles_portfolio_posts
       ),
-      posts_by_period as (
-        select
-          count(*) as posts,
+      posts_by_period AS (
+        SELECT
+          count(*) AS posts,
           period
-        from posts_with_period
-        group by period
+        FROM posts_with_period
+        GROUP BY period
       )
-      select * from posts_by_period
+      SELECT * FROM posts_by_period
     `
     )) as { period: Date; posts: number }[];
 

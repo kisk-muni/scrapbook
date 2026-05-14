@@ -34,7 +34,7 @@ function Paragraph({ children }) {
 
 function H2({ children }) {
   return (
-    <h2 className="text-xl mt-6 mb-3 md:mt-8 md:mb-6 tracking-tight text-text md:text-2xl lg:text-3xl">
+    <h2 className="text-xl mt-6 mb-3 md:mt-8 md:mb-6 tracking-tight text-text md:text-xl lg:text-2xl">
       {children}
     </h2>
   );
@@ -42,9 +42,9 @@ function H2({ children }) {
 
 export default function AboutPage() {
   return (
-    <div className="mx-auto sm:max-w-2xl mt-6 mb-8 sm:mt-6 sm:mb-16 sm:px-6 md:mt-8 md:mb-20">
+    <div className="mx-auto sm:max-w-2xl mt-6 mb-8 sm:mt-6 sm:mb-16 sm:px-6 md:mt-6 md:mb-20">
       <div className="justify-center">
-        <h1 className="text-4xl mb-6 tracking-tight text-text sm:text-5xl md:text-5xl">
+        <h1 className="text-4xl mb-6 tracking-tight text-text sm:text-4xl md:text-4xl">
           <span className="block xl:inline font-extrabold">O Scrapbooku</span>
         </h1>
         <Paragraph>
@@ -62,15 +62,10 @@ export default function AboutPage() {
         <Paragraph>
           Na stránce naleznete příspěvky z portfolií studentů KISKu. Studenstká
           portfolia jsou neustále v procesu vylepšování a experimentování.
-          Většina příspěvků je a zůstane ve fázi rozpracování.
         </Paragraph>
         <Paragraph>
           Příspěvky pochází z portfolií studentů, kteří souhlasili se
-          zveřejněním svého portfolia nebo své portfolio přidali na stránce{' '}
-          <Link className="text-orange hover:underline" href="/add-portfolio">
-            Připojení portfolia
-          </Link>
-          .
+          zveřejněním svého portfolia nebo profilu na scrapbooku. .
         </Paragraph>
         <Paragraph>
           K aktualizaci příspěvků dochází každou hodinu. Pokud svůj příspěvek do

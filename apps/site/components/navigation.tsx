@@ -15,16 +15,16 @@ import { Fragment } from 'react';
 const navigation = [
   { href: '/', label: 'Domů', classNames: '', icon: IconHouse },
   { href: '/students', label: 'Studenti', icon: IconUsersThree },
+  // {
+  //   href: '/analytics/posts',
+  //   label: 'Analytika',
+  //   classNames: 'hidden md:flex',
+  //   icon: IconChartPie,
+  // },
   {
-    href: '/analytics/posts',
-    label: 'Analytika',
-    classNames: 'hidden md:flex',
-    icon: IconChartPie,
-  },
-  {
-    href: '/about',
+    href: '/start',
     classNames: '',
-    label: 'O Scrapbooku',
+    label: 'Jak začít se Scrapbookem',
     icon: IconQuestion,
   },
 ];

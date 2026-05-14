@@ -12,7 +12,7 @@ async function UserOrLogin() {
 
   return (
     <>
-      <div className="flex lg:w-40 md:w-auto items-center justify-end">
+      <div className="flex shrink-0 md:w-auto items-center justify-end">
         {session?.user ? <UserMenu user={session.user} /> : <LoginButton />}
       </div>
     </>
